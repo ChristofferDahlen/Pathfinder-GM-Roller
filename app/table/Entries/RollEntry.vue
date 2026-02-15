@@ -2,7 +2,7 @@
 import {ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
 import {proficiencyEnum, type RollInfo, type RollResult, sucessAsString, sucessEnum} from "../../ts/types.ts";
-import {calculateResultBase, calculateRollResult, profString, profStringByInfo} from "../../ts/rolling.ts";
+import {calculateRollResultBase, calculateRollResult, getProficiencyString} from "../../ts/rolling.ts";
 
 
 interface Props {
@@ -32,7 +32,7 @@ function splitArray<Type>(arr: Array<Type>, part: "first" | "second"): Array<Typ
 }
 
 function updateBaseline() {
-  rollResult.value = calculateResultBase(rollInfo);
+  rollResult.value = calculateRollResultBase(rollInfo);
   positiveModsResults.value.clear();
   negativeModsResults.value.clear();
 }
@@ -119,7 +119,7 @@ generateRoll();
                 class="roll-result">
               <div class="inline-block relative w-11  text-center">{{ rollResult.total }}
                 <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
-                  {{ profStringByInfo(rollInfo) }}
+                  {{ getProficiencyString(rollInfo) }}
                 </div>
               </div>
 

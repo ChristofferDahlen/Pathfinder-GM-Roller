@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {calculateDC, profString} from "../../ts/rolling";
+import {calculateDC, getProficiencyString} from "../../ts/rolling";
 import {attEnum, type iDC, proficiencyEnum} from "../../ts/types";
 import {capitalize} from "vue";
 
@@ -26,7 +26,7 @@ const { name = "Type", training = proficiencyEnum.U, attr = 0, level = 0, attrTy
   <div class="ac-box border-b-gray-500" style="border-color:grey">
     <div class="inline-block relative w-11  text-center">{{ calculateDC(attr, level, training, item)}}
       <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
-        {{ profString(training) }}
+        {{ getProficiencyString(training) }}
       </div>
     </div>
   </div>

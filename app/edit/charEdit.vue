@@ -32,7 +32,7 @@ import Dialog from "primevue/dialog";
 import Textarea from "primevue/textarea";
 import Panel from 'primevue/panel';
 import Select from 'primevue/select';
-import {calcBonus, calcBonusByInfo, calcProf, getPrefix} from "../ts/rolling";
+import {calculateBonus, calculateBonusFromInfo, calculateProficiency, getPrefix} from "../ts/rolling";
 
 const characters = defineModel<iCharacters>({required: true, default : [newCharacter(0)] });
 
@@ -504,7 +504,7 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 allow-empty
                                 data-key="value"></SelectButton>
                   <div class="table_prof_num">
-                    {{ calcProf(char.level, char.proficiencies[skill], char.untrainedImprovisation) }}
+                    {{ calculateProficiency(char.level, char.proficiencies[skill], char.untrainedImprovisation) }}
                   </div>
                 </div>
               </td>
@@ -534,7 +534,7 @@ function removeSpellDC(iChar: number, iLore: number) {
               <td v-else/>
               <td class="text-center">
                 {{
-                    calcBonusByInfo({
+                    calculateBonusFromInfo({
                       rollType: "T",
                       penalty : char.checkPenalty,
                       item: char.item[skill],
@@ -565,7 +565,7 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 allow-empty
                                 data-key="value"></SelectButton>
                   <div class="table_prof_num">
-                    {{calcProf(char.level, lore.proficiency, char.untrainedImprovisation) }}
+                    {{calculateProficiency(char.level, lore.proficiency, char.untrainedImprovisation) }}
                   </div>
                 </div>
               </td>
@@ -591,7 +591,7 @@ function removeSpellDC(iChar: number, iLore: number) {
               <td></td>
               <td class="text-center">
                 {{
-                  Number(char.attributes['int']) + Number(lore.item) + calcProf(char.level, lore.proficiency, char.untrainedImprovisation)
+                  Number(char.attributes['int']) + Number(lore.item) + calculateProficiency(char.level, lore.proficiency, char.untrainedImprovisation)
                 }}
               </td>
 
@@ -634,7 +634,7 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 allow-empty
                                 data-key="value"></SelectButton>
                   <div class="table_prof_num">
-                    {{ calcProf(char.level, char.proficiencies.classDC, false) }}
+                    {{ calculateProficiency(char.level, char.proficiencies.classDC, false) }}
                   </div>
                 </div>
               </td>
@@ -661,7 +661,7 @@ function removeSpellDC(iChar: number, iLore: number) {
               <td/>
               <td class="text-center">
                 {{
-                  Number(char.attributes[char.keyAbility]) + Number(char.item.classDC) + calcProf(char.level, char.proficiencies.classDC, false)
+                  Number(char.attributes[char.keyAbility]) + Number(char.item.classDC) + calculateProficiency(char.level, char.proficiencies.classDC, false)
                 }}
               </td>
             </tr>
@@ -689,7 +689,7 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 allow-empty
                                 data-key="value"></SelectButton>
                   <div class="table_prof_num">
-                    {{ calcProf(char.level, spell.proficiency, char.untrainedImprovisation) }}
+                    {{ calculateProficiency(char.level, spell.proficiency, char.untrainedImprovisation) }}
                   </div>
                 </div>
               </td>
@@ -718,7 +718,7 @@ function removeSpellDC(iChar: number, iLore: number) {
               <td/>
               <td class="text-center">
                 {{
-                  Number(char.attributes[spell.keyAttr]) + Number(spell.item) + calcProf(char.level, spell.proficiency, false)
+                  Number(char.attributes[spell.keyAttr]) + Number(spell.item) + calculateProficiency(char.level, spell.proficiency, false)
                 }}
               </td>
             </tr>

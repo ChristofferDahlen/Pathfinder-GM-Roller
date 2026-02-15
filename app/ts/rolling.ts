@@ -1,7 +1,19 @@
 import {attEnum, proficiencyEnum, proficiencyValues, type RollInfo, type RollResult, sucessEnum} from "./types";
 
-export function profString(profEnum: proficiencyEnum) {
-    return profEnum as string
+const CRITICAL_SUCCESS_MARGIN = 10;
+const CRITICAL_FAILURE_MARGIN = -10;
+
+// Utility function to get active penalty based on attribute type
+function getActivePenalty(attrType: attEnum, penalty: number): number {
+    return (attrType === attEnum.dex || attrType === attEnum.str) ? penalty : 0;
+}
+
+// Utility function to determine critical success/failure modifiers
+function getCriticalModifiers(roll: number): { cSuccess: number; cFailure: number } {
+    return {
+        cSuccess: roll === 20 ? 1 : 0,
+        cFailure: roll === 1 ? 1 : 0,
+    };
 }
 
 export function getProficiencyString(info: RollInfo): string {
@@ -10,89 +22,66 @@ export function getProficiencyString(info: RollInfo): string {
         [proficiencyEnum.T]: "T",
         [proficiencyEnum.E]: "E",
         [proficiencyEnum.M]: "M",
-        [proficiencyEnum.L]: "L"
+        [proficiencyEnum.L]: "L",
     };
-
-    if (info.training === proficiencyEnum.U && info.untrainedImprovisation) {
-        return "UI";
-    }
-
-    return proficiencyMap[info.training] || "";
+    return (info.training === proficiencyEnum.U && info.untrainedImprovisation)
+        ? "UI"
+        : (proficiencyMap[info.training] || "");
 }
 
-
-export function calcProf(lvl: number, training: proficiencyEnum, untrainedImprovisation: boolean ) : number {
-
-    if (training == proficiencyEnum.U){
+export function calculateProficiency(level: number, training: proficiencyEnum, untrainedImprovisation: boolean): number {
+    if (training === proficiencyEnum.U) {
         if (untrainedImprovisation) {
-            if (lvl < 5)
-                return lvl - 2;
-            if (lvl < 7)
-                return lvl - 1;
-            return lvl;
+            return level < 5 ? level - 2 : level < 7 ? level - 1 : level;
         }
-
-        return 0
+        return 0;
     }
-
-    return lvl + proficiencyValues[training];
-
+    return level + proficiencyValues[training];
 }
 
-export function calcProfByInfo(info: RollInfo) {
-    return calcProf(info.level, info.training, info.untrainedImprovisation)
+export function calculateProficiencyFromInfo(info: RollInfo): number {
+    return calculateProficiency(info.level, info.training, info.untrainedImprovisation);
 }
 
-export function calcBonus(attrType: attEnum, attValue : number, item: number, prof: number, penalty: number) {
-    const activePenalty = (attrType === attEnum.dex || attrType === attEnum.str) ? penalty : 0;
-    return attValue + activePenalty + item + prof
+export function calculateBonus(attrType: attEnum, attrValue: number, itemBonus: number, proficiencyBonus: number, penalty: number): number {
+    const activePenalty = getActivePenalty(attrType, penalty);
+    return attrValue + activePenalty + itemBonus + proficiencyBonus;
 }
 
-export function calcBonusByInfo(rollInfo: RollInfo) {
-    return calcBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, calcProfByInfo(rollInfo), rollInfo.penalty)
+export function calculateBonusFromInfo(rollInfo: RollInfo): number {
+    const proficiency = calculateProficiencyFromInfo(rollInfo);
+    return calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
 }
 
-export function calculateResultBase(rollInfo : RollInfo) : RollResult {
-    const prof = calcProfByInfo(rollInfo);
-    const activePenalty = (rollInfo.attrType == attEnum.dex || rollInfo.attrType == attEnum.str) ? rollInfo.penalty : 0;
+export function calculateRollResult(dc: number, roll: number, bonus: number, miscMod: number = 0): sucessEnum {
+    const value = roll + bonus + miscMod;
+    const {cSuccess, cFailure} = getCriticalModifiers(roll);
 
-    const bonus = calcBonusByInfo(rollInfo)
-
-    return {proficiency: prof, bonus: bonus, passive : 10 + bonus, activePenalty: activePenalty }
+    if (value >= dc + CRITICAL_SUCCESS_MARGIN) return sucessEnum.CS - cFailure; // Critical Success
+    if (value >= dc) return sucessEnum.S + cSuccess - cFailure; // Success
+    if (value <= dc + CRITICAL_FAILURE_MARGIN) return sucessEnum.CF + cSuccess; // Critical Failure
+    return sucessEnum.F - cFailure; // Failure
 }
 
-export function getPrefix(value : number) : string {
-    if (value < 0)
-        return '';
-    return '+';
+export function calculateRollResultBase(rollInfo: RollInfo): RollResult {
+    const proficiency = calculateProficiencyFromInfo(rollInfo);
+    const bonus = calculateBonusFromInfo(rollInfo);
+    const activePenalty = getActivePenalty(rollInfo.attrType, rollInfo.penalty);
+
+    return {
+        proficiency,
+        bonus,
+        passive: 10 + bonus,
+        activePenalty,
+    };
 }
 
-export function calculateDC(attValue : number, lvl: number, training: proficiencyEnum, item : number)
-{
-    const prof = calcProf(lvl, training, false)
-
-    const bonus = calcBonus(attEnum.wis, attValue, item, prof, 0);
+export function calculateDC(attrValue: number, level: number, training: proficiencyEnum, itemBonus: number): number {
+    const proficiency = calculateProficiency(level, training, false);
+    const bonus = calculateBonus(attEnum.wis, attrValue, itemBonus, proficiency, 0);
     return 10 + bonus;
 }
 
-export function calculateRollResult(dc: number, roll: number, bonus: number, misc_mod: number = 0): sucessEnum {
-    const value = roll + bonus + misc_mod;
-    const cSuccess = (roll === 20) ? 1 : 0;
-    const cFailure = (roll === 1) ? 1 : 0;
-
-    //Critical Success
-    if (value >= (dc + 10)) {
-        return 2 - cFailure
-    }
-    // Success
-    if (value >= dc) {
-        return 1 + cSuccess - cFailure
-    }
-    //Critical failure
-    if (value < dc - 10) {
-        return -1 + cSuccess
-    }
-
-    //failure
-    return cSuccess - cFailure
+export function getPrefix(value: number): string {
+    return value < 0 ? '' : '+';
 }
