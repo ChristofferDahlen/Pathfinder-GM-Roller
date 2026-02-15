@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {attrFullname, Attribute, iCharacter} from "../ts/types";
-import {getPrefix} from "../ts/rolling";
+import {attrFullname, Attribute, iCharacter} from "../../ts/types";
+import {getPrefix} from "../../ts/rolling";
 
 const props = defineProps<{char : iCharacter}>()
 
@@ -10,7 +10,7 @@ const props = defineProps<{char : iCharacter}>()
 
 <template>
   <Panel toggleable header="Attributes" class="">
-    <div v-for="a in Attribute" class="grid grid-cols-2 w-fit" :key="'edit_char_' + i + '_attr_' + a">
+    <div v-for="a in Attribute" class="grid grid-cols-2 w-fit" :key="'edit_char_attr_' + a">
       <span class="inline-block p-2">{{ attrFullname[a] }}</span>
       <InputNumber class="number" v-model="char.attributes[a]"
                    :prefix="getPrefix(char.attributes[a])" showButtons buttonLayout="horizontal" fluid

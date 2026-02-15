@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {iCharacter} from "../ts/types";
+import {iCharacter} from "../../ts/types";
 
 const props = defineProps<{char : iCharacter}>()
 

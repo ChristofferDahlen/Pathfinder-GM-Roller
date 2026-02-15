@@ -295,15 +295,7 @@ export interface RollInfo {
 
 }
 
-export type RollResult = {
-    bonus: number,
-    proficiency: number,
-    passive: number,
-    activePenalty: number,
-    roll?: number,
-    total?: number,
-    result?: RollOutcome,
-}
+
 
 
 

@@ -7,7 +7,7 @@
         <InputNumber class="rv_field " v-model="vul.value" fluid
                      :min="0" :max="30">
         </InputNumber>
-        <Button class="rv_button" @click="removeVulnerability(i, ir)">
+        <Button class="rv_button" @click="removeVulnerability(ir)">
           <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"></MdiIcon>
         </Button>
       </li>
@@ -17,7 +17,7 @@
         <InputNumber class="rv_field text-center " v-model="newVulnerabilityValue" fluid
                      :min="0" :max="30">
         </InputNumber>
-        <Button class="rv_button" @click="addVulnerability(i)">
+        <Button class="rv_button" @click="addVulnerability()">
           <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"></MdiIcon>
         </Button>
       </li>
@@ -26,19 +26,23 @@
 </template>
 <script setup lang="ts">
 
-import {iCharacter} from "../ts/types";
+import {iCharacter} from "../../ts/types";
+import {ref} from "vue";
 
-const props = defineProps<{char : iCharacter, i: number}>()
+const props = defineProps<{char : iCharacter}>()
 
-function addVulnerability(iChar: number) {
-  characters.value[iChar]?.vulnerabilities.push({name: newVulnerability.value, value: newVulnerabilityValue.value})
+const newVulnerability = ref("")
+const newVulnerabilityValue = ref(0)
+
+
+function addVulnerability() {
+  props.char.vulnerabilities.push({name: newVulnerability.value, value: newVulnerabilityValue.value})
   newVulnerability.value = ""
   newVulnerabilityValue.value = 0
 }
 
-function removeVulnerability(iChar: number, iRes: number) {
-  console.warn(characters)
-  characters.value[iChar]?.vulnerabilities.splice(iRes, 1);
+function removeVulnerability(iRes: number) {
+  props.char.vulnerabilities.splice(iRes, 1);
 }
 
 

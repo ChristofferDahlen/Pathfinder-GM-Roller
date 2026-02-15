@@ -1,9 +1,20 @@
 <script setup lang="ts">
 import {capitalize, ref} from "vue";
-import {attrBase, Attribute, iCharacter, type iDC, type iLore, proficiencyLevel, Skill} from "../ts/types.js";
-import {calculateBonusFromInfo, calculateProficiency} from "../ts/rolling";
+import {attrBase, Attribute, iCharacter, type iDC, type iLore, proficiencyLevel, Skill} from "../../ts/types";
+import {calculateBonusFromInfo, calculateProficiency} from "../../ts/rolling";
+import {Select} from "primevue";
 
-const props = defineProps<{char : iCharacter, i : Number}>()
+const props = defineProps<{char : iCharacter}>()
+
+const keyAttr = ref([
+  {key : Attribute.str, name : "Str"},
+  {key : Attribute.con, name : "Con"},
+  {key : Attribute.dex, name : "Dex"},
+  {key : Attribute.int, name : "Int"},
+  {key : Attribute.wis, name : "Wis"},
+  {key : Attribute.cha, name : "Cha"},
+])
+
 
 const proficiencyOptions = ref([
   {value:proficiencyLevel.Trained, name:"T"},
@@ -44,11 +55,11 @@ function addSpellDC(iChar: number) {
   rNewSpellDC.value = ''
 }
 
-function removeLore(iChar: number, iLore: number) {
+function removeLore(iLore: number) {
   props.char.lores.splice(iLore, 1);
 }
 
-function removeSpellDC(iChar: number, iLore: number) {
+function removeSpellDC(iLore: number) {
   props.char.spellDCs.splice(iLore, 1);
 }
 
@@ -144,7 +155,7 @@ function removeSpellDC(iChar: number, iLore: number) {
       <td class="text-center flex">
         <div class="mx-auto">
           <div class="table_skill inline"> {{lore.name}}</div>
-          <Button outlined class="lore_button" size="small" @click="removeLore(i, il)">
+          <Button outlined class="lore_button" size="small" @click="removeLore(il)">
             <MdiIcon icon="mdiMinus"/>
           </Button>
         </div>
@@ -193,7 +204,7 @@ function removeSpellDC(iChar: number, iLore: number) {
     <tr>
       <td class="text-center flex">
         <InputText class="lore_skill" flex placeholder="New Lore" v-model="rNewLore"></InputText>
-        <Button outlined class="lore_button" @click="addLore(i)">
+        <Button outlined class="lore_button" @click="addLore()">
           <MdiIcon icon="mdiPlus"/>
         </Button>
       </td>
@@ -260,11 +271,11 @@ function removeSpellDC(iChar: number, iLore: number) {
         }}
       </td>
     </tr>
-    <tr v-for="(spell, il) in char.spellDCs" :key="'edit_char_' + i + '_spell' + il">
+    <tr v-for="(spell, il) in char.spellDCs" :key="'edit_char_spell' + il">
       <td class="text-center flex">
         <div class="mx-auto">
           <div class="table_skill inline"> {{spell.name}}</div>
-          <Button outlined class="lore_button" size="small" @click="removeSpellDC(i, il)">
+          <Button outlined class="lore_button" size="small" @click="removeSpellDC(il)">
             <MdiIcon icon="mdiMinus"/>
           </Button>
         </div>

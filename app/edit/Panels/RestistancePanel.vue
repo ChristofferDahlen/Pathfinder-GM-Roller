@@ -17,7 +17,7 @@
         <InputNumber class="rv_field " v-model="newResistanceValue" fluid
                      :min="0" :max="30">
         </InputNumber>
-        <Button class="rv_button" @click="addResistance(i)">
+        <Button class="rv_button" @click="addResistance()">
           <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"></MdiIcon>
         </Button>
       </li>
@@ -26,9 +26,25 @@
 </template>
 <script setup lang="ts">
 
-import {iCharacter} from "../ts/types";
+import {iCharacter} from "../../ts/types";
+import {ref} from "vue";
 
-const props = defineProps<{char : iCharacter, i: number}>()
+const props = defineProps<{char : iCharacter}>()
+
+const newResistance = ref("")
+const newResistanceValue = ref(0)
+
+
+function addResistance() {
+  props.char.resistances.push({name: newResistance.value, value: newResistanceValue.value})
+  newResistance.value = ""
+  newResistanceValue.value = 0
+}
+
+function removeResistance(iRes: number) {
+  props.char.resistances.splice(iRes, 1);
+}
+
 
 </script>
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {calculateRollResultBase, getProficiencyString} from "../../ts/rolling";
+import {evaluateRollBonuses, getProficiencyString} from "../../ts/rolling";
 import type {RollInfo} from "../../ts/types.ts";
 
 
@@ -15,7 +15,7 @@ const props = defineProps<{
 
 <template>
   <div class="ac-box border-b-gray-600" style="border-color:grey">
-    <div class="inline-block relative w-11  text-center">{{ calculateRollResultBase(rollInfo).passive }}
+    <div class="inline-block relative w-11  text-center">{{ evaluateRollBonuses(rollInfo).passive }}
       <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
         {{ getProficiencyString(rollInfo) }}
       </div>

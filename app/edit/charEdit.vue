@@ -18,12 +18,12 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Textarea from "primevue/textarea";
 import Panel from 'primevue/panel';
-import MainPanel from "./MainPanel.vue";
-import AttributePanel from "./AttributePanel.vue";
-import DefensePanel from "./DefensePanel.vue";
-import RestistancePanel from "./RestistancePanel.vue";
-import VulnerabiliesPanel from "./VulnerabiliesPanel.vue";
-import SkillEditTable from "./SkillEditTable.vue";
+import MainPanel from "./Panels/MainPanel.vue";
+import AttributePanel from "./Panels/AttributePanel.vue";
+import DefensePanel from "./Panels/DefensePanel.vue";
+import RestistancePanel from "./Panels/RestistancePanel.vue";
+import VulnerabiliesPanel from "./Panels/VulnerabiliesPanel.vue";
+import SkillEditTable from "./Panels/SkillEditTable.vue";
 
 const characters = defineModel<iCharacters>({required: true, default : [newCharacter(0)] });
 
@@ -37,11 +37,7 @@ const rLoading = ref<boolean>(false)
 
 
 
-const newResistance = ref("")
-const newResistanceValue = ref(0)
 
-const newVulnerability = ref("")
-const newVulnerabilityValue = ref(0)
 
 
 const rHoverVal = ref<number>(-2)
@@ -51,14 +47,7 @@ const selectedTab = ref<number>(0)
 const pathbuilderText = ref<string>("")
 const pathbuilderID = ref<string>("")
 
-const keyAttr = ref([
-  {key : Attribute.str, name : "str"},
-  {key : Attribute.con, name : "con"},
-  {key : Attribute.dex, name : "dex"},
-  {key : Attribute.int, name : "int"},
-  {key : Attribute.wis, name : "wis"},
-  {key : Attribute.cha, name : "cha"},
-])
+
 
 
 
@@ -187,15 +176,6 @@ function onDrop(event: DragEvent) {
   }
 }
 
-function addResistance(iChar: number) {
-  characters.value[iChar]?.resistances.push({name: newResistance.value, value: newResistanceValue.value})
-  newResistance.value = ""
-  newResistanceValue.value = 0
-}
-
-function removeResistance(iChar: number, iRes: number) {
-  characters.value[iChar]?.resistances.splice(iRes, 1);
-}
 
 
 
@@ -253,7 +233,7 @@ function removeResistance(iChar: number, iRes: number) {
         <scroll-panel class="inline-block align-top" style=" height: 70vh; width: 35%">
           <div class="inline-block w-7/12 ">
             <MainPanel :char="char"/>
-            <AttributePanel :char="char" :i="i"/>
+            <AttributePanel :char="char"/>
           </div>
           <div class="inline-block align-top w-5/12">
             <Panel toggleable header="Other" class="">
@@ -264,12 +244,12 @@ function removeResistance(iChar: number, iRes: number) {
               </div>
             </Panel>
             <DefensePanel :char="char"/>
-            <RestistancePanel :char="char" :i="i"/>
-            <VulnerabiliesPanel :char="char" :i="i"/>
+            <RestistancePanel :char="char"/>
+            <VulnerabiliesPanel :char="char"/>
           </div>
         </scroll-panel>
         <ScrollPanel class="inline-block align-top" style=" height: 70vh; width: 65%">
-          <SkillEditTable :char="char" :i="i"/>
+          <SkillEditTable :char="char"/>
         </ScrollPanel>
       </TabPanel>
     </TabPanels>

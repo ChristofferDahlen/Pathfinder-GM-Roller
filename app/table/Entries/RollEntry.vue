@@ -1,26 +1,24 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import {type RollInfo, type RollResult} from "../../ts/types.ts";
+import {type RollInfo} from "../../ts/types.ts";
 import {
   calculateRollResult,
-  calculateRollResultBase,
+  evaluateRollBonuses,
   getProficiencyString,
-  RollOutcome,
+  RollOutcome, RollResult,
   SuccessAsString
 } from "../../ts/rolling.ts";
+import {DC} from "../../ts/sharedResources"
 
 
 interface Props {
-  DC: number,
   focus: boolean,
   hideMods: boolean,
   rollInfo: RollInfo
 }
 
-const {DC, focus, hideMods, rollInfo} = defineProps<Props>();
-
-
+const {focus, hideMods, rollInfo} = defineProps<Props>();
 
 const hover = ref<boolean>(false);
 const rollResult = ref<RollResult>({bonus: 0, proficiency: 0, passive: 0, activePenalty: 0});
@@ -38,7 +36,7 @@ function splitArray<Type>(arr: Array<Type>, part: "first" | "second"): Array<Typ
 }
 
 function updateBaseline() {
-  rollResult.value = calculateRollResultBase(rollInfo);
+  rollResult.value = evaluateRollBonuses(rollInfo);
   positiveModsResults.value.clear();
   negativeModsResults.value.clear();
 }
@@ -51,37 +49,45 @@ function applyModifiers(
     dc: number
 ) {
   modifiers.forEach((mod) =>
-      resultMap.set(mod, calculateRollResult(dc, roll ?? 0, bonus, mod))
+      resultMap.set(mod, calculateRollResult(dc, roll ?? 0, bonus + mod))
   );
 }
 
 function generateRoll() {
-  console.debug("Rolling", rollInfo.rollType);
   const randomRoll = Math.floor(Math.random() * 20) + 1;
+  console.debug("Rolling", rollInfo.rollType)
 
   rollResult.value = {
     ...rollResult.value,
     roll: randomRoll,
     total: rollResult.value.bonus + randomRoll,
-    result: calculateRollResult(DC, randomRoll, rollResult.value.bonus, 0),
+    result: calculateRollResult(DC.value, randomRoll, rollResult.value.bonus, 0),
   };
+  //console.debug("Rolling", rollInfo.rollType, "bonus:", rollResult.value.bonus, "Total:", rollResult.value.total, "Result:", rollResult.value.result);
 
-  applyModifiers(positiveMods.value, positiveModsResults.value, randomRoll, rollResult.value.bonus, DC);
-  applyModifiers(positiveMods.value, negativeModsResults.value, randomRoll, rollResult.value.bonus, DC);
+  applyModifiers(positiveMods.value, positiveModsResults.value, randomRoll, rollResult.value.bonus, DC.value);
+  applyModifiers(negativeMods.value, negativeModsResults.value, randomRoll, rollResult.value.bonus, DC.value);
 }
 
 watch(
     () => rollInfo,
-    (newRollInfo: RollInfo) => {
-      if (newRollInfo !== rollInfo) {
-        console.log("Baseline Update", newRollInfo.rollType);
-        updateBaseline();
-        generateRoll();
-      }
+    (newRollInfo: RollInfo, oldValue: RollInfo) => {
+        if(newRollInfo.attrValue !== oldValue.attrValue ||
+            newRollInfo.penalty !== oldValue.penalty ||
+            newRollInfo.item !== oldValue.item ||
+            newRollInfo.training !== oldValue.training ||
+          newRollInfo.untrainedImprovisation !== oldValue.untrainedImprovisation
+    ) {
+
+          console.log("Baseline Update", newRollInfo.rollType);
+          updateBaseline();
+          generateRoll();
+
+        }
     }
 );
 
-watch(() => DC, generateRoll);
+watch(() => DC.value, generateRoll);
 
 defineExpose({generateRoll});
 
@@ -114,7 +120,7 @@ generateRoll();
           </div>
         </div>
 
-        <RollTooltip :DC="DC" :rollInfo="rollInfo" :roll-result="rollResult">
+        <RollTooltip :DC="DC.value" :rollInfo="rollInfo" :roll-result="rollResult">
           <div @dblclick="generateRoll" class="">
             <div
                 v-bind:class="[(focus) ? SuccessAsString[rollResult.result] : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"

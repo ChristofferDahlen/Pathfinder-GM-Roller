@@ -1,8 +1,19 @@
 <script setup lang="ts">
 
-import {iCharacter} from "../ts/types";
+import {Attribute, iCharacter} from "../../ts/types";
+import {ref} from "vue";
+import {Select} from "primevue";
 
 const props = defineProps<{char : iCharacter}>()
+
+const keyAttr = ref([
+  {key : Attribute.str, name : "Str"},
+  {key : Attribute.con, name : "Con"},
+  {key : Attribute.dex, name : "Dex"},
+  {key : Attribute.int, name : "Int"},
+  {key : Attribute.wis, name : "Wis"},
+  {key : Attribute.cha, name : "Cha"},
+])
 
 </script>
 
@@ -13,6 +24,11 @@ const props = defineProps<{char : iCharacter}>()
         <span class="p-2 flex-initial" style="min-width: 5.5rem">Character</span>
         <InputText class="flex-auto w-5" v-model="char.name" placeholder="Character Name"></InputText>
       </div>
+      <div class="flex">
+        <span class="p-2 flex-initial" style="min-width: 5.5rem">Class</span>
+        <InputText class="flex-auto w-5" v-model="char.class" placeholder="Class"></InputText>
+      </div>
+
       <div class="flex">
         <span class="flex-initial p-2" style="min-width: 5.5rem">Player</span>
         <InputText class="flex-auto w-8" v-model="char.playerName" placeholder="Player Name"></InputText>
@@ -31,7 +47,7 @@ const props = defineProps<{char : iCharacter}>()
               <MdiIcon size="14pt" icon="mdiMinus"/>
             </template>
           </InputNumber>
-          <span class="p-2 flex-initial" style="min-width: 5.5rem">Check penatly</span>
+          <span class="p-2 flex-initial" style="min-width: 5.5rem">Check penalty</span>
           <InputNumber class="number" v-model="char.checkPenalty" showButtons
                        buttonLayout="horizontal"
                        fluid :min="-10" :max="0">
@@ -42,10 +58,11 @@ const props = defineProps<{char : iCharacter}>()
               <MdiIcon size="14pt" icon="mdiMinus"/>
             </template>
           </InputNumber>
-          <span class="p-4 flex-initial" style="min-width: 5.5rem">Key Attribute</span>
-          <Select class="inline-block" style="min-width: 10rem" v-model="char.keyAbility" :options="keyAttr"
+          <span class="p-2 flex-initial" style="min-width: 5.5rem">Key Attribute</span>
+          <Select  v-model="char.keyAbility" :options="keyAttr"
                   optionLabel="name" optionValue="key"
-                  placeholder="Key Att"></Select>
+                  placeholder="Key Att">
+          </Select>
 
         </div>
         <div class="m-2">Untrained Improvisation

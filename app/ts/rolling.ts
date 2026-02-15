@@ -8,6 +8,16 @@ export enum RollOutcome  {
     CS = 2
 }
 
+export type RollResult = {
+    bonus: number,
+    proficiency: number,
+    passive: number,
+    activePenalty: number,
+    roll?: number,
+    total?: number,
+    result?: RollOutcome,
+}
+
 export const SuccessAsString = {
     [RollOutcome.CF] : "cf",
     [RollOutcome.F] : "f",
@@ -16,8 +26,7 @@ export const SuccessAsString = {
 
 }
 
-const CRITICAL_SUCCESS_MARGIN = 10;
-const CRITICAL_FAILURE_MARGIN = -10;
+const CRITICAL_MARGIN = 10;
 
 // Utility function to get active penalty based on attribute type
 function getActivePenalty(attrType: Attribute, penalty: number): number {
@@ -25,7 +34,7 @@ function getActivePenalty(attrType: Attribute, penalty: number): number {
 }
 
 // Utility function to determine critical success/failure modifiers
-function getCriticalModifiers(roll: number): { cSuccess: number; cFailure: number } {
+export function getCriticalModifiers(roll: number): { cSuccess: number; cFailure: number } {
     return {
         cSuccess: roll === 20 ? 1 : 0,
         cFailure: roll === 1 ? 1 : 0,
@@ -55,33 +64,9 @@ export function calculateProficiency(level: number, training: proficiencyLevel, 
     return level + ProficiencyValueMap[training];
 }
 
-export function calculateProficiencyFromInfo(info: RollInfo): number {
-    return calculateProficiency(info.level, info.training, info.untrainedImprovisation);
-}
-
-export function calculateBonus(attrType: Attribute, attrValue: number, itemBonus: number, proficiencyBonus: number, penalty: number): number {
-    const activePenalty = getActivePenalty(attrType, penalty);
-    return attrValue + activePenalty + itemBonus + proficiencyBonus;
-}
-
-export function calculateBonusFromInfo(rollInfo: RollInfo): number {
-    const proficiency = calculateProficiencyFromInfo(rollInfo);
-    return calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
-}
-
-export function calculateRollResult(dc: number, roll: number, bonus: number, miscMod: number = 0): RollOutcome {
-    const value = roll + bonus + miscMod;
-    const {cSuccess, cFailure} = getCriticalModifiers(roll);
-
-    if (value >= dc + CRITICAL_SUCCESS_MARGIN) return RollOutcome.CS - cFailure; // Critical Success
-    if (value >= dc) return RollOutcome.S + cSuccess - cFailure; // Success
-    if (value <= dc + CRITICAL_FAILURE_MARGIN) return RollOutcome.CF + cSuccess; // Critical Failure
-    return RollOutcome.F - cFailure; // Failure
-}
-
-export function calculateRollResultBase(rollInfo: RollInfo): RollResult {
-    const proficiency = calculateProficiencyFromInfo(rollInfo);
-    const bonus = calculateBonusFromInfo(rollInfo);
+export function evaluateRollBonuses(rollInfo: RollInfo): RollResult {
+    const proficiency = evaluateProficiency(rollInfo);
+    const bonus = calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
     const activePenalty = getActivePenalty(rollInfo.attrType, rollInfo.penalty);
 
     return {
@@ -92,9 +77,36 @@ export function calculateRollResultBase(rollInfo: RollInfo): RollResult {
     };
 }
 
-export function calculateDC(attrValue: number, level: number, training: proficiencyLevel, itemBonus: number): number {
+export function evaluateProficiency(info: RollInfo): number {
+    return calculateProficiency(info.level, info.training, info.untrainedImprovisation);
+}
+
+export function calculateBonus(attrType: Attribute, attrValue: number, itemBonus: number, proficiencyBonus: number, penalty: number): number {
+    const activePenalty = getActivePenalty(attrType, penalty);
+    return attrValue + activePenalty + itemBonus + proficiencyBonus;
+}
+
+export function calculateBonusFromInfo(rollInfo: RollInfo): number {
+    const proficiency = evaluateProficiency(rollInfo);
+    return calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
+}
+
+export function calculateRollResult(dc: number, roll: number, bonus: number): RollOutcome {
+    const value = roll + bonus;
+    const {cSuccess, cFailure} = getCriticalModifiers(roll);
+
+    if (value >= dc + CRITICAL_MARGIN)
+        return RollOutcome.CS - cFailure; // Critical Success
+    if (value >= dc)
+        return RollOutcome.S + cSuccess - cFailure; // Success
+    if (value >= dc - CRITICAL_MARGIN)
+        return RollOutcome.F + cSuccess - cFailure; //Failure
+    return RollOutcome.CF + cSuccess; // Critical Failure
+}
+
+export function calculateDC(attrType : Attribute,attrValue: number, level: number, training: proficiencyLevel, itemBonus: number): number {
     const proficiency = calculateProficiency(level, training, false);
-    const bonus = calculateBonus(Attribute.wis, attrValue, itemBonus, proficiency, 0);
+    const bonus = calculateBonus(attrType, attrValue, itemBonus, proficiency, 0);
     return 10 + bonus;
 }
 

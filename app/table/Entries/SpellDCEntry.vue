@@ -24,7 +24,7 @@ const { name = "Type", training = proficiencyLevel.Untrained, attr = 0, level = 
   <div>{{ capitalize(name) }}</div>
   <div>
   <div class="ac-box border-b-gray-500" style="border-color:grey">
-    <div class="inline-block relative w-11  text-center">{{ calculateDC(attr, level, training, item)}}
+    <div class="inline-block relative w-11  text-center">{{ calculateDC(attrType, attr, level, training, item)}}
       <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
         {{ getProficiencyString(training) }}
       </div>

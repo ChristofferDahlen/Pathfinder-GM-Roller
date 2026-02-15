@@ -16,7 +16,6 @@ import {
 import {onMounted, onUnmounted, watch} from "vue";
 import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
-import {DC} from "../ts/sharedResources"
 
 
 const CONTROL_KEY = "Control"; // Extracted constant for control key
@@ -191,7 +190,6 @@ updateDCs()
       <td v-for="char in characters" class="relative" :key="char.name">
         <div>
           <RollEntry :ref="(el) => setRoller('perception', char.key, el as RollEntryType)"
-                     :DC="DC.value"
                      :focus="(Selected.perception.selected || Selected.perception.hover)"
                      :hideMods="false"
                      :rollInfo="{
@@ -259,7 +257,6 @@ updateDCs()
       </td>
       <td v-for="char in characters" class="" style="width: 2000px" ref="{{char.name}}">
         <RollEntry :ref="(el) => setRoller(s, char.key, el as RollEntryType)"
-                   :DC="DC.value"
                    :focus="(Selected[s].selected || Selected[s].hover)"
                    :hideMods="false"
                    :rollInfo="{
@@ -290,7 +287,6 @@ updateDCs()
           <div>{{ capitalize(char.lores[loreIndex]!.name) }}</div>
           <div>
             <RollEntry :ref="(el) => setRoller(loreIndex, char.key, el as RollEntryType)"
-                :DC="DC.value"
                 :focus="(Selected.lores[loreIndex]!.selected || Selected.lores[loreIndex]!.hover)"
                 :hideMods="false"
                 :rollInfo="{
