@@ -1,0 +1,116 @@
+@use "../box-base" as *;
+
+
+.roll-type {
+  font-size: large;
+  font-weight: bold;
+}
+
+
+.result {
+  @apply text-white;
+
+  &.cs {
+
+    @apply border-white;
+    @apply border-opacity-20;
+    @apply bg-green-950;
+  }
+
+  &.s {;
+    @apply border-white;
+    @apply border-opacity-20;
+    @apply bg-blue-900;
+  }
+
+  &.f {
+    @apply border-white;
+    @apply border-opacity-20;
+    @apply bg-red-950;
+  }
+
+  &.cf {
+    @apply border-white;
+    @apply border-opacity-20;
+    @apply bg-orange-700
+  }
+
+  &.n20 {
+    @apply border-lime-500;
+  }
+
+  &.n1 {
+    @apply border-amber-100;
+  }
+
+}
+
+
+.roll-unfocused {
+  color: gray;
+}
+
+.roll_details {
+  @extend .unselectable;
+  @extend .result;
+  @extend .box-main;
+}
+
+
+.training_overlay {
+  @extend .unselectable;
+
+  position: absolute;
+  width: 1rem;
+  top: 0;
+  right: 0.2rem;
+  text-align: center;
+  font-size: small;
+  line-height: normal;
+}
+
+.modifiers {
+  position: absolute;
+  width: 3.5rem;
+  height: 3rem;
+  z-index: 1;
+
+  &.left {
+    top: -0.6rem;
+    right: 3.7rem;
+  }
+
+  &.right {
+    top: -0.6rem;
+    left: 3.7rem;
+  }
+}
+
+.mod {
+  @extend .unselectable;
+  @extend .result;
+
+  @apply border-white;
+  border-width: 1pt;
+
+  width: 1.2rem;
+  text-align: center;
+  background-color: gray;
+  border-radius: 20pt;
+  font-size: small;
+}
+
+
+.roll-result {
+  @extend .unselectable;
+  @extend .result;
+  @extend .box-base;
+}
+
+
+.table-border {
+  border-top: gray double;
+}
+
+
+

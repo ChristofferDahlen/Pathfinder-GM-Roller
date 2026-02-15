@@ -1,0 +1,76 @@
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltiptext {
+  position: absolute;
+  display: block;
+  flex-direction: row;
+  visibility: hidden;
+
+  flex: 100%;
+  width: 12rem;
+  text-align: center;
+  vertical-align: top;
+
+
+  /* Position the RollTooltip.vue text - see examples below! */
+  z-index: 4;
+  top: 90%;
+  left: 50%;
+  margin-left: -6rem; /* Use half of the width (120/2 = 60), to center the RollTooltip.vue */
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%; /* At the top of the RollTooltip.vue */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+/* Show the RollTooltip.vue text when you mouse over the RollTooltip.vue container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  transform: translate3d(0, 10%, 0);
+  transition: all 0.4s 1s ease;
+}
+
+.tooltipbox {
+  height: 100%;
+  width: fit-content;
+  background: black;
+  border-radius: 6px;
+  margin: auto;
+  @apply text-white;
+}
+
+
+.roll-result {
+  vertical-align: top;
+  font-size: small;
+}
+
+.roll-desc {
+  font-size: xx-small;
+}
+
+.roll-pad {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.addition {
+  @extend .roll-result;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: auto;
+}

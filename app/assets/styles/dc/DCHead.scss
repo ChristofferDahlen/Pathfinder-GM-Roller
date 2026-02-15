@@ -1,0 +1,116 @@
+
+@use "../box-base" as *;
+
+.diff-button {
+  min-width: 3rem;
+  min-height: 3rem;
+
+  .dc-button-text{
+    font-weight: bold;
+    border: white 1px;
+    text-align: center;
+    align-content: center;
+  }
+
+  .dc-button-disc{
+    font-size: x-small;
+    border: white 1px;
+    text-align: center;
+    align-content: center;
+  }
+
+
+  &.left {
+    margin-right: 0.2rem;
+  }
+
+  &.right {
+    margin-left: 0.2rem;
+  }
+}
+
+
+
+
+.saved-field {
+
+  .SaveButton {
+    @apply border-primary-700;
+    @apply border;
+    @apply rounded;
+
+
+    .text {
+      font-size: small;
+      align-content: center;
+      font-weight: bold;
+    }
+
+    .button {
+      @extend .unselectable;
+      align-content: center;
+      height: 0rem;
+      line-height: 0rem;
+      padding: 1rem 0 1rem 0;
+      overflow: clip;
+
+      display: inline-block;
+      @apply border-primary-700;
+    }
+    .button:active {
+      @apply bg-highlight;
+    }
+
+  }
+
+  .header {
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+
+    text-align: center;
+    align-content: center;
+    vertical-align: top;
+    padding: 0;
+  }
+
+  .pt_header {
+    font-size: xx-small;
+    padding: 0;
+  }
+
+  .input {
+    width: 2.6rem;
+
+    text-align: center;
+    display: inline-block;
+
+  }
+
+  .pt_input{
+    width: 2.5rem;
+    text-align: center;
+    @apply rounded-l-none;
+    @apply rounded-r;
+    @apply bg-primary;
+    @apply bg-opacity-10;
+    @apply text-primary-300;
+    font-weight: bold;
+    font-size: small;
+  }
+
+}
+
+.DC_header {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  margin: auto;
+}
+
+
+.DC_input {
+  width: 4.3rem;
+  vertical-align: middle;
+  margin: auto;
+}

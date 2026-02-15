@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.diceIcon {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  background-image: url('app/assets/dice.svg');
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  .internal{
+    stroke: green;
+  }
+}
+
+
+.divider {
+  border-top: 1px solid #171717;
+
+}
+
+.background {
+  @apply bg-neutral-800
+}

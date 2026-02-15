@@ -1,0 +1,25 @@
+
+
+.DC_pane {
+  top: 0;
+  left: 0;
+  z-index: 0;
+  height: 99vh;
+  text-align: center;
+  table-layout: fixed;
+  overflow: scroll;
+  display: inline-block;
+
+}
+
+.DC_by_level{
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 4fr));
+  column-gap: 2rem;
+  row-gap: 0.1rem;
+}
+
+
+
+
+
