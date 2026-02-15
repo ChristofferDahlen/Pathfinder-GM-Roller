@@ -133,9 +133,9 @@ updateDCs()
       </th>
       <th v-for="char in characters" :key="char.name">
         <div class="" @dblclick="() => rollCharacter(char.key)">
-          <div class="text-2xl"> {{ char.name }}</div>
-          <div class="opacity-50">{{ char.class }} {{ char.level }}</div>
-          <div class="opacity-50">{{ char.playerName }}</div>
+          <div class="text-2xl select-none"> {{ char.name }}</div>
+          <div class="opacity-50 select-none">{{ char.class }} {{ char.level }}</div>
+          <div class="opacity-50 select-none">{{ char.playerName }}</div>
         </div>
       </th>
     </tr>
@@ -146,7 +146,7 @@ updateDCs()
     </tr>
     <tr>
       <td/>
-      <td class="roll-type">AC</td>
+      <td class="roll-type ">AC</td>
       <td v-for="char in characters" :key="char" class="relative">
         <ACEntry :ac="char.protection.ac" :shield="char.protection.shield"/>
       </td>
@@ -188,7 +188,7 @@ updateDCs()
             v-model="Selected.perception.selected" class="align-middle" :binary="true"
             @click="selectOnly('perception')"/>
       </td>
-      <td class="roll-type">Perception</td>
+      <td class="roll-type"><div class="roll-type">Perception</div></td>
       <td v-for="char in characters" :key="char.name" class="relative">
         <div>
           <RollEntry
@@ -328,6 +328,10 @@ updateDCs()
   table-layout: fixed;
   overflow: scroll;
   display: inline-block;
+}
+.roll-type {
+  font-weight: bold;
+  user-select: none;
 }
 
 
