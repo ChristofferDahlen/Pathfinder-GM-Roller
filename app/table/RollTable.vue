@@ -65,7 +65,6 @@ watch(characters, () => {
 
 
 
-const emit = defineEmits(["edit"])
 
 
 
@@ -92,7 +91,6 @@ function rollCharacter(charKey: string) {
   console.log("Roll Character", charKey);
 
   roller.value.forEach((inner, key) => {
-    console.log("inner", key)
     inner.get(charKey)?.generateRoll();
   })
 }
@@ -189,11 +187,6 @@ updateDCs()
           <div class="opacity-50">{{ char.class }} {{ char.level }}</div>
           <div class="opacity-50">{{ char.playerName }}</div>
         </div>
-      </th>
-      <th>
-
-        <Button icon="material-symbols:edit-outline"
-                 class="absolute right-0 align-top bottom-0 m-2" @click="emit('edit')"/>
       </th>
     </tr>
     </thead>
