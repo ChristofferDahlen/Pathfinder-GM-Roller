@@ -81,7 +81,7 @@ function restart() {
   <div>
     <div class="inline-block mx-2"><Checkbox v-model="isRolling" binary class="" @change="change"/></div>
     <div class="inline-block">Roll every</div>
-    <InputNumber v-model="rollMins" fluid/>
+    <div class="inline-block mx-1 w-12" ><InputNumber v-model="rollMins" fluid/></div>
     <div class="inline-block">min and</div>
     <div class="mx-1 w-12 inline-block"><InputNumber v-model="rollSec" :min="0" :max="60" fluid/></div>seconds
   </div>
