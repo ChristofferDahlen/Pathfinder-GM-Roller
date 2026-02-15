@@ -1,5 +1,5 @@
 
-export enum attEnum {
+export enum Attribute {
     str = "str",
     dex = "dex",
     con = "con",
@@ -9,16 +9,16 @@ export enum attEnum {
 }
 
 export const attrFullname = {
-    [attEnum.str] : "Strength",
-    [attEnum.dex] : "Dexterity",
-    [attEnum.con] : "Constitution",
-    [attEnum.int] : "Intelligence",
-    [attEnum.wis] : "Wisdom",
-    [attEnum.cha] : "Charisma",
+    [Attribute.str] : "Strength",
+    [Attribute.dex] : "Dexterity",
+    [Attribute.con] : "Constitution",
+    [Attribute.int] : "Intelligence",
+    [Attribute.wis] : "Wisdom",
+    [Attribute.cha] : "Charisma",
 }
 
 
-export enum skillEnum {
+export enum Skill {
     acrobatics = "acrobatics",
     arcana = "arcana" ,
     athletics = "athletics" ,
@@ -38,22 +38,22 @@ export enum skillEnum {
 }
 
 export const attrBase = {
-    [skillEnum.acrobatics] : attEnum.dex,
-    [skillEnum.arcana] :  attEnum.int,
-    [skillEnum.athletics] : attEnum.str,
-    [skillEnum.crafting] : attEnum.int,
-    [skillEnum.deception] : attEnum.cha,
-    [skillEnum.diplomacy] : attEnum.cha,
-    [skillEnum.intimidation] : attEnum.cha,
-    [skillEnum.medicine] : attEnum.wis,
-    [skillEnum.nature] : attEnum.wis,
-    [skillEnum.occultism] : attEnum.int,
-    [skillEnum.performance] : attEnum.cha,
-    [skillEnum.religion] : attEnum.wis,
-    [skillEnum.society] : attEnum.int,
-    [skillEnum.stealth] : attEnum.dex,
-    [skillEnum.survival] : attEnum.wis,
-    [skillEnum.thievery] : attEnum.dex
+    [Skill.acrobatics] : Attribute.dex,
+    [Skill.arcana] :  Attribute.int,
+    [Skill.athletics] : Attribute.str,
+    [Skill.crafting] : Attribute.int,
+    [Skill.deception] : Attribute.cha,
+    [Skill.diplomacy] : Attribute.cha,
+    [Skill.intimidation] : Attribute.cha,
+    [Skill.medicine] : Attribute.wis,
+    [Skill.nature] : Attribute.wis,
+    [Skill.occultism] : Attribute.int,
+    [Skill.performance] : Attribute.cha,
+    [Skill.religion] : Attribute.wis,
+    [Skill.society] : Attribute.int,
+    [Skill.stealth] : Attribute.dex,
+    [Skill.survival] : Attribute.wis,
+    [Skill.thievery] : Attribute.dex
 }
 
 export enum miscEnum {
@@ -80,18 +80,18 @@ export const proficiencyValues = {
 }
 
 
-export enum sucessEnum  {
+export enum SuccessEnum  {
     CF = -1,
     F = 0,
     S = 1,
     CS = 2
 }
 
-export const sucessAsString = {
-    [sucessEnum.CF] : "cf",
-    [sucessEnum.F] : "f",
-    [sucessEnum.S] : "s",
-    [sucessEnum.CS] : "cs",
+export const SuccessAsString = {
+    [SuccessEnum.CF] : "cf",
+    [SuccessEnum.F] : "f",
+    [SuccessEnum.S] : "s",
+    [SuccessEnum.CS] : "cs",
 
 }
 
@@ -116,12 +116,12 @@ export enum weaponEnum {
 }
 
 export interface iAttribute {
-    [attEnum.str] : number,
-    [attEnum.dex] : number,
-    [attEnum.con] : number,
-    [attEnum.int] : number,
-    [attEnum.wis] : number,
-    [attEnum.cha] : number,
+    [Attribute.str] : number,
+    [Attribute.dex] : number,
+    [Attribute.con] : number,
+    [Attribute.int] : number,
+    [Attribute.wis] : number,
+    [Attribute.cha] : number,
 }
 
 export interface iSkillVal {
@@ -130,27 +130,27 @@ export interface iSkillVal {
     [defenseEnum.fortitude] : number,
     [defenseEnum.will] : number,
     [defenseEnum.reflex] : number,
-    [skillEnum.acrobatics] : number,
-    [skillEnum.arcana] :  number,
-    [skillEnum.athletics] : number,
-    [skillEnum.crafting] : number,
-    [skillEnum.deception] : number,
-    [skillEnum.diplomacy] : number,
-    [skillEnum.intimidation] : number,
-    [skillEnum.medicine] : number,
-    [skillEnum.nature] : number,
-    [skillEnum.occultism] : number,
-    [skillEnum.performance] : number,
-    [skillEnum.religion] : number,
-    [skillEnum.society] : number,
-    [skillEnum.stealth] : number,
-    [skillEnum.survival] : number,
-    [skillEnum.thievery] : number,
+    [Skill.acrobatics] : number,
+    [Skill.arcana] :  number,
+    [Skill.athletics] : number,
+    [Skill.crafting] : number,
+    [Skill.deception] : number,
+    [Skill.diplomacy] : number,
+    [Skill.intimidation] : number,
+    [Skill.medicine] : number,
+    [Skill.nature] : number,
+    [Skill.occultism] : number,
+    [Skill.performance] : number,
+    [Skill.religion] : number,
+    [Skill.society] : number,
+    [Skill.stealth] : number,
+    [Skill.survival] : number,
+    [Skill.thievery] : number,
 
 }
 
 export type belowBorder = {
-    [key in skillEnum]?: boolean
+    [key in Skill]?: boolean
 }
 
 
@@ -183,7 +183,7 @@ export interface iDC {
     name: string,
     type: string,
     item: number,
-    keyAttr: attEnum,
+    keyAttr: Attribute,
     proficiency: proficiencyEnum,
 }
 
@@ -195,22 +195,22 @@ export type iProficiencies = {
     [defenseEnum.fortitude] : proficiencyEnum,
     [defenseEnum.will] : proficiencyEnum,
     [defenseEnum.reflex] : proficiencyEnum,
-    [skillEnum.acrobatics] : proficiencyEnum,
-    [skillEnum.arcana] :  proficiencyEnum,
-    [skillEnum.athletics] : proficiencyEnum,
-    [skillEnum.crafting] : proficiencyEnum,
-    [skillEnum.deception] : proficiencyEnum,
-    [skillEnum.diplomacy] : proficiencyEnum,
-    [skillEnum.intimidation] : proficiencyEnum,
-    [skillEnum.medicine] : proficiencyEnum,
-    [skillEnum.nature] : proficiencyEnum,
-    [skillEnum.occultism] : proficiencyEnum,
-    [skillEnum.performance] : proficiencyEnum,
-    [skillEnum.religion] : proficiencyEnum,
-    [skillEnum.society] : proficiencyEnum,
-    [skillEnum.stealth] : proficiencyEnum,
-    [skillEnum.survival] : proficiencyEnum,
-    [skillEnum.thievery] : proficiencyEnum,
+    [Skill.acrobatics] : proficiencyEnum,
+    [Skill.arcana] :  proficiencyEnum,
+    [Skill.athletics] : proficiencyEnum,
+    [Skill.crafting] : proficiencyEnum,
+    [Skill.deception] : proficiencyEnum,
+    [Skill.diplomacy] : proficiencyEnum,
+    [Skill.intimidation] : proficiencyEnum,
+    [Skill.medicine] : proficiencyEnum,
+    [Skill.nature] : proficiencyEnum,
+    [Skill.occultism] : proficiencyEnum,
+    [Skill.performance] : proficiencyEnum,
+    [Skill.religion] : proficiencyEnum,
+    [Skill.society] : proficiencyEnum,
+    [Skill.stealth] : proficiencyEnum,
+    [Skill.survival] : proficiencyEnum,
+    [Skill.thievery] : proficiencyEnum,
 }
 
 export interface iCharacter {
@@ -220,7 +220,7 @@ export interface iCharacter {
     class?: string,
     dualClass?: string,
     level: number,
-    keyAbility: attEnum,
+    keyAbility: Attribute,
     attributes: iAttribute,
     protection: iProtection,
     resistances: Array<iVulRes>,
@@ -294,7 +294,7 @@ export function newCharacter(n: number): iCharacter {
         name: ("char " + n),
         playerName: "",
         level: 1,
-        keyAbility: attEnum.str,
+        keyAbility: Attribute.str,
         attributes: {
             str: 0,
             dex: 0,
@@ -341,7 +341,7 @@ export interface iSelectedDisplay extends iTableDisplay {
 
 export interface RollInfo {
     rollType: string,
-    attrType : attEnum,
+    attrType : Attribute,
     attrValue: number,
     training: proficiencyEnum,
     untrainedImprovisation: boolean,
@@ -358,7 +358,7 @@ export type RollResult = {
     activePenalty: number,
     roll?: number,
     total?: number,
-    result?: sucessEnum,
+    result?: SuccessEnum,
 }
 
 
@@ -373,22 +373,22 @@ export interface iSkillTable {
     vulnerabilities: iTableDisplay,
     classDC: iTableDisplay,
     spellDC: iTableDisplay,
-    [skillEnum.thievery] : iSelectedDisplay,
-    [skillEnum.acrobatics] : iSelectedDisplay,
-    [skillEnum.arcana] :  iSelectedDisplay,
-    [skillEnum.athletics] : iSelectedDisplay,
-    [skillEnum.crafting] : iSelectedDisplay,
-    [skillEnum.deception] : iSelectedDisplay,
-    [skillEnum.diplomacy] : iSelectedDisplay,
-    [skillEnum.intimidation] : iSelectedDisplay,
-    [skillEnum.medicine] : iSelectedDisplay,
-    [skillEnum.nature] : iSelectedDisplay,
-    [skillEnum.occultism] : iSelectedDisplay,
-    [skillEnum.performance] : iSelectedDisplay,
-    [skillEnum.religion] : iSelectedDisplay,
-    [skillEnum.society] : iSelectedDisplay,
-    [skillEnum.stealth] : iSelectedDisplay,
-    [skillEnum.survival] : iSelectedDisplay,
+    [Skill.thievery] : iSelectedDisplay,
+    [Skill.acrobatics] : iSelectedDisplay,
+    [Skill.arcana] :  iSelectedDisplay,
+    [Skill.athletics] : iSelectedDisplay,
+    [Skill.crafting] : iSelectedDisplay,
+    [Skill.deception] : iSelectedDisplay,
+    [Skill.diplomacy] : iSelectedDisplay,
+    [Skill.intimidation] : iSelectedDisplay,
+    [Skill.medicine] : iSelectedDisplay,
+    [Skill.nature] : iSelectedDisplay,
+    [Skill.occultism] : iSelectedDisplay,
+    [Skill.performance] : iSelectedDisplay,
+    [Skill.religion] : iSelectedDisplay,
+    [Skill.society] : iSelectedDisplay,
+    [Skill.stealth] : iSelectedDisplay,
+    [Skill.survival] : iSelectedDisplay,
 }
 
 

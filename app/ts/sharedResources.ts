@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {skillEnum} from "~/ts/types.ts";
+import {Skill} from "./types";
 
 export interface iCheckState {
     selected: boolean,
@@ -8,32 +8,32 @@ export interface iCheckState {
 
 
 
-export type selectable = skillEnum | 'perception'
+export type selectable = Skill | 'perception'
 
 type managable = {
     checkAll: boolean,
     checkAllIntermediate: boolean,
     perception: iCheckState,
-    [skillEnum.acrobatics]: iCheckState,
-    [skillEnum.arcana]: iCheckState,
-    [skillEnum.athletics]: iCheckState,
-    [skillEnum.crafting]: iCheckState,
-    [skillEnum.deception]: iCheckState,
-    [skillEnum.diplomacy]: iCheckState,
-    [skillEnum.intimidation]: iCheckState,
-    [skillEnum.medicine]: iCheckState,
-    [skillEnum.nature]: iCheckState,
-    [skillEnum.occultism]: iCheckState,
-    [skillEnum.performance]: iCheckState,
-    [skillEnum.religion]: iCheckState,
-    [skillEnum.society]: iCheckState,
-    [skillEnum.stealth]: iCheckState,
-    [skillEnum.survival]: iCheckState,
-    [skillEnum.thievery]: iCheckState,
+    [Skill.acrobatics]: iCheckState,
+    [Skill.arcana]: iCheckState,
+    [Skill.athletics]: iCheckState,
+    [Skill.crafting]: iCheckState,
+    [Skill.deception]: iCheckState,
+    [Skill.diplomacy]: iCheckState,
+    [Skill.intimidation]: iCheckState,
+    [Skill.medicine]: iCheckState,
+    [Skill.nature]: iCheckState,
+    [Skill.occultism]: iCheckState,
+    [Skill.performance]: iCheckState,
+    [Skill.religion]: iCheckState,
+    [Skill.society]: iCheckState,
+    [Skill.stealth]: iCheckState,
+    [Skill.survival]: iCheckState,
+    [Skill.thievery]: iCheckState,
     lores: Array<iCheckState>,
     loreCount() : number,
     loreKeys() : Array<number>,
-    skillKeys() : Array<skillEnum>,
+    skillKeys() : Array<Skill>,
     toggle(skill : selectable) : void,
     selectOnly(skill : selectable) : void,
     selectOnlyLore(n : number) : void,
@@ -48,22 +48,22 @@ export const Selected = reactive<managable>({
     checkAll: true,
     checkAllIntermediate: false,
     perception: {selected: true, hover:false},
-    [skillEnum.acrobatics]: {selected: true, hover:false},
-    [skillEnum.arcana]: {selected: true, hover:false},
-    [skillEnum.athletics]: {selected: true, hover:false},
-    [skillEnum.crafting]: {selected: true, hover:false},
-    [skillEnum.deception]: {selected: true, hover:false},
-    [skillEnum.diplomacy]: {selected: true, hover:false},
-    [skillEnum.intimidation]: {selected: true, hover:false},
-    [skillEnum.medicine]: {selected: true, hover:false},
-    [skillEnum.nature]: {selected: true, hover:false},
-    [skillEnum.occultism]: {selected: true, hover:false},
-    [skillEnum.performance]: {selected: true, hover:false},
-    [skillEnum.religion]: {selected: true, hover:false},
-    [skillEnum.society]: {selected: true, hover:false},
-    [skillEnum.stealth]: {selected: true, hover:false},
-    [skillEnum.survival]: {selected: true, hover:false},
-    [skillEnum.thievery]: {selected: true, hover:false},
+    [Skill.acrobatics]: {selected: true, hover:false},
+    [Skill.arcana]: {selected: true, hover:false},
+    [Skill.athletics]: {selected: true, hover:false},
+    [Skill.crafting]: {selected: true, hover:false},
+    [Skill.deception]: {selected: true, hover:false},
+    [Skill.diplomacy]: {selected: true, hover:false},
+    [Skill.intimidation]: {selected: true, hover:false},
+    [Skill.medicine]: {selected: true, hover:false},
+    [Skill.nature]: {selected: true, hover:false},
+    [Skill.occultism]: {selected: true, hover:false},
+    [Skill.performance]: {selected: true, hover:false},
+    [Skill.religion]: {selected: true, hover:false},
+    [Skill.society]: {selected: true, hover:false},
+    [Skill.stealth]: {selected: true, hover:false},
+    [Skill.survival]: {selected: true, hover:false},
+    [Skill.thievery]: {selected: true, hover:false},
     lores: Array<iCheckState>(),
     loreCount() {
         return this.lores.length
@@ -73,14 +73,14 @@ export const Selected = reactive<managable>({
         return Array.from(Array(this.lores.length).keys())
     },
 
-    skillKeys() : Array<skillEnum> {
-        return Array.from(Object.values(skillEnum));
+    skillKeys() : Array<Skill> {
+        return Array.from(Object.values(Skill));
     },
 
     toggle(skill : selectable) {
-        console.log("Toggle", skill, !this[skill as skillEnum].selected);
+        console.log("Toggle", skill, !this[skill as Skill].selected);
         console.log(this[skill].selected)
-        this[skill as skillEnum].selected = !this[skill as skillEnum].selected;
+        this[skill as Skill].selected = !this[skill as Skill].selected;
         console.log(this[skill].selected)
     },
 
@@ -92,7 +92,7 @@ export const Selected = reactive<managable>({
 
         this.skillKeys().forEach(otherSkill => {
             console.log(otherSkill, skill, skill == otherSkill );
-            this[skill as skillEnum].selected = skill == otherSkill;
+            this[skill as Skill].selected = skill == otherSkill;
         })
         this.perception.selected = skill == 'perception';
         this.lores.forEach(l => l.selected=false)
@@ -103,7 +103,7 @@ export const Selected = reactive<managable>({
         this.checkAllIntermediate = true;
 
         this.skillKeys().forEach(skill => {
-            this[skill as skillEnum].selected = false;
+            this[skill as Skill].selected = false;
         })
 
         this.perception.selected = false;
@@ -116,7 +116,7 @@ export const Selected = reactive<managable>({
     selectTotal(to : boolean) {
         console.log(this.skillKeys())
         this.skillKeys().forEach(skill => {
-            this[skill as skillEnum].selected = to;
+            this[skill as Skill].selected = to;
         })
 
         this.lores.forEach(k => k.selected = to);

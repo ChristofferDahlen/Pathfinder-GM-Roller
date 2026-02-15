@@ -8,7 +8,7 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 
 import {newParty, type iParty, type iSkillTable} from "./ts/types.ts"
-import {defaultShortcuts, type RollerSettings, type RollerShortcuts} from "./ts/settings.ts";
+import {DEFAULT_ROLLER_SETTINGS, DEFAULT_SHORTCUTS, type RollerSettings, type RollerShortcuts} from "./ts/settings.ts";
 import CharEdit from "./edit/charEdit.vue";
 import PartySave from "./save/PartySave.vue";
 
@@ -83,10 +83,10 @@ const initializePartyKeys = (): void => {
 const loadShortcutsFromLocalStorage = (): void => {
   try {
     const storedShortcuts = localStorage.getItem(SHORTCUTS_KEY);
-    shortcuts.value = storedShortcuts ? JSON.parse(storedShortcuts) : defaultShortcuts();
+    shortcuts.value = storedShortcuts ? JSON.parse(storedShortcuts) :  DEFAULT_SHORTCUTS;
   } catch (error) {
     console.error("Failed to load shortcuts, using defaults...", error);
-    shortcuts.value = defaultShortcuts();
+    shortcuts.value = DEFAULT_SHORTCUTS;
   }
 };
 

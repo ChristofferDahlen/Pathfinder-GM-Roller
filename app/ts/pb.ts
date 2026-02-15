@@ -1,11 +1,11 @@
 import {
-    attEnum,
+    Attribute,
     type iCharacter,
     type iDC,
     type iLore,
     type iProficiencies,
     type iVulRes, proficiencyEnum
-} from "~/ts/types";
+} from "./types";
 import {capitalize} from "vue";
 
 export interface iPBChar {
@@ -13,12 +13,12 @@ export interface iPBChar {
 }
 
 export interface iPBAbilities {
-    [attEnum.str]: number,
-    [attEnum.dex]: number,
-    [attEnum.con]: number,
-    [attEnum.int]: number,
-    [attEnum.wis]: number,
-    [attEnum.cha]: number,
+    [Attribute.str]: number,
+    [Attribute.dex]: number,
+    [Attribute.con]: number,
+    [Attribute.int]: number,
+    [Attribute.wis]: number,
+    [Attribute.cha]: number,
 }
 
 export interface iPBProficiencies {
@@ -141,7 +141,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
     char.name = pbCharBuild.name;
     char.class = pbCharBuild.class;
     char.level = pbCharBuild.level;
-    char.keyAbility = pbCharBuild.keyability as attEnum;
+    char.keyAbility = pbCharBuild.keyability as Attribute;
 
     console.info("Updating source information")
     char.protection.ac = pbCharBuild.acTotal.acTotal;
@@ -149,7 +149,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
 
     console.info("Updating attributes")
 
-    const attKeys = Object.values(attEnum);
+    const attKeys = Object.values(Attribute);
     attKeys.forEach(key => {
         const newValue = toModValue(pbCharBuild.abilities[key])
 
@@ -207,7 +207,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
     pbCharBuild.spellCasters.forEach((spellCasting: iSpellCaster) => {
         const newDC: iDC = {
             name: capitalize(spellCasting.magicTradition),
-            keyAttr: spellCasting.ability as attEnum,
+            keyAttr: spellCasting.ability as Attribute,
             type: "spell",
             proficiency: toProfEnum(spellCasting.proficiency),
             item: 0,

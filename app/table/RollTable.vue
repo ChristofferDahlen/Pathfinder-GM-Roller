@@ -6,9 +6,9 @@ import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
 import {capitalize, ref} from "vue";
 import {
-  skillEnum,
+  Skill,
   attrBase,
-  attEnum,
+  Attribute,
   miscEnum,
   type RollInfo,
   type iCharacters, type iCharacter
@@ -196,8 +196,8 @@ updateDCs()
                      :hideMods="false"
                      :rollInfo="{
                      rollType: capitalize(miscEnum.perception.toString()),
-                     attrType: attEnum.wis,
-                     attrValue: char.attributes[attEnum.wis],
+                     attrType: Attribute.wis,
+                     attrValue: char.attributes[Attribute.wis],
                      training: char.proficiencies.perception,
                      untrainedImprovisation: char.untrainedImprovisation,
                      level: char.level,
@@ -245,7 +245,7 @@ updateDCs()
     </tr>
 
 
-    <tr v-for="s in skillEnum" :key="s"
+    <tr v-for="s in Skill" :key="s"
         @mouseover="Selected[s].hover = true"
         @mouseleave="Selected[s].hover = false"
         :class="(true) ? 'divider' : '' " class="mt-10"
@@ -295,7 +295,7 @@ updateDCs()
                 :hideMods="false"
                 :rollInfo="{
                      rollType: char.lores[loreIndex]!.name,
-                     attrType: attEnum.int,
+                     attrType: Attribute.int,
                      attrValue: char.attributes.int,
                      training: char.lores[loreIndex]!.proficiency,
                      untrainedImprovisation: char.untrainedImprovisation,

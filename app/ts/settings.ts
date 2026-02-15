@@ -1,46 +1,59 @@
-
-
 export interface RollerSettings {
-    showAC : true,
-    showVulnerabilities : true,
-    showResistances: true,
-    showPerception: true,
-    showSkills: true,
-    showLores: true,
+    displayOptions: {
+        armorClass: boolean;
+        vulnerabilities: boolean;
+        resistances: boolean;
+        perception: boolean;
+        skills: boolean;
+        lores: boolean;
+    };
 }
 
+export const DEFAULT_ROLLER_SETTINGS: RollerSettings = {
+    displayOptions: {
+        armorClass: true,
+        vulnerabilities: true,
+        resistances: true,
+        perception: true,
+        skills: true,
+        lores: true,
+    }
+};
 
 export interface RollerShortcuts {
-    Saved1 : string;
-    Saved2 : string;
-    Saved3 : string;
-    Saved4 : string;
-    Saved5 : string;
-    Saved6 : string;
-    Reset : string;
-    Untrained: string;
-    Trained: string;
-    Expert: string;
-    Master: string;
-    Legendary:string;
+    savedRolls: {
+        slot1: string;
+        slot2: string;
+        slot3: string;
+        slot4: string;
+        slot5: string;
+        slot6: string;
+    };
+    actions: {
+        reset: string;
+        untrained: string;
+        trained: string;
+        expert: string;
+        master: string;
+        legendary: string;
+    };
 }
 
-
-export function defaultShortcuts() : RollerShortcuts {
-    return  {
-        Saved1: "1",
-        Saved2: "2",
-        Saved3: "3",
-        Saved4: "4",
-        Saved5: "5",
-        Saved6: "6",
-        Reset: "R",
-        Untrained: "U",
-        Trained: "T",
-        Expert: "E",
-        Master: "M",
-        Legendary: "L"
+export const DEFAULT_SHORTCUTS: RollerShortcuts = {
+    savedRolls: {
+        slot1: "1",
+        slot2: "2",
+        slot3: "3",
+        slot4: "4",
+        slot5: "5",
+        slot6: "6",
+    },
+    actions: {
+        reset: "R",
+        untrained: "U",
+        trained: "T",
+        expert: "E",
+        master: "M",
+        legendary: "L",
     }
-}
-
-
+};

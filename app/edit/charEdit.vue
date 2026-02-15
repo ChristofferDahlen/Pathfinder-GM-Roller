@@ -4,7 +4,7 @@
 import {capitalize, ref} from "vue";
 import type {iCharacters} from "../ts/types";
 import {
-  attEnum,
+  Attribute,
   attrBase,
   attrFullname,
   type belowBorder,
@@ -12,7 +12,7 @@ import {
   type iLore,
   newCharacter,
   proficiencyEnum,
-  skillEnum
+  Skill
 } from "../ts/types";
 
 import {type iPBChar, loadFromPB, updateCharatcer} from "../ts/pb";
@@ -69,12 +69,12 @@ const pathbuilderText = ref<string>("")
 const pathbuilderID = ref<string>("")
 
 const keyAttr = ref([
-  {key : attEnum.str, name : "str"},
-  {key : attEnum.con, name : "con"},
-  {key : attEnum.dex, name : "dex"},
-  {key : attEnum.int, name : "int"},
-  {key : attEnum.wis, name : "wis"},
-  {key : attEnum.cha, name : "cha"},
+  {key : Attribute.str, name : "str"},
+  {key : Attribute.con, name : "con"},
+  {key : Attribute.dex, name : "dex"},
+  {key : Attribute.int, name : "int"},
+  {key : Attribute.wis, name : "wis"},
+  {key : Attribute.cha, name : "cha"},
 ])
 
 
@@ -362,7 +362,7 @@ function removeSpellDC(iChar: number, iLore: number) {
               </div>
             </Panel>
             <Panel toggleable header="Attributes" class="">
-              <div v-for="a in attEnum" class="grid grid-cols-2 w-fit" :key="'edit_char_' + i + '_attr_' + a">
+              <div v-for="a in Attribute" class="grid grid-cols-2 w-fit" :key="'edit_char_' + i + '_attr_' + a">
                 <span class="inline-block p-2">{{ attrFullname[a] }}</span>
                 <InputNumber class="number" v-model="char.attributes[a]"
                              :prefix="getPrefix(char.attributes[a])" showButtons buttonLayout="horizontal" fluid
@@ -488,7 +488,7 @@ function removeSpellDC(iChar: number, iLore: number) {
             <tbody>
 
 
-            <tr v-for="skill in skillEnum" :key="'edit_' + skill" :class="{ editDivider : false }">
+            <tr v-for="skill in Skill" :key="'edit_' + skill" :class="{ editDivider : false }">
               <td class="table_skill">{{ capitalize(skill.toString())  }}</td>
               <td class="text-center">
                 <div class="mx-auto">
@@ -528,7 +528,7 @@ function removeSpellDC(iChar: number, iLore: number) {
                   </InputNumber>
                 </div>
               </td>
-              <td v-if="(attrBase[skill] === attEnum.str || attrBase[skill] === attEnum.dex)" class="text-center">
+              <td v-if="(attrBase[skill] === Attribute.str || attrBase[skill] === Attribute.dex)" class="text-center">
                 {{ char.checkPenalty }}
               </td>
               <td v-else/>

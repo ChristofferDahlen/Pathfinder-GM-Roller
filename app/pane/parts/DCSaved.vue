@@ -11,6 +11,7 @@ const maxDC = 60;
 
 const displayHeader = ref(true);
 
+/*
 
 onMounted(() => {
   document.addEventListener('keydown', numbShortcut)
@@ -19,6 +20,8 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('keydown', numbShortcut)
 })
+
+ */
 
 
 const shortcuts = inject<ref<RollerShortcuts>>("shortcuts")
@@ -104,11 +107,11 @@ function swap(dc : savedDC) {
   dc.val = tempDc
   updateText(dc)
 }
-
+/*
 function numbShortcut(key: KeyboardEvent) {
   var keyIndex: number = -1
 
-  if(key.key == shortcuts.value.Saved1)
+  if(key.key == shortcuts.value.)
     keyIndex = 0
   else if(key.key == shortcuts.value.Saved2)
     keyIndex = 1
@@ -124,6 +127,7 @@ function numbShortcut(key: KeyboardEvent) {
   if(keyIndex > 0)
     load(saved_dcs.value[keyIndex] as savedDC)
 }
+ */
 
 onMounted(() => {
   try {

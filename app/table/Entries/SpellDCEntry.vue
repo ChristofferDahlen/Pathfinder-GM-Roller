@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {calculateDC, getProficiencyString} from "../../ts/rolling";
-import {attEnum, type iDC, proficiencyEnum} from "../../ts/types";
+import {Attribute, type iDC, proficiencyEnum} from "../../ts/types";
 import {capitalize} from "vue";
 
 
@@ -12,10 +12,10 @@ interface Props {
   attr: number,
   level: number,
   item: number,
-  attrType: attEnum,
+  attrType: Attribute,
 }
 
-const { name = "Type", training = proficiencyEnum.U, attr = 0, level = 0, attrType = attEnum.str } = defineProps<Props>()
+const { name = "Type", training = proficiencyEnum.U, attr = 0, level = 0, attrType = Attribute.str } = defineProps<Props>()
 
 
 </script>

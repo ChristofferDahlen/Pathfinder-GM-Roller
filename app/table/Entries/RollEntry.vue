@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import {proficiencyEnum, type RollInfo, type RollResult, sucessAsString, sucessEnum} from "../../ts/types.ts";
+import {proficiencyEnum, type RollInfo, type RollResult, SuccessAsString, SuccessEnum} from "../../ts/types.ts";
 import {calculateRollResultBase, calculateRollResult, getProficiencyString} from "../../ts/rolling.ts";
 
 
@@ -22,8 +22,8 @@ const rollResult = ref<RollResult>({bonus: 0, proficiency: 0, passive: 0, active
 const negativeMods = ref<Array<number>>([-1, -2, -3, -4]);
 const positiveMods = ref<Array<number>>([1, 2, 3, 4]);
 
-const positiveModsResults = ref<Map<number, sucessEnum>>(new Map<number, sucessEnum>())
-const negativeModsResults = ref<Map<number, sucessEnum>>(new Map<number, sucessEnum>())
+const positiveModsResults = ref<Map<number, SuccessEnum>>(new Map<number, SuccessEnum>())
+const negativeModsResults = ref<Map<number, SuccessEnum>>(new Map<number, SuccessEnum>())
 
 
 function splitArray<Type>(arr: Array<Type>, part: "first" | "second"): Array<Type> {
@@ -39,7 +39,7 @@ function updateBaseline() {
 
 function applyModifiers(
     modifiers: Array<number>,
-    resultMap: Map<number, sucessEnum>,
+    resultMap: Map<number, SuccessEnum>,
     roll: number,
     bonus: number,
     dc: number
@@ -64,8 +64,8 @@ function generateRoll() {
   applyModifiers(positiveMods.value, negativeModsResults.value, randomRoll, rollResult.value.bonus, DC);
 }
 
-function getSuccessAsString(status: sucessEnum | undefined): string {
-  return sucessAsString[status ?? sucessEnum.F];
+function getSuccessAsString(status: SuccessEnum | undefined): string {
+  return SuccessAsString[status ?? SuccessEnum.F];
 }
 
 watch(
