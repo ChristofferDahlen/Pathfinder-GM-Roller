@@ -96,7 +96,7 @@ onUnmounted(() => {
           </div>
         </Button>
       </div>
-      <div class="inline-block w-fit m-auto">
+      <div class="flex w-fit flex-col m-auto">
         <header class="DC_header m-auto">
           DC
         </header>
@@ -104,18 +104,19 @@ onUnmounted(() => {
             ref="input"
             v-model="dcText"
             color="primary"
-            class="DC_input"
+            class="DC_input m-auto"
             type="number"
             @change="updateViaTextBox"
             @keydown="checkDigit"
             @focus="selectAll"
             @focusout="updateViaTextBox"/>
         <Button
-            class="text-xs w-fit m-auto" :class="{invisible : DC.resetValue === undefined}" outlined
+            class="text-xs w-fit m-auto align-middle" :class="{invisible : DC.resetValue === undefined}" outlined
             @click="DC.setReset()">
           Reset
           <div v-if="DC.resetValue !== undefined" class="text-xs">({{ DC.resetValue }})</div>
         </Button>
+
       </div>
       <div class="grid gap-1 w-1/3">
         <Button class="diff-button left" outlined @click="DC.add(2, false)">
@@ -141,7 +142,8 @@ onUnmounted(() => {
       </div>
 
     </div>
-    <Slider v-model="dcScrollVal" :min="0" :max="60" @change="slideChange" @slideend="slideEnd"/>
+      <Slider v-model="dcScrollVal" class="align-middle pt-2 mt-2" :min="0" :max="60" @change="slideChange" @slideend="slideEnd"/>
+
 
 
   </div>
