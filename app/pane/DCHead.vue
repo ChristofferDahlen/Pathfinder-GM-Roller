@@ -44,18 +44,16 @@ const checkDigit = (event: KeyboardEvent) => {
       event.preventDefault();
     }
   }
-  if(event.key === "Enter")
+  if (event.key === "Enter")
     updateViaTextBox()
 };
 
 
-
 function setOldDcShortcut(key: KeyboardEvent) {
   console.log(key.key, "oldDC", shortcuts.value.Reset)
-  if(key.key === shortcuts.value.Reset)
+  if (key.key === shortcuts.value.Reset)
     DC.setReset()
 }
-
 
 
 onMounted(() => {
@@ -73,8 +71,8 @@ onUnmounted(() => {
     <div class="flex">
       <div class="grid gap-1 w-1/3 ">
         <Button
-                class="diff-button left" outlined color="primary" variant="outlined"
-                @click="DC.add(-5, false)">
+            class="diff-button left" outlined color="primary" variant="outlined"
+            @click="DC.add(-5, false)">
           <div class="text-center m-auto">
             <div class=" dc-button-text">-5</div>
             <div class="dc-button-disc">Very easy</div>
@@ -89,9 +87,9 @@ onUnmounted(() => {
           </div>
         </Button>
         <Button
-                class="diff-button left" outlined style="grid-area: 2 / 1 / 2  / 3 " color="primary"
-                variant="outlined"
-                @click="DC.add(-10, false)">
+            class="diff-button left" outlined style="grid-area: 2 / 1 / 2  / 3 " color="primary"
+            variant="outlined"
+            @click="DC.add(-10, false)">
           <div class="text-center m-auto">
             <div class=" dc-button-text">-10</div>
             <div class="dc-button-disc">Incredibly easy</div>
@@ -99,21 +97,24 @@ onUnmounted(() => {
         </Button>
       </div>
       <div class="inline-block w-fit m-auto">
-          <header class="DC_header m-auto">
-            DC
-          </header>
-          <InputText
-              ref="input"
-              v-model="dcText"
-              color="primary"
-              class="DC_input"
-              type="number"
-              @change="updateViaTextBox"
-              @keydown="checkDigit"
-              @focus="selectAll"
-              @focusout="updateViaTextBox"/>
-        <Button class="text-xs w-fit m-auto" :class="{invisible : DC.resetValue === undefined}" outlined @click="DC.setReset()" >
-          Reset <div v-if="DC.resetValue !== undefined" class="text-xs">({{DC.resetValue}})</div>
+        <header class="DC_header m-auto">
+          DC
+        </header>
+        <InputText
+            ref="input"
+            v-model="dcText"
+            color="primary"
+            class="DC_input"
+            type="number"
+            @change="updateViaTextBox"
+            @keydown="checkDigit"
+            @focus="selectAll"
+            @focusout="updateViaTextBox"/>
+        <Button
+            class="text-xs w-fit m-auto" :class="{invisible : DC.resetValue === undefined}" outlined
+            @click="DC.setReset()">
+          Reset
+          <div v-if="DC.resetValue !== undefined" class="text-xs">({{ DC.resetValue }})</div>
         </Button>
       </div>
       <div class="grid gap-1 w-1/3">
@@ -141,7 +142,6 @@ onUnmounted(() => {
 
     </div>
     <Slider v-model="dcScrollVal" :min="0" :max="60" @change="slideChange" @slideend="slideEnd"/>
-
 
 
   </div>

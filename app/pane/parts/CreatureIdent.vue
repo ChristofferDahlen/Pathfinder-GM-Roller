@@ -39,10 +39,10 @@ const creatureTable = ref({
     </tr>
     </thead>
     <tbody>
-    <tr v-for="(key, trait) in creatureTable">
+    <tr v-for="(key, trait) in creatureTable" :key="key">
       <td>{{trait}}</td>
       <td>
-        <div v-for="skill in key" class="px-2 inline-block">{{capitalize(skill)}}</div>
+        <div v-for="skill in key" :key="skill" class="px-2 inline-block">{{capitalize(skill)}}</div>
       </td>
       <td>
         <Button @click="Selected.selectSkills(key)">Select</Button>

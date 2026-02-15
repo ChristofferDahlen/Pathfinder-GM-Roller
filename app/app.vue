@@ -8,7 +8,7 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 
 import {newParty, type iParty, type iSkillTable} from "./ts/types.ts"
-import {DEFAULT_ROLLER_SETTINGS, DEFAULT_SHORTCUTS, type RollerSettings, type RollerShortcuts} from "./ts/settings.ts";
+import {DEFAULT_SHORTCUTS, type RollerSettings, type RollerShortcuts} from "./ts/settings.ts";
 import CharEdit from "./edit/charEdit.vue";
 import PartySave from "./save/PartySave.vue";
 
@@ -83,7 +83,7 @@ const initializePartyKeys = (): void => {
 const loadShortcutsFromLocalStorage = (): void => {
   try {
     const storedShortcuts = localStorage.getItem(SHORTCUTS_KEY);
-    shortcuts.value = storedShortcuts ? JSON.parse(storedShortcuts) :  DEFAULT_SHORTCUTS;
+    shortcuts.value = storedShortcuts ? JSON.parse(storedShortcuts) : DEFAULT_SHORTCUTS;
   } catch (error) {
     console.error("Failed to load shortcuts, using defaults...", error);
     shortcuts.value = DEFAULT_SHORTCUTS;
@@ -98,9 +98,6 @@ const roll = (): void => {
   roller.value?.rollAll();
 };
 
-const selectSkills = (skills: Array<keyof iSkillTable | string>): void => {
-  roller.value?.selectSkills(skills);
-};
 
 watch(party, savePartyToLocalStorage);
 
@@ -119,61 +116,65 @@ onUnmounted(() => {
 
 <template class="dark-mode">
 
-  <div v-if="isLoading" class="background w-full h-full text-center">LOADING </div>
+  <div v-if="isLoading" class="background w-full h-full text-center">LOADING</div>
   <div v-else class="background w-full">
 
-    <Dialog v-model:visible="hasPartyChanged" modal header="Save / Load Party" :style="{ width:'98%'}" @after-hide="savePartyToLocalStorage(); roll();">
-      <PartySave ref="partyDialog" v-model="party"></PartySave>
+    <Dialog
+        v-model:visible="hasPartyChanged" modal header="Save / Load Party" :style="{ width:'98%'}"
+        @after-hide="savePartyToLocalStorage(); roll();">
+      <PartySave ref="partyDialog" v-model="party"/>
     </Dialog>
-    <Dialog v-model:visible="isEditing" modal header="Edit characters" :style="{ width:'98%'}" @after-hide="savePartyToLocalStorage(); roll();">
-      <char-edit ref="editDialog" v-model="party.characters"></char-edit>
+    <Dialog
+        v-model:visible="isEditing" modal header="Edit characters" :style="{ width:'98%'}"
+        @after-hide="savePartyToLocalStorage(); roll();">
+      <char-edit ref="editDialog" v-model="party.characters"/>
     </Dialog>
 
 
-
-    <RollTable v-model="party.characters" @edit="edit" ref="rt" :settings="settings" :partyName="party.name"></RollTable>
+    <RollTable ref="rt" v-model="party.characters" :settings="settings" :party-name="party.name" @edit="edit"/>
     <div class="inline-block align-top w-3/12 max-h-screen overflow-scroll">
       <div class="flex flex-row-reverse border-b">
         <div class=" m-2 flex justify-between w-full">
           <div class="inline-block">
-            <Button  class="" @click="isEditing=true">
-              <MdiIcon icon="mdiAccountEdit" ></MdiIcon>
+            <Button class="" @click="isEditing=true">
+              <MdiIcon icon="mdiAccountEdit"/>
             </Button>
           </div>
           <div class="inline-block">
-            <ToggleButton v-model="toggle"
-                          onLabel="Locked" offLabel="Unlocked" onIcon="dropdownicon"
-                          offIcon="dropdownicon"
-                          @click="toggleDarkMode()"
-                          class="mx-1">
+            <ToggleButton
+                v-model="toggle"
+                on-label="Locked" off-label="Unlocked" on-icon="dropdownicon"
+                off-icon="dropdownicon"
+                class="mx-1"
+                @click="toggleDarkMode()">
               <MdiIcon v-if="toggle" icon="mdiWeatherSunny"/>
               <MdiIcon v-if="!toggle" icon="mdiWeatherNight"/>
             </ToggleButton>
             <Button outlined class="mx-1" @click="hasPartyChanged=true">
-              <MdiIcon icon="mdiAccountGroup" ></MdiIcon>
+              <MdiIcon icon="mdiAccountGroup"/>
             </Button>
             <Button outlined class="mx-1">
-              <MdiIcon icon="mdiInformation" ></MdiIcon>
+              <MdiIcon icon="mdiInformation"/>
             </Button>
             <Button outlined>
-              <MdiIcon icon="mdiCog" ></MdiIcon>
+              <MdiIcon icon="mdiCog"/>
             </Button>
           </div>
         </div>
       </div>
 
-      <div class=" " >
-        <DCPane @roll="roll"></DCPane>
+      <div class=" ">
+        <DCPane @roll="roll"/>
       </div>
 
     </div>
   </div>
 </template>
 
-<style lang="scss">
-</style>
-
-
 <script>
 
 </script>
+
+
+<style lang="scss">
+</style>

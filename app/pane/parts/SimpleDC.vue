@@ -29,10 +29,11 @@ const simpleDCs = ref([
 </script>
 
 <template>
-  <div class="inline-block" v-for="dc in simpleDCs">
+  <div v-for="dc in simpleDCs" :key="dc" class="inline-block">
     <div class="inline-block m-auto p-1">
-      <Button class="diff-button right block" color="primary" outlined
-              @click="DC.set(dc.value, true)">
+      <Button
+          class="diff-button right block" color="primary" outlined
+          @click="DC.set(dc.value, true)">
         <div class="inline-block font-bold w-16 mr-2  ">{{ dc.desc }}</div>
         <div class="inline-block bg-primary rounded-md bg-opacity-10  ml-2 w-6 text-center ">{{ dc.value }}</div>
       </Button>

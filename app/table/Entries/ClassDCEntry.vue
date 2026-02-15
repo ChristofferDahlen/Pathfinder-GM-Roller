@@ -3,12 +3,9 @@ import {evaluateRollBonuses, getProficiencyString} from "../../ts/rolling";
 import type {RollInfo} from "../../ts/types.ts";
 
 
-
-
-const props = defineProps<{
+defineProps<{
   rollInfo: RollInfo
 }>()
-
 
 
 </script>

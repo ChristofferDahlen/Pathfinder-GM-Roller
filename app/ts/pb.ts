@@ -116,19 +116,17 @@ function find(current: iDC[], newDc: iDC): number {
     return -1;
 }
 
-function toProfEnum(profAsPbNumber : number) : proficiencyLevel {
-    if(profAsPbNumber == 2)
-        return  proficiencyLevel.Trained
-    if(profAsPbNumber == 4)
-        return  proficiencyLevel.Expert
-    if(profAsPbNumber == 6)
+function toProfEnum(profAsPbNumber: number): proficiencyLevel {
+    if (profAsPbNumber == 2)
+        return proficiencyLevel.Trained
+    if (profAsPbNumber == 4)
+        return proficiencyLevel.Expert
+    if (profAsPbNumber == 6)
         return proficiencyLevel.Master
-    if(profAsPbNumber == 8)
+    if (profAsPbNumber == 8)
         return proficiencyLevel.Legendary
     return proficiencyLevel.Untrained
 }
-
-
 
 
 export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
@@ -159,7 +157,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
 
     console.info("Updating proficiencies");
     Object.keys(pbCharBuild.proficiencies).forEach(profKey => {
-        if(profKey in char.proficiencies) {
+        if (profKey in char.proficiencies) {
             const fromKey = profKey as keyof iPBProficiencies
             const toKey = profKey as keyof iProficiencies
             console.log("Updating", profKey, "to", pbCharBuild.proficiencies[fromKey]);
@@ -171,7 +169,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
     console.info("Checking feats")
     char.untrainedImprovisation = false;
     pbCharBuild.feats.forEach(feat => {
-        if(feat[0] == "Untrained Improvisation") {
+        if (feat[0] == "Untrained Improvisation") {
             console.info("Found improved Improvisation")
             char.untrainedImprovisation = true;
         }
@@ -182,7 +180,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
     pbCharBuild.resistances.forEach((resistance) => {
         const res = getResistanceValue(resistance)
         char.resistances.push(res)
-    } )
+    })
 
     console.info("Updating lore")
     char.lores = [];
@@ -222,7 +220,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
         spellCasting.spells.forEach((spellsAtLvl: iSpellsAtLevel) => {
             if (spellsAtLvl.spellLevel == 0) {
                 spellsAtLvl.list.forEach((spell: string) => {
-                    if(spell == "Sheild"){
+                    if (spell == "Sheild") {
                         char.protection.shield = Math.max(char.protection.shield, 1);
                         console.log("Found the Shield Spell")
                     }
@@ -235,7 +233,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
 }
 
 
-export async function loadFromPB(jsonId : string) {
+export async function loadFromPB(jsonId: string) {
 
     const url = 'https://pathbuilder2e.com/json.php?id=' + jsonId;
     let obj = null;
@@ -243,7 +241,7 @@ export async function loadFromPB(jsonId : string) {
 
     try {
         obj = await (await fetch(url)).json();
-    } catch(e) {
+    } catch (e) {
         console.error('error', e);
     }
 

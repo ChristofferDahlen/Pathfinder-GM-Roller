@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
+import { ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import {type RollInfo} from "../../ts/types.ts";
+import type {RollInfo} from "../../ts/types.ts";
+import type {
+  RollOutcome, RollResult
+} from "../../ts/rolling.ts";
 import {
   calculateRollResult,
   evaluateRollBonuses,
   getProficiencyString,
-  RollOutcome, RollResult,
   SuccessAsString
 } from "../../ts/rolling.ts";
 import {DC} from "../../ts/sharedResources"
@@ -72,18 +74,18 @@ function generateRoll() {
 watch(
     () => rollInfo,
     (newRollInfo: RollInfo, oldValue: RollInfo) => {
-        if(newRollInfo.attrValue !== oldValue.attrValue ||
-            newRollInfo.penalty !== oldValue.penalty ||
-            newRollInfo.item !== oldValue.item ||
-            newRollInfo.training !== oldValue.training ||
+      if (newRollInfo.attrValue !== oldValue.attrValue ||
+          newRollInfo.penalty !== oldValue.penalty ||
+          newRollInfo.item !== oldValue.item ||
+          newRollInfo.training !== oldValue.training ||
           newRollInfo.untrainedImprovisation !== oldValue.untrainedImprovisation
-    ) {
+      ) {
 
-          console.log("Baseline Update", newRollInfo.rollType);
-          updateBaseline();
-          generateRoll();
+        console.log("Baseline Update", newRollInfo.rollType);
+        updateBaseline();
+        generateRoll();
 
-        }
+      }
     }
 );
 
@@ -99,31 +101,34 @@ generateRoll();
 
 
 <template>
-  <div class="center relative"
-       @mouseover="hover = true"
-       @mouseleave="hover = false"
+  <div
+      class="center relative"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
   >
     <div class="inline-block align-middle">
       <div class="relative w-fit m-auto">
         <div class="modifiers left  align-middle inline-block">
           <div class="">
-            <div class="mod inline-block" v-for="b in splitArray(negativeMods, 'first')"
-                 :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
+            <div
+                v-for="b in splitArray(negativeMods, 'first')" :key="b" class="mod inline-block"
+                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
           <div class="">
-            <div class="mod inline-block" v-for="b in splitArray(negativeMods, 'last')"
-                 :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
+            <div
+                v-for="b in splitArray(negativeMods, 'last')" :key="b" class="mod inline-block"
+                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
         </div>
 
-        <RollTooltip :DC="DC.value" :rollInfo="rollInfo" :roll-result="rollResult">
-          <div @dblclick="generateRoll" class="">
+        <RollTooltip :dc="DC.value" :roll-info="rollInfo" :roll-result="rollResult">
+          <div class="" @dblclick="generateRoll">
             <div
-                v-bind:class="[(focus) ? SuccessAsString[rollResult.result] : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
+                :class="[(focus) ? SuccessAsString[rollResult.result] : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
                 class="roll-result">
               <div class="inline-block relative w-11  text-center">{{ rollResult.total }}
                 <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
@@ -137,15 +142,17 @@ generateRoll();
 
         <div class="modifiers right">
           <div style="margin:0; padding: 0">
-            <div class="mod unselectable inline-block" v-for="b in splitArray(positiveMods, 'first')"
-                 :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
+            <div
+                v-for="b in splitArray(positiveMods, 'first')" :key="b" class="mod unselectable inline-block"
+                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>
           <div class="">
-            <div class="mod unselectable inline-block" v-for="b in splitArray(positiveMods, 'second')"
-                 :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
+            <div
+                v-for="b in splitArray(positiveMods, 'second')" :key="b" class="mod unselectable inline-block"
+                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>
         </div>
@@ -155,7 +162,9 @@ generateRoll();
     <div class="absolute align-top inline-block ml-1 justify-center px-1 roll_details bg-gray-600">
       <div class="leading-none w-fit mx-auto text-xs tracking-tighter">
         <div class="text-right ">
-          <span class="" style="letter-spacing: -0.1em; margin-left: -4pt">{{ rollResult.bonus < 0 ? '-' : '+' }}</span>{{ Math.abs(rollResult.bonus) }}
+          <span class="" style="letter-spacing: -0.1em; margin-left: -4pt">{{ rollResult.bonus < 0 ? '-' : '+' }}</span>{{
+            Math.abs(rollResult.bonus)
+          }}
         </div>
         <div class="text-right">
           {{ rollResult.passive }}

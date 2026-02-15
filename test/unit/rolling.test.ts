@@ -195,7 +195,7 @@ test("Test trained", () => {
     const r = evaluateRollBonuses({
         untrainedImprovisation: false,
         level: level,
-        attrValue:attValue,
+        attrValue: attValue,
         penalty: penatly,
         item: item,
         training: proficency

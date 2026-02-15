@@ -1,4 +1,3 @@
-
 export enum Attribute {
     str = "str",
     dex = "dex",
@@ -9,57 +8,57 @@ export enum Attribute {
 }
 
 export const attrFullname = {
-    [Attribute.str] : "Strength",
-    [Attribute.dex] : "Dexterity",
-    [Attribute.con] : "Constitution",
-    [Attribute.int] : "Intelligence",
-    [Attribute.wis] : "Wisdom",
-    [Attribute.cha] : "Charisma",
+    [Attribute.str]: "Strength",
+    [Attribute.dex]: "Dexterity",
+    [Attribute.con]: "Constitution",
+    [Attribute.int]: "Intelligence",
+    [Attribute.wis]: "Wisdom",
+    [Attribute.cha]: "Charisma",
 }
 
 
 export enum Skill {
     acrobatics = "acrobatics",
-    arcana = "arcana" ,
-    athletics = "athletics" ,
-    crafting = "crafting" ,
-    deception = "deception" ,
-    diplomacy = "diplomacy" ,
-    intimidation = "intimidation" ,
-    medicine = "medicine" ,
-    nature = "nature" ,
-    occultism = "occultism" ,
-    performance = "performance" ,
-    religion = "religion" ,
-    society = "society" ,
-    stealth = "stealth" ,
-    survival = "survival" ,
-    thievery = "thievery" ,
+    arcana = "arcana",
+    athletics = "athletics",
+    crafting = "crafting",
+    deception = "deception",
+    diplomacy = "diplomacy",
+    intimidation = "intimidation",
+    medicine = "medicine",
+    nature = "nature",
+    occultism = "occultism",
+    performance = "performance",
+    religion = "religion",
+    society = "society",
+    stealth = "stealth",
+    survival = "survival",
+    thievery = "thievery",
 }
 
 export const attrBase = {
-    [Skill.acrobatics] : Attribute.dex,
-    [Skill.arcana] :  Attribute.int,
-    [Skill.athletics] : Attribute.str,
-    [Skill.crafting] : Attribute.int,
-    [Skill.deception] : Attribute.cha,
-    [Skill.diplomacy] : Attribute.cha,
-    [Skill.intimidation] : Attribute.cha,
-    [Skill.medicine] : Attribute.wis,
-    [Skill.nature] : Attribute.wis,
-    [Skill.occultism] : Attribute.int,
-    [Skill.performance] : Attribute.cha,
-    [Skill.religion] : Attribute.wis,
-    [Skill.society] : Attribute.int,
-    [Skill.stealth] : Attribute.dex,
-    [Skill.survival] : Attribute.wis,
-    [Skill.thievery] : Attribute.dex
+    [Skill.acrobatics]: Attribute.dex,
+    [Skill.arcana]: Attribute.int,
+    [Skill.athletics]: Attribute.str,
+    [Skill.crafting]: Attribute.int,
+    [Skill.deception]: Attribute.cha,
+    [Skill.diplomacy]: Attribute.cha,
+    [Skill.intimidation]: Attribute.cha,
+    [Skill.medicine]: Attribute.wis,
+    [Skill.nature]: Attribute.wis,
+    [Skill.occultism]: Attribute.int,
+    [Skill.performance]: Attribute.cha,
+    [Skill.religion]: Attribute.wis,
+    [Skill.society]: Attribute.int,
+    [Skill.stealth]: Attribute.dex,
+    [Skill.survival]: Attribute.wis,
+    [Skill.thievery]: Attribute.dex
 }
 
 export enum miscEnum {
-    ClassDC="ClassDC",
-    SpellDC="spellDC",
-    perception="Perception",
+    ClassDC = "ClassDC",
+    SpellDC = "spellDC",
+    perception = "Perception",
     vulnerabilites = "Vulnerabilites"
 }
 
@@ -84,37 +83,38 @@ export enum DefenseEnum { // Renamed enum to follow PascalCase convention
     Reflex = "reflex",
     Will = "will",
 }
+
 export interface iAttribute {
-    [Attribute.str] : number,
-    [Attribute.dex] : number,
-    [Attribute.con] : number,
-    [Attribute.int] : number,
-    [Attribute.wis] : number,
-    [Attribute.cha] : number,
+    [Attribute.str]: number,
+    [Attribute.dex]: number,
+    [Attribute.con]: number,
+    [Attribute.int]: number,
+    [Attribute.wis]: number,
+    [Attribute.cha]: number,
 }
 
 export interface iSkillVal {
     classDC: number,
     perception: number,
-    [DefenseEnum.Fortitude] : number,
-    [DefenseEnum.Will] : number,
-    [DefenseEnum.Reflex] : number,
-    [Skill.acrobatics] : number,
-    [Skill.arcana] :  number,
-    [Skill.athletics] : number,
-    [Skill.crafting] : number,
-    [Skill.deception] : number,
-    [Skill.diplomacy] : number,
-    [Skill.intimidation] : number,
-    [Skill.medicine] : number,
-    [Skill.nature] : number,
-    [Skill.occultism] : number,
-    [Skill.performance] : number,
-    [Skill.religion] : number,
-    [Skill.society] : number,
-    [Skill.stealth] : number,
-    [Skill.survival] : number,
-    [Skill.thievery] : number,
+    [DefenseEnum.Fortitude]: number,
+    [DefenseEnum.Will]: number,
+    [DefenseEnum.Reflex]: number,
+    [Skill.acrobatics]: number,
+    [Skill.arcana]: number,
+    [Skill.athletics]: number,
+    [Skill.crafting]: number,
+    [Skill.deception]: number,
+    [Skill.diplomacy]: number,
+    [Skill.intimidation]: number,
+    [Skill.medicine]: number,
+    [Skill.nature]: number,
+    [Skill.occultism]: number,
+    [Skill.performance]: number,
+    [Skill.religion]: number,
+    [Skill.society]: number,
+    [Skill.stealth]: number,
+    [Skill.survival]: number,
+    [Skill.thievery]: number,
 }
 
 export type belowBorder = {
@@ -139,7 +139,6 @@ export interface iLore {
 }
 
 
-
 export type iCharacters = Array<iCharacter>
 
 export interface iParty {
@@ -156,29 +155,28 @@ export interface iDC {
 }
 
 
-
 export type iProficiencies = {
     classDC: proficiencyLevel,
     perception: proficiencyLevel,
-    [DefenseEnum.fortitude] : proficiencyLevel,
-    [DefenseEnum.will] : proficiencyLevel,
-    [DefenseEnum.reflex] : proficiencyLevel,
-    [Skill.acrobatics] : proficiencyLevel,
-    [Skill.arcana] :  proficiencyLevel,
-    [Skill.athletics] : proficiencyLevel,
-    [Skill.crafting] : proficiencyLevel,
-    [Skill.deception] : proficiencyLevel,
-    [Skill.diplomacy] : proficiencyLevel,
-    [Skill.intimidation] : proficiencyLevel,
-    [Skill.medicine] : proficiencyLevel,
-    [Skill.nature] : proficiencyLevel,
-    [Skill.occultism] : proficiencyLevel,
-    [Skill.performance] : proficiencyLevel,
-    [Skill.religion] : proficiencyLevel,
-    [Skill.society] : proficiencyLevel,
-    [Skill.stealth] : proficiencyLevel,
-    [Skill.survival] : proficiencyLevel,
-    [Skill.thievery] : proficiencyLevel,
+    [DefenseEnum.fortitude]: proficiencyLevel,
+    [DefenseEnum.will]: proficiencyLevel,
+    [DefenseEnum.reflex]: proficiencyLevel,
+    [Skill.acrobatics]: proficiencyLevel,
+    [Skill.arcana]: proficiencyLevel,
+    [Skill.athletics]: proficiencyLevel,
+    [Skill.crafting]: proficiencyLevel,
+    [Skill.deception]: proficiencyLevel,
+    [Skill.diplomacy]: proficiencyLevel,
+    [Skill.intimidation]: proficiencyLevel,
+    [Skill.medicine]: proficiencyLevel,
+    [Skill.nature]: proficiencyLevel,
+    [Skill.occultism]: proficiencyLevel,
+    [Skill.performance]: proficiencyLevel,
+    [Skill.religion]: proficiencyLevel,
+    [Skill.society]: proficiencyLevel,
+    [Skill.stealth]: proficiencyLevel,
+    [Skill.survival]: proficiencyLevel,
+    [Skill.thievery]: proficiencyLevel,
 }
 
 export interface iCharacter {
@@ -237,6 +235,7 @@ function createDefaultSkillValues(): iSkillVal {
         ...createDefaultValues(DEFAULT_SKILL_VALUE),
     };
 }
+
 export function newCharacter(n: number): iCharacter {
     return {
         key: "",
@@ -270,13 +269,13 @@ export function newCharacter(n: number): iCharacter {
 
 
 export function newParty(): iParty {
-    return { name: "",  characters: [newCharacter(1), newCharacter(2), newCharacter(3), newCharacter(4)]}
+    return {name: "", characters: [newCharacter(1), newCharacter(2), newCharacter(3), newCharacter(4)]}
 }
 
 
 export interface iTableDisplay {
-    shown : boolean,
-    hover : boolean,
+    shown: boolean,
+    hover: boolean,
 }
 
 export interface iSelectedDisplay extends iTableDisplay {
@@ -285,7 +284,7 @@ export interface iSelectedDisplay extends iTableDisplay {
 
 export interface RollInfo {
     rollType: string,
-    attrType : Attribute,
+    attrType: Attribute,
     attrValue: number,
     training: proficiencyLevel,
     untrainedImprovisation: boolean,
@@ -296,35 +295,32 @@ export interface RollInfo {
 }
 
 
-
-
-
 export interface iSkillTable {
     AC: iTableDisplay,
-    [defenseEnum.fortitude] : iTableDisplay,
-    [defenseEnum.reflex] : iTableDisplay,
-    [defenseEnum.will] : iTableDisplay,
-    perception : iSelectedDisplay,
+    [defenseEnum.fortitude]: iTableDisplay,
+    [defenseEnum.reflex]: iTableDisplay,
+    [defenseEnum.will]: iTableDisplay,
+    perception: iSelectedDisplay,
     resistances: iTableDisplay,
     vulnerabilities: iTableDisplay,
     classDC: iTableDisplay,
     spellDC: iTableDisplay,
-    [Skill.thievery] : iSelectedDisplay,
-    [Skill.acrobatics] : iSelectedDisplay,
-    [Skill.arcana] :  iSelectedDisplay,
-    [Skill.athletics] : iSelectedDisplay,
-    [Skill.crafting] : iSelectedDisplay,
-    [Skill.deception] : iSelectedDisplay,
-    [Skill.diplomacy] : iSelectedDisplay,
-    [Skill.intimidation] : iSelectedDisplay,
-    [Skill.medicine] : iSelectedDisplay,
-    [Skill.nature] : iSelectedDisplay,
-    [Skill.occultism] : iSelectedDisplay,
-    [Skill.performance] : iSelectedDisplay,
-    [Skill.religion] : iSelectedDisplay,
-    [Skill.society] : iSelectedDisplay,
-    [Skill.stealth] : iSelectedDisplay,
-    [Skill.survival] : iSelectedDisplay,
+    [Skill.thievery]: iSelectedDisplay,
+    [Skill.acrobatics]: iSelectedDisplay,
+    [Skill.arcana]: iSelectedDisplay,
+    [Skill.athletics]: iSelectedDisplay,
+    [Skill.crafting]: iSelectedDisplay,
+    [Skill.deception]: iSelectedDisplay,
+    [Skill.diplomacy]: iSelectedDisplay,
+    [Skill.intimidation]: iSelectedDisplay,
+    [Skill.medicine]: iSelectedDisplay,
+    [Skill.nature]: iSelectedDisplay,
+    [Skill.occultism]: iSelectedDisplay,
+    [Skill.performance]: iSelectedDisplay,
+    [Skill.religion]: iSelectedDisplay,
+    [Skill.society]: iSelectedDisplay,
+    [Skill.stealth]: iSelectedDisplay,
+    [Skill.survival]: iSelectedDisplay,
 }
 
 

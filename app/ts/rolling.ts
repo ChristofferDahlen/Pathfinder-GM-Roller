@@ -1,7 +1,7 @@
 import {Attribute, proficiencyLevel, ProficiencyValueMap, type RollInfo, type RollResult} from "./types";
 
 
-export enum RollOutcome  {
+export enum RollOutcome {
     CF = -1,
     F = 0,
     S = 1,
@@ -19,10 +19,10 @@ export type RollResult = {
 }
 
 export const SuccessAsString = {
-    [RollOutcome.CF] : "cf",
-    [RollOutcome.F] : "f",
-    [RollOutcome.S] : "s",
-    [RollOutcome.CS] : "cs",
+    [RollOutcome.CF]: "cf",
+    [RollOutcome.F]: "f",
+    [RollOutcome.S]: "s",
+    [RollOutcome.CS]: "cs",
 
 }
 
@@ -104,7 +104,7 @@ export function calculateRollResult(dc: number, roll: number, bonus: number): Ro
     return RollOutcome.CF + cSuccess; // Critical Failure
 }
 
-export function calculateDC(attrType : Attribute,attrValue: number, level: number, training: proficiencyLevel, itemBonus: number): number {
+export function calculateDC(attrType: Attribute, attrValue: number, level: number, training: proficiencyLevel, itemBonus: number): number {
     const proficiency = calculateProficiency(level, training, false);
     const bonus = calculateBonus(attrType, attrValue, itemBonus, proficiency, 0);
     return 10 + bonus;

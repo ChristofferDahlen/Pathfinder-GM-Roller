@@ -4,8 +4,8 @@ import {onMounted, onUnmounted, ref, inject} from "vue";
 import {DC} from "../../ts/sharedResources"
 
 import InputText from "primevue/inputtext";
-import {type RollerShortcuts} from "../../ts/settings.ts"
-import {iParty, newParty} from "../../ts/types";
+import type {RollerShortcuts} from "../../ts/settings.ts"
+
 const minDC = 0;
 const maxDC = 60;
 
@@ -34,21 +34,21 @@ type savedDC = {
 
 
 const saved_dcs = ref<Array<savedDC>>([
-  { val: Number(15), strVal:"15", header:"Saved 1"},
-  { val: Number(15), strVal:"15", header:"Saved 2"},
-  { val: Number(15), strVal:"15", header:"Saved 3"},
-  { val: Number(15), strVal:"15", header:"Saved 4"},
-  { val: Number(15), strVal:"15", header:"Saved 5"},
-  { val: Number(15), strVal:"15", header:"Saved 6"}])
+  {val: Number(15), strVal: "15", header: "Saved 1"},
+  {val: Number(15), strVal: "15", header: "Saved 2"},
+  {val: Number(15), strVal: "15", header: "Saved 3"},
+  {val: Number(15), strVal: "15", header: "Saved 4"},
+  {val: Number(15), strVal: "15", header: "Saved 5"},
+  {val: Number(15), strVal: "15", header: "Saved 6"}])
 
 function setDefaultSaved() {
   saved_dcs.value = [
-    { val: Number(15), strVal:"15", header:"Saved 1"},
-    { val: Number(15), strVal:"15", header:"Saved 2"},
-    { val: Number(15), strVal:"15", header:"Saved 3"},
-    { val: Number(15), strVal:"15", header:"Saved 4"},
-    { val: Number(15), strVal:"15", header:"Saved 5"},
-    { val: Number(15), strVal:"15", header:"Saved 6"}]
+    {val: Number(15), strVal: "15", header: "Saved 1"},
+    {val: Number(15), strVal: "15", header: "Saved 2"},
+    {val: Number(15), strVal: "15", header: "Saved 3"},
+    {val: Number(15), strVal: "15", header: "Saved 4"},
+    {val: Number(15), strVal: "15", header: "Saved 5"},
+    {val: Number(15), strVal: "15", header: "Saved 6"}]
 }
 
 function selectAll(event: FocusEvent | KeyboardEvent) {
@@ -58,27 +58,27 @@ function selectAll(event: FocusEvent | KeyboardEvent) {
   }
 }
 
-const checkDigit = (event : KeyboardEvent, index : number) => {
+const checkDigit = (event: KeyboardEvent, index: number) => {
   if (event.key !== "Enter") {
     if (event.key.length === 1 && isNaN(Number(event.key)) || event.key.indexOf(' ') >= 0) {
       event.preventDefault();
     }
   } else {
-    if(index in saved_dcs.value)
+    if (index in saved_dcs.value)
       update(saved_dcs.value[index] as savedDC);
     selectAll(event)
     event.preventDefault();
   }
 };
 
-function updateText(dc : savedDC) {
+function updateText(dc: savedDC) {
   dc.strVal = dc.val.toString();
   SaveToStorage()
 }
 
-function update(dc : savedDC) {
+function update(dc: savedDC) {
   console.log("Update saved DC", dc)
-  var val = parseInt(dc.strVal);
+  let val = parseInt(dc.strVal);
   if (val < minDC)
     val = minDC;
   else if (val > maxDC)
@@ -89,24 +89,25 @@ function update(dc : savedDC) {
   updateText(dc)
 }
 
-function save(dc : savedDC) {
+function save(dc: savedDC) {
   console.log("Save to DC", dc.val)
   dc.val = DC.value;
   updateText(dc)
 }
 
-function set(dc : savedDC) {
+function set(dc: savedDC) {
   DC.set(dc.val, true)
 
 }
 
-function swap(dc : savedDC) {
+function swap(dc: savedDC) {
   console.log("Swap DC", dc.val, DC.value)
   const tempDc = DC.value;
   DC.set(dc.val)
   dc.val = tempDc
   updateText(dc)
 }
+
 /*
 function numbShortcut(key: KeyboardEvent) {
   var keyIndex: number = -1
@@ -163,20 +164,23 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div v-for="(dc, i) in saved_dcs" class="saved-field inline-block p-1 align-middle content-center">
+    <div v-for="(dc, i) in saved_dcs" :key="i" class="saved-field inline-block p-1 align-middle content-center">
       <div class="relative">
-      <InputText v-if="displayHeader" v-model="dc.header" @focusout="SaveToStorage" pt:root:class="pt_header" class="header"></InputText>
+        <InputText
+            v-if="displayHeader" v-model="dc.header" pt:root:class="pt_header" class="header"
+            @focusout="SaveToStorage"/>
       </div>
       <div class="SaveButton">
-        <div class="button rounded-l" @click="save(dc)" ><span class="px-2 text">Save</span></div>
-        <div class="button "><span @click="set(dc)" class="px-2 border-r border-l text">Set</span></div>
-        <div class="button"><span @click="swap(dc)" class="px-2 text">Swap</span></div>
-        <InputText v-model="dc.strVal"
-                   pt:root:class="pt_input"
-                   @keydown="e => checkDigit(e,i)"
-                   @focus="selectAll"
-                   @focusout="update(dc)"
-                   variant="filled" size="small"  class="input rounded-l-none"></InputText>
+        <div class="button rounded-l" @click="save(dc)"><span class="px-2 text">Save</span></div>
+        <div class="button "><span class="px-2 border-r border-l text" @click="set(dc)">Set</span></div>
+        <div class="button"><span class="px-2 text" @click="swap(dc)">Swap</span></div>
+        <InputText
+            v-model="dc.strVal"
+            pt:root:class="pt_input"
+            variant="filled"
+            size="small"
+            class="input rounded-l-none"
+            @keydown="e => checkDigit(e,i)" @focus="selectAll" @focusout="update(dc)"/>
       </div>
     </div>
   </div>

@@ -4,16 +4,16 @@ import {type selectable, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
-import {capitalize, ref} from "vue";
+import {capitalize, ref, onMounted, onUnmounted, watch} from "vue";
 import {
   Skill,
   attrBase,
   Attribute,
   miscEnum,
   type RollInfo,
-  type iCharacters, type iCharacter
+  type iCharacters
 } from "../ts/types";
-import {onMounted, onUnmounted, watch} from "vue";
+
 import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
 
@@ -24,7 +24,7 @@ const isControlPressed = ref<boolean>(false);
 const characters = defineModel<iCharacters>({required: true});
 defineExpose({rollAll});
 
-const props = defineProps<{ partyName: string }>();
+defineProps<{ partyName: string }>();
 
 onMounted(setupKeyboardListeners);
 onUnmounted(teardownKeyboardListeners);
@@ -120,14 +120,15 @@ updateDCs()
     <thead class="w-full">
     <tr class="main-table-header z-20" style="position: sticky; top: 0; z-index: 10;">
       <th class="p-2">
-        <Checkbox v-model="Selected.checkAll" :indeterminate="Selected.checkAllIntermediate"
-                  @update:model-value="u => Selected.selectTotal(u)"
-                  binary></Checkbox>
+        <Checkbox
+            v-model="Selected.checkAll" :indeterminate="Selected.checkAllIntermediate"
+            binary
+            @update:model-value="u => Selected.selectTotal(u)"/>
       </th>
-      <th >
+      <th>
         <div v-if="partyName">
           <div>Party</div>
-          <div class="italic">{{partyName}}</div>
+          <div class="italic">{{ partyName }}</div>
         </div>
       </th>
       <th v-for="char in characters" :key="char.name">
@@ -141,22 +142,21 @@ updateDCs()
     </thead>
     <tbody>
     <tr>
-      <td class="">
-      </td>
+      <td class=""/>
     </tr>
     <tr>
-      <td></td>
+      <td/>
       <td class="roll-type">AC</td>
-      <td v-for="char in characters" class="relative">
-        <ACEntry :AC="char.protection.ac" :shield="char.protection.shield"></ACEntry>
+      <td v-for="char in characters" :key="char" class="relative">
+        <ACEntry :ac="char.protection.ac" :shield="char.protection.shield"/>
       </td>
     </tr>
     <tr>
-      <td></td>
+      <td/>
       <td class="roll-type">Resistances</td>
       <td v-for="char in characters" :key="char.name">
         <div class="flex content-center justify-center">
-          <div v-for="r in char.resistances" class="" :key="r.name">
+          <div v-for="r in char.resistances" :key="r.name" class="">
             <div v-if="r.name!=''" class="border mx-1 px-1 border-green-600 rounded inline-flex">{{
                 capitalize(r.name)
               }} {{ r.value }}
@@ -166,11 +166,11 @@ updateDCs()
       </td>
     </tr>
     <tr>
-      <td></td>
+      <td/>
       <td class="roll-type">Vulnerabilities</td>
-      <td v-for="char in characters">
+      <td v-for="char in characters" :key="char">
         <div class="flex content-center justify-center">
-          <div v-for="r in char.vulnerabilities" class="">
+          <div v-for="r in char.vulnerabilities" :key="r" class="">
             <div v-if="r.name!=''" class="border mx-1 px-1 border-red-600 rounded inline-flex">{{
                 capitalize(r.name)
               }} {{ r.value }}
@@ -179,20 +179,23 @@ updateDCs()
         </div>
       </td>
     </tr>
-    <tr         @mouseover="Selected.perception.hover = true"
-                @mouseleave="Selected.perception.hover = false"
+    <tr
+        @mouseover="Selected.perception.hover = true"
+        @mouseleave="Selected.perception.hover = false"
     >
       <td>
-        <Checkbox v-model="Selected.perception.selected" @click="selectOnly('perception')" class="align-middle"
-                  :binary="true"></Checkbox>
+        <Checkbox
+            v-model="Selected.perception.selected" class="align-middle" :binary="true"
+            @click="selectOnly('perception')"/>
       </td>
       <td class="roll-type">Perception</td>
-      <td v-for="char in characters" class="relative" :key="char.name">
+      <td v-for="char in characters" :key="char.name" class="relative">
         <div>
-          <RollEntry :ref="(el) => setRoller('perception', char.key, el as RollEntryType)"
-                     :focus="(Selected.perception.selected || Selected.perception.hover)"
-                     :hideMods="false"
-                     :rollInfo="{
+          <RollEntry
+              :ref="(el) => setRoller('perception', char.key, el as RollEntryType)"
+              :focus="(Selected.perception.selected || Selected.perception.hover)"
+              :hide-mods="false"
+              :roll-info="{
                      rollType: capitalize(miscEnum.perception.toString()),
                      attrType: Attribute.wis,
                      attrValue: char.attributes[Attribute.wis],
@@ -205,12 +208,12 @@ updateDCs()
       </td>
     </tr>
     <tr>
-      <td></td>
+      <td/>
       <td class="roll-type">Class DC</td>
-      <td v-for="char in characters" class="relative" :key="char.name">
+      <td v-for="char in characters" :key="char.name" class="relative">
         <div>
           <ClassEntry
-              :rollInfo="{
+              :roll-info="{
                     rollType: 'ClassDC',
                      attrType: char.keyAbility,
                      attrValue: char.attributes[char.keyAbility],
@@ -218,17 +221,16 @@ updateDCs()
                      untrainedImprovisation: char.untrainedImprovisation,
                      level: char.level,
                      item: char.item.classDC,
-                     penalty: 0 } as RollInfo">
-          </ClassEntry>
+                     penalty: 0 } as RollInfo"/>
         </div>
       </td>
     </tr>
 
 
     <tr v-for="spellIndex in SpellDCCount" :key="'DC' + spellIndex">
-      <td></td>
+      <td/>
       <td class="roll-type">Spell DC {{ SpellDCCount.length > 1 ? spellIndex : "" }}</td>
-      <td v-for="char in characters" class="relative" :key="char + 'roll_type'">
+      <td v-for="char in characters" :key="char + 'roll_type'" class="relative">
         <div v-if="spellIndex < char.spellDCs.length && char.spellDCs[spellIndex]?.name != ''">
           <SpellDCEntry
               :name="char.spellDCs[spellIndex]!.name"
@@ -236,30 +238,32 @@ updateDCs()
               :attr="char.attributes[char.spellDCs[spellIndex]!.keyAttr]"
               :level="char.level"
               :item="char.spellDCs[spellIndex]!.item"
-              :attrType="char.spellDCs[spellIndex]!.keyAttr">
-          </SpellDCEntry>
+              :attr-type="char.spellDCs[spellIndex]!.keyAttr"/>
         </div>
       </td>
     </tr>
 
 
-    <tr v-for="s in Skill" :key="s"
-        @mouseover="Selected[s].hover = true"
-        @mouseleave="Selected[s].hover = false"
-        :class="(true) ? 'divider' : '' " class="mt-10"
+    <tr
+        v-for="s in Skill" :key="s"
+        :class="'divider' "
+        class="mt-10"
+        @mouseover="Selected[s].hover = true" @mouseleave="Selected[s].hover = false"
     >
       <td>
-        <Checkbox v-model="Selected[s].selected" @click="selectOnly(s)" class="align-middle"
-                  :binary="true"></Checkbox>
+        <Checkbox
+            v-model="Selected[s].selected" class="align-middle" :binary="true"
+            @click="selectOnly(s)"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(s)">
         {{ capitalize(s) }}
       </td>
-      <td v-for="char in characters" class="" style="width: 2000px" ref="{{char.name}}">
-        <RollEntry :ref="(el) => setRoller(s, char.key, el as RollEntryType)"
-                   :focus="(Selected[s].selected || Selected[s].hover)"
-                   :hideMods="false"
-                   :rollInfo="{
+      <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
+        <RollEntry
+            :ref="(el) => setRoller(s, char.key, el as RollEntryType)"
+            :focus="(Selected[s].selected || Selected[s].hover)"
+            :hide-mods="false"
+            :roll-info="{
                      rollType: capitalize(s),
                      attrType: attrBase[s],
                      attrValue: char.attributes[attrBase[s]],
@@ -270,26 +274,29 @@ updateDCs()
                      penalty: char.checkPenalty } as RollInfo"/>
       </td>
     </tr>
-    <tr v-for="loreIndex in Selected.loreKeys()" :key="'l' + loreIndex"
-        @mouseover="Selected.lores[loreIndex]!.hover = true"
-        @mouseleave="Selected.lores[loreIndex]!.hover = false"
-        :class="(loreIndex == 0) ? 'divider' : '' " class="mt-10"
+    <tr
+        v-for="loreIndex in Selected.loreKeys()" :key="'l' + loreIndex"
+        :class="(loreIndex == 0) ? 'divider' : '' "
+        class="mt-10"
+        @mouseover="Selected.lores[loreIndex]!.hover = true" @mouseleave="Selected.lores[loreIndex]!.hover = false"
     >
       <td>
-        <Checkbox v-model="Selected.lores[loreIndex]!.selected" @click="selectOnlyLore(loreIndex)" class="align-middle"
-                  :binary="true"></Checkbox>
+        <Checkbox
+            v-model="Selected.lores[loreIndex]!.selected" class="align-middle" :binary="true"
+            @click="selectOnlyLore(loreIndex)"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
         Lore {{ loreIndex + 1 }}
       </td>
-      <td v-for="char in characters" class="" style="width: 2000px" ref="{{char.name}}">
+      <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
         <div v-if="loreIndex < char.lores.length && char.lores[loreIndex]!.name != ''">
           <div>{{ capitalize(char.lores[loreIndex]!.name) }}</div>
           <div>
-            <RollEntry :ref="(el) => setRoller(loreIndex, char.key, el as RollEntryType)"
+            <RollEntry
+                :ref="(el) => setRoller(loreIndex, char.key, el as RollEntryType)"
                 :focus="(Selected.lores[loreIndex]!.selected || Selected.lores[loreIndex]!.hover)"
-                :hideMods="false"
-                :rollInfo="{
+                :hide-mods="false"
+                :roll-info="{
                      rollType: char.lores[loreIndex]!.name,
                      attrType: Attribute.int,
                      attrValue: char.attributes.int,

@@ -1,12 +1,12 @@
 <template>
   <div class="">
     <div class="card">
-      <DCHead />
+      <DCHead/>
     </div>
 
-    <Accordion :value="tiles" multiple  >
+    <Accordion :value="tiles" multiple>
       <AccordionPanel value="1">
-        <AccordionHeader >Simple DC</AccordionHeader>
+        <AccordionHeader>Simple DC</AccordionHeader>
         <AccordionContent>
           <SimpleDC/>
         </AccordionContent>
@@ -38,7 +38,7 @@
       <AccordionPanel value="3">
         <AccordionHeader>Auto Roll</AccordionHeader>
         <AccordionContent>
-          <DCPeriod ref="period" @roll="emit('roll')"></DCPeriod>
+          <DCPeriod ref="period" @roll="emit('roll')"/>
         </AccordionContent>
       </AccordionPanel>
 
