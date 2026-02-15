@@ -11,7 +11,7 @@ import {
   type iDC,
   type iLore,
   newCharacter,
-  proficiencyEnum,
+  proficiencyLevel,
   Skill
 } from "../ts/types";
 
@@ -42,10 +42,10 @@ const border = ref<belowBorder>()
 
 
 const proficiencyOptions = ref([
-{value:proficiencyEnum.T, name:"T"},
-{value:proficiencyEnum.E, name:"E"},
-{value:proficiencyEnum.M, name:"M"},
-{value:proficiencyEnum.L, name:"L"},
+{value:proficiencyLevel.Trained, name:"T"},
+{value:proficiencyLevel.Expert, name:"E"},
+{value:proficiencyLevel.Master, name:"M"},
+{value:proficiencyLevel.Legendary, name:"L"},
 ] )
 
 const rLoading = ref<boolean>(false)
@@ -227,7 +227,7 @@ function removeVulnerability(iChar: number, iRes: number) {
 
 
 function addLore(iChar: number) {
-  characters.value[iChar]?.lores.push({name: capitalize(rNewLore.value), proficiency: proficiencyEnum.U, item: 0})
+  characters.value[iChar]?.lores.push({name: capitalize(rNewLore.value), proficiency: proficiencyLevel.Untrained, item: 0})
   characters.value[iChar]?.lores.sort(function (a : iLore, b : iLore) {
     return capitalize(a.name) > capitalize(b.name) ? 1 : -1;
   })
@@ -242,7 +242,7 @@ function addSpellDC(iChar: number) {
   characters.value[iChar]?.spellDCs.push({
     name: capitalize(rNewSpellDC.value),
     keyAttr: characters.value[iChar].keyAbility,
-    proficiency: proficiencyEnum.U,
+    proficiency: proficiencyLevel.Untrained,
     item: 0,
     type: "spell"
   })
@@ -498,9 +498,9 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 optionValue="value"
                                 @update:modelValue="(v) => {
                                   if(v === undefined || v === null)
-                                    char.proficiencies[skill] = proficiencyEnum.U
+                                    char.proficiencies[skill] = proficiencyLevel.Untrained
                                 }"
-                                :defaultValue="proficiencyEnum.U"
+                                :defaultValue="proficiencyLevel.Untrained"
                                 allow-empty
                                 data-key="value"></SelectButton>
                   <div class="table_prof_num">
@@ -682,8 +682,8 @@ function removeSpellDC(iChar: number, iLore: number) {
                                 optionValue="value"
                                 @update:modelValue="(val) => {
                                   console.log('CHANGE', val)
-                                  if(!(val in proficiencyEnum)){
-                                    spell.proficiency = proficiencyEnum.U;
+                                  if(!(val in proficiencyLevel)){
+                                    spell.proficiency = proficiencyLevel.Untrained;
                                   }
                                 }"
                                 allow-empty

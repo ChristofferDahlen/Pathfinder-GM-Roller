@@ -4,7 +4,7 @@ import {
     type iDC,
     type iLore,
     type iProficiencies,
-    type iVulRes, proficiencyEnum
+    type iVulRes, proficiencyLevel
 } from "./types";
 import {capitalize} from "vue";
 
@@ -116,16 +116,16 @@ function find(current: iDC[], newDc: iDC): number {
     return -1;
 }
 
-function toProfEnum(profAsPbNumber : number) : proficiencyEnum {
+function toProfEnum(profAsPbNumber : number) : proficiencyLevel {
     if(profAsPbNumber == 2)
-        return  proficiencyEnum.T
+        return  proficiencyLevel.Trained
     if(profAsPbNumber == 4)
-        return  proficiencyEnum.E
+        return  proficiencyLevel.Expert
     if(profAsPbNumber == 6)
-        return proficiencyEnum.M
+        return proficiencyLevel.Master
     if(profAsPbNumber == 8)
-        return proficiencyEnum.L
-    return proficiencyEnum.U
+        return proficiencyLevel.Legendary
+    return proficiencyLevel.Untrained
 }
 
 

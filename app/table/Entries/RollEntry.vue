@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import {proficiencyEnum, type RollInfo, type RollResult, SuccessAsString, SuccessEnum} from "../../ts/types.ts";
-import {calculateRollResultBase, calculateRollResult, getProficiencyString} from "../../ts/rolling.ts";
+import {type RollInfo, type RollResult} from "../../ts/types.ts";
+import {
+  calculateRollResult,
+  calculateRollResultBase,
+  getProficiencyString,
+  RollOutcome,
+  SuccessAsString
+} from "../../ts/rolling.ts";
 
 
 interface Props {
@@ -22,8 +28,8 @@ const rollResult = ref<RollResult>({bonus: 0, proficiency: 0, passive: 0, active
 const negativeMods = ref<Array<number>>([-1, -2, -3, -4]);
 const positiveMods = ref<Array<number>>([1, 2, 3, 4]);
 
-const positiveModsResults = ref<Map<number, SuccessEnum>>(new Map<number, SuccessEnum>())
-const negativeModsResults = ref<Map<number, SuccessEnum>>(new Map<number, SuccessEnum>())
+const positiveModsResults = ref<Map<number, RollOutcome>>(new Map<number, RollOutcome>())
+const negativeModsResults = ref<Map<number, RollOutcome>>(new Map<number, RollOutcome>())
 
 
 function splitArray<Type>(arr: Array<Type>, part: "first" | "second"): Array<Type> {
@@ -39,7 +45,7 @@ function updateBaseline() {
 
 function applyModifiers(
     modifiers: Array<number>,
-    resultMap: Map<number, SuccessEnum>,
+    resultMap: Map<number, RollOutcome>,
     roll: number,
     bonus: number,
     dc: number
@@ -62,10 +68,6 @@ function generateRoll() {
 
   applyModifiers(positiveMods.value, positiveModsResults.value, randomRoll, rollResult.value.bonus, DC);
   applyModifiers(positiveMods.value, negativeModsResults.value, randomRoll, rollResult.value.bonus, DC);
-}
-
-function getSuccessAsString(status: SuccessEnum | undefined): string {
-  return SuccessAsString[status ?? SuccessEnum.F];
 }
 
 watch(
@@ -101,13 +103,13 @@ generateRoll();
           <div class="">
             <div class="mod inline-block" v-for="b in splitArray(negativeMods, 'first')"
                  :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="getSuccessAsString(negativeModsResults.get(b))">{{ b }}
+                 v-bind:class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
           <div class="">
             <div class="mod inline-block" v-for="b in splitArray(negativeMods, 'last')"
                  :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="getSuccessAsString(negativeModsResults.get(b))">{{ b }}
+                 v-bind:class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
         </div>
@@ -115,7 +117,7 @@ generateRoll();
         <RollTooltip :DC="DC" :rollInfo="rollInfo" :roll-result="rollResult">
           <div @dblclick="generateRoll" class="">
             <div
-                v-bind:class="[(focus) ? getSuccessAsString(rollResult.result) : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
+                v-bind:class="[(focus) ? SuccessAsString[rollResult.result] : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
                 class="roll-result">
               <div class="inline-block relative w-11  text-center">{{ rollResult.total }}
                 <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
@@ -131,13 +133,13 @@ generateRoll();
           <div style="margin:0; padding: 0">
             <div class="mod unselectable inline-block" v-for="b in splitArray(positiveMods, 'first')"
                  :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="getSuccessAsString(positiveModsResults.get(b))">+{{ b }}
+                 v-bind:class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>
           <div class="">
             <div class="mod unselectable inline-block" v-for="b in splitArray(positiveMods, 'second')"
                  :style="{visibility: hover ? 'visible' : 'hidden'}"
-                 v-bind:class="getSuccessAsString(positiveModsResults.get(b))">+{{ b }}
+                 v-bind:class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>
         </div>

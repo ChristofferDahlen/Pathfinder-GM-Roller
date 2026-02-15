@@ -63,58 +63,27 @@ export enum miscEnum {
     vulnerabilites = "Vulnerabilites"
 }
 
-export enum proficiencyEnum {
-    U = "0",
-    T = "2",
-    E = "4",
-    M = "6",
-    L = "8"
+export enum proficiencyLevel {
+    Untrained = "0",
+    Trained = "2",
+    Expert = "4",
+    Master = "6",
+    Legendary = "8"
 }
 
-export const proficiencyValues = {
-    [proficiencyEnum.U] : 0,
-    [proficiencyEnum.T] : 2,
-    [proficiencyEnum.E] : 4,
-    [proficiencyEnum.M] : 6,
-    [proficiencyEnum.L] : 8,
+export const ProficiencyValueMap: Readonly<Record<proficiencyLevel, number>> = {
+    [proficiencyLevel.Untrained]: 0,
+    [proficiencyLevel.Trained]: 2,
+    [proficiencyLevel.Expert]: 4,
+    [proficiencyLevel.Master]: 6,
+    [proficiencyLevel.Legendary]: 8,
+};
+
+export enum DefenseEnum { // Renamed enum to follow PascalCase convention
+    Fortitude = "fortitude",
+    Reflex = "reflex",
+    Will = "will",
 }
-
-
-export enum SuccessEnum  {
-    CF = -1,
-    F = 0,
-    S = 1,
-    CS = 2
-}
-
-export const SuccessAsString = {
-    [SuccessEnum.CF] : "cf",
-    [SuccessEnum.F] : "f",
-    [SuccessEnum.S] : "s",
-    [SuccessEnum.CS] : "cs",
-
-}
-
-export enum defenseEnum {
-    fortitude = "fortitude",
-    reflex = "reflex",
-    will = "will",
-}
-
-export enum castingEnum {
-    castingArcane = "castingArcane",
-    castingDivine = "castingDivine",
-    castingOccult = "castingOccult",
-    castingPrimal = "castingPrimal",
-}
-
-export enum weaponEnum {
-    advanced = "advanced",
-    martial = "martial",
-    simple = "simple",
-    unarmed = "unarmed",
-}
-
 export interface iAttribute {
     [Attribute.str] : number,
     [Attribute.dex] : number,
@@ -127,9 +96,9 @@ export interface iAttribute {
 export interface iSkillVal {
     classDC: number,
     perception: number,
-    [defenseEnum.fortitude] : number,
-    [defenseEnum.will] : number,
-    [defenseEnum.reflex] : number,
+    [DefenseEnum.Fortitude] : number,
+    [DefenseEnum.Will] : number,
+    [DefenseEnum.Reflex] : number,
     [Skill.acrobatics] : number,
     [Skill.arcana] :  number,
     [Skill.athletics] : number,
@@ -146,7 +115,6 @@ export interface iSkillVal {
     [Skill.stealth] : number,
     [Skill.survival] : number,
     [Skill.thievery] : number,
-
 }
 
 export type belowBorder = {
@@ -166,7 +134,7 @@ export interface iVulRes {
 
 export interface iLore {
     name: string,
-    proficiency: proficiencyEnum,
+    proficiency: proficiencyLevel,
     item: number
 }
 
@@ -184,33 +152,33 @@ export interface iDC {
     type: string,
     item: number,
     keyAttr: Attribute,
-    proficiency: proficiencyEnum,
+    proficiency: proficiencyLevel,
 }
 
 
 
 export type iProficiencies = {
-    classDC: proficiencyEnum,
-    perception: proficiencyEnum,
-    [defenseEnum.fortitude] : proficiencyEnum,
-    [defenseEnum.will] : proficiencyEnum,
-    [defenseEnum.reflex] : proficiencyEnum,
-    [Skill.acrobatics] : proficiencyEnum,
-    [Skill.arcana] :  proficiencyEnum,
-    [Skill.athletics] : proficiencyEnum,
-    [Skill.crafting] : proficiencyEnum,
-    [Skill.deception] : proficiencyEnum,
-    [Skill.diplomacy] : proficiencyEnum,
-    [Skill.intimidation] : proficiencyEnum,
-    [Skill.medicine] : proficiencyEnum,
-    [Skill.nature] : proficiencyEnum,
-    [Skill.occultism] : proficiencyEnum,
-    [Skill.performance] : proficiencyEnum,
-    [Skill.religion] : proficiencyEnum,
-    [Skill.society] : proficiencyEnum,
-    [Skill.stealth] : proficiencyEnum,
-    [Skill.survival] : proficiencyEnum,
-    [Skill.thievery] : proficiencyEnum,
+    classDC: proficiencyLevel,
+    perception: proficiencyLevel,
+    [DefenseEnum.fortitude] : proficiencyLevel,
+    [DefenseEnum.will] : proficiencyLevel,
+    [DefenseEnum.reflex] : proficiencyLevel,
+    [Skill.acrobatics] : proficiencyLevel,
+    [Skill.arcana] :  proficiencyLevel,
+    [Skill.athletics] : proficiencyLevel,
+    [Skill.crafting] : proficiencyLevel,
+    [Skill.deception] : proficiencyLevel,
+    [Skill.diplomacy] : proficiencyLevel,
+    [Skill.intimidation] : proficiencyLevel,
+    [Skill.medicine] : proficiencyLevel,
+    [Skill.nature] : proficiencyLevel,
+    [Skill.occultism] : proficiencyLevel,
+    [Skill.performance] : proficiencyLevel,
+    [Skill.religion] : proficiencyLevel,
+    [Skill.society] : proficiencyLevel,
+    [Skill.stealth] : proficiencyLevel,
+    [Skill.survival] : proficiencyLevel,
+    [Skill.thievery] : proficiencyLevel,
 }
 
 export interface iCharacter {
@@ -235,59 +203,40 @@ export interface iCharacter {
 }
 
 
-function newProfVal(): iProficiencies {
-    return {
-        classDC: proficiencyEnum.U,
-        perception: proficiencyEnum.U,
-        fortitude: proficiencyEnum.U,
-        reflex: proficiencyEnum.U,
-        will: proficiencyEnum.U,
-        acrobatics: proficiencyEnum.U,
-        arcana: proficiencyEnum.U,
-        athletics: proficiencyEnum.U,
-        crafting: proficiencyEnum.U,
-        deception: proficiencyEnum.U,
-        diplomacy: proficiencyEnum.U,
-        intimidation: proficiencyEnum.U,
-        medicine: proficiencyEnum.U,
-        nature: proficiencyEnum.U,
-        occultism: proficiencyEnum.U,
-        performance: proficiencyEnum.U,
-        religion: proficiencyEnum.U,
-        society: proficiencyEnum.U,
-        stealth: proficiencyEnum.U,
-        survival: proficiencyEnum.U,
-        thievery: proficiencyEnum.U,
-    }
+const DEFAULT_PROFICIENCY = proficiencyLevel.Untrained;
+const DEFAULT_SKILL_VALUE = 0;
+
+// Utility function to create default values
+function createDefaultValues<T>(defaultValue: T): Record<string, T> {
+    return Object.values(Skill).reduce((acc, key) => {
+        acc[key] = defaultValue;
+        return acc;
+    }, {} as Record<string, T>);
 }
 
-
-function newSkillVal(): iSkillVal {
+// Create default proficiencies
+function createDefaultProficiencies(): iProficiencies {
     return {
-        classDC: 0,
-        perception: 0,
-        fortitude: 0,
-        reflex: 0,
-        will: 0,
-        acrobatics: 0,
-        arcana: 0,
-        athletics: 0,
-        crafting: 0,
-        deception: 0,
-        diplomacy: 0,
-        intimidation: 0,
-        medicine: 0,
-        nature: 0,
-        occultism: 0,
-        performance: 0,
-        religion: 0,
-        society: 0,
-        stealth: 0,
-        survival: 0,
-        thievery: 0,
-    }
+        classDC: DEFAULT_PROFICIENCY,
+        perception: DEFAULT_PROFICIENCY,
+        [DefenseEnum.fortitude]: DEFAULT_PROFICIENCY,
+        [DefenseEnum.reflex]: DEFAULT_PROFICIENCY,
+        [DefenseEnum.will]: DEFAULT_PROFICIENCY,
+        ...createDefaultValues(proficiencyLevel.Untrained),
+    };
 }
 
+// Create default skill values
+function createDefaultSkillValues(): iSkillVal {
+    return {
+        classDC: DEFAULT_SKILL_VALUE,
+        perception: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.fortitude]: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.reflex]: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.will]: DEFAULT_SKILL_VALUE,
+        ...createDefaultValues(DEFAULT_SKILL_VALUE),
+    };
+}
 export function newCharacter(n: number): iCharacter {
     return {
         key: "",
@@ -313,8 +262,8 @@ export function newCharacter(n: number): iCharacter {
         untrainedImprovisation: false,
         checkPenalty: 0,
         spellDCs: [],
-        proficiencies: newProfVal(),
-        item: newSkillVal(),
+        proficiencies: createDefaultProficiencies(),
+        item: createDefaultSkillValues(),
         lores: [],
     };
 }
@@ -322,11 +271,6 @@ export function newCharacter(n: number): iCharacter {
 
 export function newParty(): iParty {
     return { name: "",  characters: [newCharacter(1), newCharacter(2), newCharacter(3), newCharacter(4)]}
-}
-
-export interface iProficiencyOption {
-    name: string,
-    value: number,
 }
 
 
@@ -343,7 +287,7 @@ export interface RollInfo {
     rollType: string,
     attrType : Attribute,
     attrValue: number,
-    training: proficiencyEnum,
+    training: proficiencyLevel,
     untrainedImprovisation: boolean,
     level: number,
     item: number,
@@ -358,7 +302,7 @@ export type RollResult = {
     activePenalty: number,
     roll?: number,
     total?: number,
-    result?: SuccessEnum,
+    result?: RollOutcome,
 }
 
 

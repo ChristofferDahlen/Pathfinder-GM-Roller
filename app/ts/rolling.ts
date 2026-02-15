@@ -1,4 +1,20 @@
-import {Attribute, proficiencyEnum, proficiencyValues, type RollInfo, type RollResult, SuccessEnum} from "./types";
+import {Attribute, proficiencyLevel, ProficiencyValueMap, type RollInfo, type RollResult} from "./types";
+
+
+export enum RollOutcome  {
+    CF = -1,
+    F = 0,
+    S = 1,
+    CS = 2
+}
+
+export const SuccessAsString = {
+    [RollOutcome.CF] : "cf",
+    [RollOutcome.F] : "f",
+    [RollOutcome.S] : "s",
+    [RollOutcome.CS] : "cs",
+
+}
 
 const CRITICAL_SUCCESS_MARGIN = 10;
 const CRITICAL_FAILURE_MARGIN = -10;
@@ -17,26 +33,26 @@ function getCriticalModifiers(roll: number): { cSuccess: number; cFailure: numbe
 }
 
 export function getProficiencyString(info: RollInfo): string {
-    const proficiencyMap: Record<proficiencyEnum, string> = {
-        [proficiencyEnum.U]: "",
-        [proficiencyEnum.T]: "T",
-        [proficiencyEnum.E]: "E",
-        [proficiencyEnum.M]: "M",
-        [proficiencyEnum.L]: "L",
+    const proficiencyMap: Record<proficiencyLevel, string> = {
+        [proficiencyLevel.Untrained]: "",
+        [proficiencyLevel.Trained]: "T",
+        [proficiencyLevel.Expert]: "E",
+        [proficiencyLevel.Master]: "M",
+        [proficiencyLevel.Legendary]: "L",
     };
-    return (info.training === proficiencyEnum.U && info.untrainedImprovisation)
+    return (info.training === proficiencyLevel.Untrained && info.untrainedImprovisation)
         ? "UI"
         : (proficiencyMap[info.training] || "");
 }
 
-export function calculateProficiency(level: number, training: proficiencyEnum, untrainedImprovisation: boolean): number {
-    if (training === proficiencyEnum.U) {
+export function calculateProficiency(level: number, training: proficiencyLevel, untrainedImprovisation: boolean): number {
+    if (training === proficiencyLevel.Untrained) {
         if (untrainedImprovisation) {
             return level < 5 ? level - 2 : level < 7 ? level - 1 : level;
         }
         return 0;
     }
-    return level + proficiencyValues[training];
+    return level + ProficiencyValueMap[training];
 }
 
 export function calculateProficiencyFromInfo(info: RollInfo): number {
@@ -53,14 +69,14 @@ export function calculateBonusFromInfo(rollInfo: RollInfo): number {
     return calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
 }
 
-export function calculateRollResult(dc: number, roll: number, bonus: number, miscMod: number = 0): SuccessEnum {
+export function calculateRollResult(dc: number, roll: number, bonus: number, miscMod: number = 0): RollOutcome {
     const value = roll + bonus + miscMod;
     const {cSuccess, cFailure} = getCriticalModifiers(roll);
 
-    if (value >= dc + CRITICAL_SUCCESS_MARGIN) return SuccessEnum.CS - cFailure; // Critical Success
-    if (value >= dc) return SuccessEnum.S + cSuccess - cFailure; // Success
-    if (value <= dc + CRITICAL_FAILURE_MARGIN) return SuccessEnum.CF + cSuccess; // Critical Failure
-    return SuccessEnum.F - cFailure; // Failure
+    if (value >= dc + CRITICAL_SUCCESS_MARGIN) return RollOutcome.CS - cFailure; // Critical Success
+    if (value >= dc) return RollOutcome.S + cSuccess - cFailure; // Success
+    if (value <= dc + CRITICAL_FAILURE_MARGIN) return RollOutcome.CF + cSuccess; // Critical Failure
+    return RollOutcome.F - cFailure; // Failure
 }
 
 export function calculateRollResultBase(rollInfo: RollInfo): RollResult {
@@ -76,7 +92,7 @@ export function calculateRollResultBase(rollInfo: RollInfo): RollResult {
     };
 }
 
-export function calculateDC(attrValue: number, level: number, training: proficiencyEnum, itemBonus: number): number {
+export function calculateDC(attrValue: number, level: number, training: proficiencyLevel, itemBonus: number): number {
     const proficiency = calculateProficiency(level, training, false);
     const bonus = calculateBonus(Attribute.wis, attrValue, itemBonus, proficiency, 0);
     return 10 + bonus;
