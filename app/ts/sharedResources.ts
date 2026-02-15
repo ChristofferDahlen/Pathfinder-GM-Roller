@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {type iSelectedDisplay, type iSkillTable, skillEnum} from "~/ts/types.ts";
+import {skillEnum} from "~/ts/types.ts";
 
 export interface iCheckState {
     selected: boolean,
@@ -157,15 +157,23 @@ export const Selected = reactive<managable>({
     }
 })
 
+type DCreact = {
+    value : number,
+    resetValue : number | undefined,
+    set(newValue : number, setReset: boolean, clearReset: boolean) : void,
+    add(value : number) : void,
+    setReset() : void
+}
 
-export const DC = reactive({
+
+export const DC = reactive<DCreact>({
     value: 15,
-    resetValue: undefined | Number,
+    resetValue: undefined,
     minDC: 0,
     maxDC: 60,
     set(v: number, reset: boolean, clearReset = false ) {
         console.log("Set DC to ", v)
-        if (reset && this.resetValue == undefined)
+        if (reset && this.resetValue == undefined && v != this.value)
             this.resetValue = this.value
         else if(clearReset)
             this.resetValue = undefined
@@ -182,7 +190,7 @@ export const DC = reactive({
         this.set(this.value + addition, reset)
     },
 
-    reset() {
+    setReset() {
         this.value = this.resetValue;
         this.resetValue = undefined;
     }

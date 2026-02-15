@@ -19,6 +19,6 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "../assets/styles/table/ac-box" as *;
+@use "../../assets/styles/table/ac-box" as *;
 
 </style>

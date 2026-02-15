@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {type selectable, Selected} from "./ts/sharedResources.ts";
+import {type selectable, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
-import ACEntry from "./table/ACEntry.vue";
-import RollEntry from "./table/RollEntry.vue";
+import ACEntry from "./Entries/ACEntry.vue";
+import RollEntry from "./Entries/RollEntry.vue";
 import {capitalize, ref} from "vue";
 import {
   skillEnum,
@@ -15,11 +15,11 @@ import {
   miscEnum,
   type RollInfo,
   type iCharacters, type iCharacter
-} from "./ts/types";
+} from "../ts/types";
 import {onMounted, onUnmounted, watch} from "vue";
-import ClassEntry from "./table/ClassDCEntry.vue";
-import SpellDCEntry from "./table/SpellDCEntry.vue";
-import {DC} from "./ts/sharedResources"
+import ClassEntry from "./Entries/ClassDCEntry.vue";
+import SpellDCEntry from "./Entries/SpellDCEntry.vue";
+import {DC} from "../ts/sharedResources"
 
 
 const characters = defineModel<iCharacters>({required: true});

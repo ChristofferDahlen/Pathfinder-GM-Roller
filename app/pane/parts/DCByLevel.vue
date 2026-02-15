@@ -3,13 +3,13 @@
 import Button from "primevue/button";
 
 const emit = defineEmits<{set : [value: number, saveOld: boolean]}>()
-import c from "../assets/dc_by_lvl.json"
-import d from "../assets/dc_by_spell_rank.json"
+import c from "../../assets/dc_by_lvl.json"
+import d from "../../assets/dc_by_spell_rank.json"
 
 const dc_by_level = ref(c)
 const dc_by_spell_rank = ref(d)
 
-import {DC} from "../ts/sharedResources"
+import {DC} from "../../ts/sharedResources"
 
 </script>
 

@@ -2,7 +2,7 @@
 
 import Button from "primevue/button";
 import {ref} from "vue";
-import {DC} from "../ts/sharedResources";
+import {DC} from "../../ts/sharedResources";
 
 const simpleDCs = ref([
   {

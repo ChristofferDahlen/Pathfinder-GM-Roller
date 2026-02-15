@@ -2,8 +2,8 @@
 
 import Button from "primevue/button";
 import {capitalize} from "vue";
-import {type iSkillTable, skillEnum} from "../ts/types.ts";
-import {Selected} from "../ts/sharedResources";
+import {type iSkillTable, skillEnum} from "../../ts/types.ts";
+import {Selected} from "../../ts/sharedResources";
 
 interface sklist {
   trait: string,

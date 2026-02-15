@@ -10,7 +10,7 @@ const rollSec = ref(0)
 const rollMins = ref(5)
 const timeout = ref()
 
-const emit = defineEmits(["Roll"])
+const emit = defineEmits(["roll"])
 
 onMounted(()=> {
   const autoRoll = localStorage.getItem("auto-roll");
@@ -55,10 +55,9 @@ function change() {
 
 function roll() {
   if(isRolling.value) {
-    console.log("rolling", isRolling.value)
     timeout.value = setTimeout(roll, getTime())
 
-    emit("Roll");
+    emit("roll");
   } else {
     clearTimeout(timeout.value);
   }
@@ -74,10 +73,7 @@ function restart() {
     timeout.value = setTimeout(roll, getTime())
   }
   save();
-
 }
-
-defineExpose({ restart})
 
 </script>
 
@@ -94,5 +90,5 @@ defineExpose({ restart})
 </template>
 
 <style scoped lang="scss">
-@use "../assets/styles/dc/DCHead" as *;
+@use "../../assets/styles/dc/DCHead" as *;
 </style>

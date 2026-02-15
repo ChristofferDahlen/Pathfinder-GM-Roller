@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 
-import type {RollInfo, RollResult} from "../ts/types.ts";
+import type {RollInfo, RollResult} from "../../ts/types.ts";
 
 const input = defineProps<{
   DC: number,
@@ -67,6 +67,6 @@ function capitalizeFirstLetter(str : string) {
 
 
 <style scoped lang="scss">
-@use "../assets/styles/table/tooltip" as *;
+@use "../../assets/styles/table/tooltip" as *;
 
 </style>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import {proficiencyEnum, type RollInfo, type RollResult, sucessAsString, sucessEnum} from "../ts/types.ts";
-import {calculateResultBase, calculateRollResult} from "../ts/rolling.ts";
+import {proficiencyEnum, type RollInfo, type RollResult, sucessAsString, sucessEnum} from "../../ts/types.ts";
+import {calculateResultBase, calculateRollResult} from "../../ts/rolling.ts";
 
 
 interface Props {
@@ -54,7 +54,7 @@ function updateBaseline() {
 
 function generateRoll() {
 
-  console.info("Rolling", rollInfo.rollType)
+  console.debug("Rolling", rollInfo.rollType)
 
   rollResult.value.roll = Math.floor(Math.random() * 20) + 1;
   rollResult.value.total = rollResult.value.bonus + rollResult.value.roll;
@@ -83,7 +83,7 @@ watch(() => rollInfo, (u : RollInfo) => {
   }
 })
 
-watch(() => DC, (u) => {
+watch(() => DC, () => {
   generateRoll();
 })
 
@@ -168,7 +168,7 @@ generateRoll()
 
 
 <style scoped lang="scss">
-@use "../assets/styles/table/roll-box" as *;
+@use "../../assets/styles/table/roll-box" as *;
 
 
 </style>

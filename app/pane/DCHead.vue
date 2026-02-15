@@ -53,7 +53,7 @@ const checkDigit = (event: KeyboardEvent) => {
 function setOldDcShortcut(key: KeyboardEvent) {
   console.log(key.key, "oldDC", shortcuts.value.Reset)
   if(key.key === shortcuts.value.Reset)
-    DC.reset()
+    DC.setReset()
 }
 
 
@@ -109,7 +109,7 @@ onUnmounted(() => {
                      @focusout="updateViaTextBox">
 
           </InputText>
-        <Button class="text-xs w-fit m-auto" :class="{invisible : DC.resetValue === undefined}" outlined @click="DC.reset()" >
+        <Button class="text-xs w-fit m-auto" :class="{invisible : DC.resetValue === undefined}" outlined @click="DC.setReset()" >
           Reset <div class="text-xs" v-if="DC.resetValue !== undefined">({{DC.resetValue}})</div>
         </Button>
       </div>

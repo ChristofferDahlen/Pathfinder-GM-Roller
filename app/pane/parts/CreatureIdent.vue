@@ -2,7 +2,7 @@
 
 import Button from "primevue/button";
 import {capitalize, ref} from "vue";
-import {Selected} from "../ts/sharedResources";
+import {Selected} from "../../ts/sharedResources";
 
 const creatureTable = ref({
   "Aberration": ["occultism"],

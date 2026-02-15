@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {capitalize, onMounted, onUnmounted, ref} from "vue";
-import type {iParty} from "ts/types";
+import type {iParty} from "app/ts/types";
 import ScrollPanel from "primevue/scrollpanel";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";

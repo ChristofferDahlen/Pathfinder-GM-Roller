@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {calcProf, calcProfByInfo, calculateDC, profString, profStringByInfo} from "../ts/rolling";
-import {attEnum, type iDC, proficiencyEnum} from "../ts/types";
+import {calculateDC, profString} from "../../ts/rolling";
+import {attEnum, type iDC, proficiencyEnum} from "../../ts/types";
 import {capitalize} from "vue";
 
 
@@ -35,6 +35,6 @@ const { name = "Type", training = proficiencyEnum.U, attr = 0, level = 0, attrTy
 </template>
 
 <style scoped lang="scss">
-@use "../assets/styles/table/ac-box" as *;
+@use "../../assets/styles/table/ac-box" as *;
 
 </style>

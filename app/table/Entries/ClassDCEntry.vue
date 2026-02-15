@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {calculateResultBase, profStringByInfo} from "../ts/rolling";
-import type {RollInfo} from "../ts/types.ts";
+import {calculateResultBase, profStringByInfo} from "../../ts/rolling";
+import type {RollInfo} from "../../ts/types.ts";
 
 
 
@@ -24,6 +24,6 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@use "../assets/styles/table/ac-box" as *;
+@use "../../assets/styles/table/ac-box" as *;
 
 </style>

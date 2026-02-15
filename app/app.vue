@@ -2,16 +2,15 @@
 import {onMounted, onUnmounted, ref, watch, provide} from 'vue'
 
 import ToggleButton from 'primevue/togglebutton';
-import RollTable from "./RollTable.vue";
-import DCPane from "./DC-pane.vue"
+import RollTable from "./table/RollTable.vue";
+import DCPane from "./pane/DC-pane.vue"
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 
 import {newParty, type iParty, type iSkillTable} from "./ts/types.ts"
 import {defaultShortcuts, type RollerSettings, type RollerShortcuts} from "./ts/settings.ts";
 import CharEdit from "./edit/charEdit.vue";
-import {DC} from "./ts/sharedResources";
-import PartySave from "./PartySave.vue";
+import PartySave from "./save/PartySave.vue";
 
 
 interface iRoller {
@@ -147,7 +146,7 @@ function select(u : Array<keyof iSkillTable | string>) {
 
 
 
-    <RollTable v-model="party.characters" @edit="edit" ref="rt" :settings="settings" :DC="DC" :partyName="party.name"></RollTable>
+    <RollTable v-model="party.characters" @edit="edit" ref="rt" :settings="settings":partyName="party.name"></RollTable>
     <div class="inline-block align-top w-3/12 max-h-screen overflow-scroll">
       <div class="flex flex-row-reverse border-b">
         <div class="m-2">
@@ -168,12 +167,11 @@ function select(u : Array<keyof iSkillTable | string>) {
           <Button outlined>
             <MdiIcon icon="mdiCog" ></MdiIcon>
           </Button>
-
         </div>
       </div>
 
-      <div class=" " @response="(dc : number) => updateVal(dc)">
-        <DCPane @newDC="updateVal" @skillSelect="u => select(u)"></DCPane>
+      <div class=" " >
+        <DCPane @roll="roll"></DCPane>
       </div>
 
     </div>
