@@ -13,7 +13,6 @@ interface Props {
   level: number,
   item: number,
   attrType: attEnum,
-
 }
 
 const { name = "Type", training = proficiencyEnum.U, attr = 0, level = 0, attrType = attEnum.str } = defineProps<Props>()

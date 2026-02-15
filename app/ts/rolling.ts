@@ -1,17 +1,25 @@
-import {attEnum, proficiencyEnum, proficiencyValues, type RollInfo, type RollResult} from "~/ts/types.ts";
-import {sucessEnum} from "./types";
+import {attEnum, proficiencyEnum, proficiencyValues, type RollInfo, type RollResult, sucessEnum} from "./types";
 
 export function profString(profEnum: proficiencyEnum) {
     return profEnum as string
 }
 
-export function profStringByInfo(info: RollInfo) {
-    if (info.training === proficiencyEnum.U && info.untrainedImprovisation)
-    {
+export function getProficiencyString(info: RollInfo): string {
+    const proficiencyMap: Record<proficiencyEnum, string> = {
+        [proficiencyEnum.U]: "",
+        [proficiencyEnum.T]: "T",
+        [proficiencyEnum.E]: "E",
+        [proficiencyEnum.M]: "M",
+        [proficiencyEnum.L]: "L"
+    };
+
+    if (info.training === proficiencyEnum.U && info.untrainedImprovisation) {
         return "UI";
     }
-    return info.training as string
+
+    return proficiencyMap[info.training] || "";
 }
+
 
 export function calcProf(lvl: number, training: proficiencyEnum, untrainedImprovisation: boolean ) : number {
 

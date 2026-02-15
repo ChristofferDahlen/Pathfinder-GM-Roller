@@ -7,11 +7,8 @@ import RollEntry from "./Entries/RollEntry.vue";
 import {capitalize, ref} from "vue";
 import {
   skillEnum,
-  type iSkillTable,
-  type iSelectedDisplay,
   attrBase,
   attEnum,
-  defenseEnum,
   miscEnum,
   type RollInfo,
   type iCharacters, type iCharacter
@@ -22,144 +19,97 @@ import SpellDCEntry from "./Entries/SpellDCEntry.vue";
 import {DC} from "../ts/sharedResources"
 
 
+const CONTROL_KEY = "Control"; // Extracted constant for control key
+const isControlPressed = ref<boolean>(false);
+
 const characters = defineModel<iCharacters>({required: true});
-
-
 defineExpose({rollAll});
-const props = defineProps<{
-  partyName: string
-}>()
 
-const controlPressed = ref<boolean>(false)
+const props = defineProps<{ partyName: string }>();
 
-onMounted(() => {
-  document.addEventListener('keydown', keydown)
-  document.addEventListener('keyup', keyup)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', keydown)
-  document.removeEventListener('keyup', keyup)
-
-})
-
-function keydown(key: KeyboardEvent) {
-  if (key.key === "Control") {
-    controlPressed.value = true;
-  }
-}
-
-function keyup(key: KeyboardEvent) {
-  if (key.key === "Control") {
-    controlPressed.value = false;
-  }
-}
-
-
+onMounted(setupKeyboardListeners);
+onUnmounted(teardownKeyboardListeners);
 
 watch(characters, () => {
-  console.log("Party")
+  console.log("Party");
   updateLores();
   updateDCs();
-})
+});
 
+const SpellDCCount = ref<number[]>([]);
+const roller = ref<rollerDict>(new Map<string, charRollers>());
 
+function setupKeyboardListeners() {
+  document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("keyup", handleKeyup);
+}
 
+function teardownKeyboardListeners() {
+  document.removeEventListener("keydown", handleKeydown);
+  document.removeEventListener("keyup", handleKeyup);
+}
 
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === CONTROL_KEY) isControlPressed.value = true;
+}
 
+function handleKeyup(event: KeyboardEvent) {
+  if (event.key === CONTROL_KEY) isControlPressed.value = false;
+}
 
-
-
-type RollEntryType = InstanceType<typeof RollEntry>
-
-type charRollers = Map<string, RollEntryType>
-type rollerDict = Map<string | number, charRollers>
-
-
-const roller = ref<rollerDict>(new Map<string, charRollers>)
-
-
-
-
-function setRoller(skillKey : string | number, charKey : string,  roll :  RollEntryType) {
-  if((!roller.value.has(skillKey)))
+function setRoller(skillKey: string | number, charKey: string, roll: RollEntryType) {
+  if (!roller.value.has(skillKey)) {
     roller.value.set(skillKey, new Map<string, RollEntryType>());
+  }
   roller.value.get(skillKey)?.set(charKey, roll);
 }
 
-function rollCharacter(charKey: string) {
-  console.log("Roll Character", charKey);
-
-  roller.value.forEach((inner, key) => {
-    inner.get(charKey)?.generateRoll();
-  })
+function rollCharacter(characterKey: string) {
+  console.log("Roll Character", characterKey);
+  roller.value.forEach(inner => inner.get(characterKey)?.generateRoll());
 }
 
 function rollSkill(skillKey: string | number) {
-  const key = skillKey.toString();
-  console.log("Roll Skill ", skillKey, key);
-  const innerRoller = roller.value.get(key)
-  console.log("innerRoller", innerRoller)
-
-  innerRoller?.forEach((value, key) => {
-    console.log(key)
+  console.log("Roll Skill", skillKey);
+  roller.value.get(skillKey.toString())?.forEach((value, key) => {
+    console.log(key);
     value?.generateRoll();
-  })
-
+  });
 }
 
 function rollAll() {
-  console.log("Roll All")
-
-  roller.value.forEach(inner => {
-    inner?.forEach(r => r?.generateRoll())
-  })
+  console.log("Roll All");
+  roller.value.forEach(inner => inner.forEach(roll => roll?.generateRoll()));
 }
 
-
 function updateLores() {
-  console.info("Update Lores")
-  let maxCount = 0
-  const char = characters.value;
+  console.info("Update Lores");
+  const maxLoreCount = Math.max(...characters.value.map(char => char.lores.length), 0);
+  adjustLores(maxLoreCount);
+}
 
-  char.forEach((char: iCharacter) => {
-    console.log("---CI", char)
-    maxCount = Math.max(maxCount, char.lores.length);
-  })
-
-  if(maxCount < Selected.lores.length)
-  {
-    Selected.lores = Selected.lores.slice(0, maxCount)
-  } else if(maxCount > Selected.lores.length) {
-    let numToAdd = maxCount - Selected.lores.length;
-    for (let i = 0; i < numToAdd; i++) {
-      Selected.lores.push({selected: true, hover: false})
-    }
+function adjustLores(targetCount: number) {
+  const currentCount = Selected.lores.length;
+  if (targetCount < currentCount) {
+    Selected.lores = Selected.lores.slice(0, targetCount);
+  } else if (targetCount > currentCount) {
+    Selected.lores.push(...Array.from({length: targetCount - currentCount}, () => ({selected: true, hover: false})));
   }
 }
 
-const SpellDCCount = ref<number[]>([])
-
 function updateDCs() {
-  var maxSpellDCCount = 0;
-  characters.value.forEach((char: iCharacter) => {
-    maxSpellDCCount = Math.max(maxSpellDCCount, char.spellDCs.length);
-  })
-  SpellDCCount.value = Array.from(Array(maxSpellDCCount).keys());
+  console.info("Update DCs");
+  const maxSpellDCCount = Math.max(...characters.value.map(char => char.spellDCs.length), 0);
+  SpellDCCount.value = [...Array(maxSpellDCCount).keys()];
 }
-
 
 function selectOnly(skill: selectable) {
-  if(controlPressed.value == true)
-    Selected.selectOnly(skill)
+  if (isControlPressed.value) Selected.selectOnly(skill);
 }
 
-function selectOnlyLore(skill: number) {
-  if(controlPressed.value == true)
-    Selected.selectOnlyLore(skill)
+function selectOnlyLore(skillIndex: number) {
+  if (isControlPressed.value) Selected.selectOnlyLore(skillIndex);
 }
-
-
 
 updateLores()
 updateDCs()
