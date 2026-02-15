@@ -1,24 +1,26 @@
 <template>
   <Panel toggleable header="Vulnerabilities" class="overflow-scroll">
     <ul>
-      <li v-for="(vul, ir) in char.vulnerabilities" class="p-1" :key="'vul_' + ir">
-        <InputText v-model="vul.name" placeholder="Type" pt:root:class="pt_rv_text"
-                   class="rv_text"></InputText>
-        <InputNumber class="rv_field " v-model="vul.value" fluid
-                     :min="0" :max="30">
-        </InputNumber>
+      <li v-for="(vul, ir) in char.vulnerabilities" :key="'vul_' + ir" class="p-1">
+        <InputText
+            v-model="vul.name" placeholder="Type" pt:root:class="pt_rv_text"
+            class="rv_text"/>
+        <InputNumber
+            v-model="vul.value" class="rv_field " fluid
+            :min="0" :max="30"/>
         <Button class="rv_button" @click="removeVulnerability(ir)">
-          <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"></MdiIcon>
+          <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"/>
         </Button>
       </li>
       <li class="p-1">
-        <InputText v-model="newVulnerability" placeholder="Type" pt:root:class="pt_rv_text"
-                   class="rv_text"></InputText>
-        <InputNumber class="rv_field text-center " v-model="newVulnerabilityValue" fluid
-                     :min="0" :max="30">
-        </InputNumber>
+        <InputText
+            v-model="newVulnerability" placeholder="Type" pt:root:class="pt_rv_text"
+            class="rv_text"/>
+        <InputNumber
+            v-model="newVulnerabilityValue" class="rv_field text-center " fluid
+            :min="0" :max="30"/>
         <Button class="rv_button" @click="addVulnerability()">
-          <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"></MdiIcon>
+          <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"/>
         </Button>
       </li>
     </ul>
@@ -26,23 +28,23 @@
 </template>
 <script setup lang="ts">
 
-import {iCharacter} from "../../ts/types";
+import type {iCharacter} from "../../ts/types";
 import {ref} from "vue";
 
-const props = defineProps<{char : iCharacter}>()
+const char = defineModel<{ char: iCharacter }>();
 
 const newVulnerability = ref("")
 const newVulnerabilityValue = ref(0)
 
 
 function addVulnerability() {
-  props.char.vulnerabilities.push({name: newVulnerability.value, value: newVulnerabilityValue.value})
+  char.value.vulnerabilities.push({name: newVulnerability.value, value: newVulnerabilityValue.value})
   newVulnerability.value = ""
   newVulnerabilityValue.value = 0
 }
 
 function removeVulnerability(iRes: number) {
-  props.char.vulnerabilities.splice(iRes, 1);
+  char.value.char.vulnerabilities.splice(iRes, 1);
 }
 
 

@@ -38,7 +38,7 @@
       <AccordionPanel value="3">
         <AccordionHeader>Auto Roll</AccordionHeader>
         <AccordionContent>
-          <DCPeriod @roll="emit('roll')" ref="period"></DCPeriod>
+          <DCPeriod ref="period" @roll="emit('roll')"></DCPeriod>
         </AccordionContent>
       </AccordionPanel>
 

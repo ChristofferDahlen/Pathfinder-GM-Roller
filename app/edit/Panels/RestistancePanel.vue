@@ -1,52 +1,56 @@
-<template>
-  <Panel toggleable header="Resistances" class="overflow-scroll">
-    <ul>
-      <li v-for="(res, ir) in char.resistances" class="p-1" :key="'res_' + ir">
-        <InputText v-model="res.name" placeholder="Type" pt:root:class="pt_rv_text"
-                   class="rv_text"></InputText>
-        <InputNumber class="rv_field " v-model="res.value" fluid
-                     :min="0" :max="30">
-        </InputNumber>
-        <Button class="rv_button" @click="removeResistance(i, ir)">
-          <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"></MdiIcon>
-        </Button>
-      </li>
-      <li class="p-1">
-        <InputText v-model="newResistance" placeholder="Type" pt:root:class="pt_rv_text"
-                   class="rv_text"></InputText>
-        <InputNumber class="rv_field " v-model="newResistanceValue" fluid
-                     :min="0" :max="30">
-        </InputNumber>
-        <Button class="rv_button" @click="addResistance()">
-          <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"></MdiIcon>
-        </Button>
-      </li>
-    </ul>
-  </Panel>
-</template>
 <script setup lang="ts">
 
-import {iCharacter} from "../../ts/types";
+import type {iCharacter} from "../../ts/types";
 import {ref} from "vue";
 
-const props = defineProps<{char : iCharacter}>()
+const char = defineModel<{ char: iCharacter }>();
 
 const newResistance = ref("")
 const newResistanceValue = ref(0)
 
 
 function addResistance() {
-  props.char.resistances.push({name: newResistance.value, value: newResistanceValue.value})
+  char.value.resistances.push({name: newResistance.value, value: newResistanceValue.value})
   newResistance.value = ""
   newResistanceValue.value = 0
 }
 
 function removeResistance(iRes: number) {
-  props.char.resistances.splice(iRes, 1);
+  char.value.resistances.splice(iRes, 1);
 }
 
 
 </script>
+
+
+<template>
+  <Panel toggleable header="Resistances" class="overflow-scroll">
+    <ul>
+      <li v-for="(res, ir) in char.resistances" :key="'res_' + ir" class="p-1">
+        <InputText
+            v-model="res.name" placeholder="Type" pt:root:class="pt_rv_text"
+            class="rv_text"/>
+        <InputNumber
+            v-model="res.value" class="rv_field " fluid
+            :min="0" :max="30"/>
+        <Button class="rv_button" @click="removeResistance(i, ir)">
+          <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"/>
+        </Button>
+      </li>
+      <li class="p-1">
+        <InputText
+            v-model="newResistance" placeholder="Type" pt:root:class="pt_rv_text"
+            class="rv_text"/>
+        <InputNumber
+            v-model="newResistanceValue" class="rv_field " fluid
+            :min="0" :max="30"/>
+        <Button class="rv_button" @click="addResistance()">
+          <MdiIcon icon="mdiPlus" size="12pt" class="p-0 m-0"/>
+        </Button>
+      </li>
+    </ul>
+  </Panel>
+</template>
 <style scoped lang="scss">
 
 .rv_text {

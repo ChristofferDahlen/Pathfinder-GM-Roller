@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
-import {iCharacter} from "../../ts/types";
+import type {iCharacter} from "../../ts/types";
 
-const props = defineProps<{char : iCharacter}>()
+const char = defineModel<{ char: iCharacter }>();
+
 
 </script>
 
@@ -10,8 +11,9 @@ const props = defineProps<{char : iCharacter}>()
   <Panel toggleable header="Defense">
     <div class="">
       <span class="inline-block p-2 w-16">AC</span>
-      <InputNumber class="number" v-model="char.protection.ac" showButtons
-                   buttonLayout="horizontal" fluid :min="0" :max="30">
+      <InputNumber
+v-model="char.protection.ac" class="number" show-buttons
+                   button-layout="horizontal" fluid :min="0" :max="30">
         <template #incrementbuttonicon>
           <MdiIcon size="14pt" icon="mdiPlus"/>
         </template>
@@ -22,8 +24,9 @@ const props = defineProps<{char : iCharacter}>()
     </div>
     <div class="">
       <span class="inline-block p-2 w-16">Shield</span>
-      <InputNumber class="number" v-model="char.protection.shield" showButtons
-                   buttonLayout="horizontal" fluid :min="0" :max="30">
+      <InputNumber
+          v-model="char.protection.shield" class="number" show-buttons
+          button-layout="horizontal" fluid :min="0" :max="30">
         <template #incrementbuttonicon>
           <MdiIcon size="14pt" icon="mdiPlus"/>
         </template>

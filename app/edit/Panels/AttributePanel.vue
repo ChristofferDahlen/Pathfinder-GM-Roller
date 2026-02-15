@@ -1,20 +1,23 @@
 <script setup lang="ts">
 
-import {attrFullname, Attribute, iCharacter} from "../../ts/types";
+import type {iCharacter} from "../../ts/types";
+import {attrFullname, Attribute} from "../../ts/types";
 import {getPrefix} from "../../ts/rolling";
 
-const props = defineProps<{char : iCharacter}>()
+
+const char = defineModel<{ char: iCharacter }>();
 
 </script>
 
 
 <template>
   <Panel toggleable header="Attributes" class="">
-    <div v-for="a in Attribute" class="grid grid-cols-2 w-fit" :key="'edit_char_attr_' + a">
+    <div v-for="a in Attribute" :key="'edit_char_attr_' + a" class="grid grid-cols-2 w-fit">
       <span class="inline-block p-2">{{ attrFullname[a] }}</span>
-      <InputNumber class="number" v-model="char.attributes[a]"
-                   :prefix="getPrefix(char.attributes[a])" showButtons buttonLayout="horizontal" fluid
-                   :min="-9" :max="9">
+      <InputNumber
+          v-model="char.attributes[a]" class="number"
+          :prefix="getPrefix(char.attributes[a])" show-buttons button-layout="horizontal" fluid
+          :min="-9" :max="9">
         <template #incrementbuttonicon>
           <MdiIcon size="14pt" icon="mdiPlus"/>
         </template>
