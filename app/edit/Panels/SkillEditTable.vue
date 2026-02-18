@@ -101,7 +101,6 @@ function removeSpellDC(iLore: number) {
               :options="proficiencyOptions"
               option-label="name"
               option-value="value"
-              :default-value="proficiencyLevel.Untrained"
               allow-empty
               data-key="value"
               @update:model-value="(v) => {
