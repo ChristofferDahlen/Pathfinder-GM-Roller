@@ -1,24 +1,3 @@
 
 @use "../box-base" as *;
 
-.ac-box {
-  @extend .box-base;
-
-  background-color: slategrey;
-  text-align: center;
-  display: inline-block;
-  vertical-align: middle;
-  width: fit-content;
-
-}
-
-.shield {
-  position: absolute;
-  border-radius: 10pt;
-  background-color: slategrey;
-  text-align: center;
-  display: inline-block;
-  vertical-align: top;
-  width: fit-content;
-
-}

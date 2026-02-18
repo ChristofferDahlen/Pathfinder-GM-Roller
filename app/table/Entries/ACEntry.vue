@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 const props = defineProps({
       ac: {type: Number, default: 15},
@@ -9,18 +9,42 @@ const props = defineProps({
 
 <template>
   <div
-      class="ac-box border-b-gray-500" style="border-color:grey">
+      class="ac-box border-b-gray-500">
     {{ props.ac }}
   </div>
   <div
       v-if="props.shield > 0"
-      class=" shield bg-gray-600">
+      class="shield">
     +{{ props.shield }}
   </div>
 
 </template>
 
-<style scoped lang="scss">
-@use "../../assets/styles/table/ac-box" as *;
+<style lang="scss" scoped>
+@use "../../assets/styles/box-base" as *;
 
+.ac-box {
+  @extend .box-base;
+
+  background-color: darkblue;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  width: fit-content;
+  @apply border-gray-100;
+
+}
+
+.shield {
+  position: absolute;
+  border-radius: 10pt;
+  background-color: slategrey;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  width: fit-content;
+  padding: 0 4pt;
+  @apply border-gray-100;
+
+}
 </style>

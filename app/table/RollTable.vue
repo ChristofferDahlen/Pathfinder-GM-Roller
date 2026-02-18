@@ -1,21 +1,15 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {type selectable, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
-import {capitalize, ref, onMounted, onUnmounted, watch} from "vue";
-import {
-  Skill,
-  attrBase,
-  Attribute,
-  miscEnum,
-  type RollInfo,
-  type iCharacters
-} from "../ts/types";
+import {capitalize, onMounted, onUnmounted, ref, watch} from "vue";
+import {attrBase, Attribute, DefenseEnum, type iCharacters, miscEnum, type RollInfo, Skill} from "../ts/types";
 
 import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
+import DefenseEntry from "./Entries/DefenseEntry.vue";
 
 
 const CONTROL_KEY = "Control"; // Extracted constant for control key
@@ -151,6 +145,23 @@ updateDCs()
         <ACEntry :ac="char.protection.ac" :shield="char.protection.shield"/>
       </td>
     </tr>
+    <tr v-for="defense in DefenseEnum" :key="defense">
+      <td/>
+      <td class="roll-type ">{{ capitalize(defense) }}</td>
+      <td v-for="char in characters" :key="char" class="relative">
+        <DefenseEntry :roll-info="{
+            rollType: 'T',
+        penalty: char.checkPenalty,
+        item: char.item[defense],
+        attrType: attrBase[defense],
+        level: char.level,
+        attrValue: char.attributes[attrBase[defense]],
+        untrainedImprovisation: false,
+        training: char.proficiencies[defense],
+        } as RollInfo"/>
+      </td>
+    </tr>
+
     <tr>
       <td/>
       <td class="roll-type">Resistances</td>
@@ -180,15 +191,17 @@ updateDCs()
       </td>
     </tr>
     <tr
-        @mouseover="Selected.perception.hover = true"
         @mouseleave="Selected.perception.hover = false"
+        @mouseover="Selected.perception.hover = true"
     >
       <td>
         <Checkbox
-            v-model="Selected.perception.selected" class="align-middle" :binary="true"
+            v-model="Selected.perception.selected" :binary="true" class="align-middle"
             @click="selectOnly('perception')"/>
       </td>
-      <td class="roll-type"><div class="roll-type">Perception</div></td>
+      <td class="roll-type">
+        <div class="roll-type">Perception</div>
+      </td>
       <td v-for="char in characters" :key="char.name" class="relative">
         <div>
           <RollEntry
@@ -233,12 +246,12 @@ updateDCs()
       <td v-for="char in characters" :key="char + 'roll_type'" class="relative">
         <div v-if="spellIndex < char.spellDCs.length && char.spellDCs[spellIndex]?.name != ''">
           <SpellDCEntry
-              :name="char.spellDCs[spellIndex]!.name"
-              :training="char.spellDCs[spellIndex]!.proficiency"
               :attr="char.attributes[char.spellDCs[spellIndex]!.keyAttr]"
-              :level="char.level"
+              :attr-type="char.spellDCs[spellIndex]!.keyAttr"
               :item="char.spellDCs[spellIndex]!.item"
-              :attr-type="char.spellDCs[spellIndex]!.keyAttr"/>
+              :level="char.level"
+              :name="char.spellDCs[spellIndex]!.name"
+              :training="char.spellDCs[spellIndex]!.proficiency"/>
         </div>
       </td>
     </tr>
@@ -248,11 +261,11 @@ updateDCs()
         v-for="s in Skill" :key="s"
         :class="'divider' "
         class="mt-10"
-        @mouseover="Selected[s].hover = true" @mouseleave="Selected[s].hover = false"
+        @mouseleave="Selected[s].hover = false" @mouseover="Selected[s].hover = true"
     >
       <td>
         <Checkbox
-            v-model="Selected[s].selected" class="align-middle" :binary="true"
+            v-model="Selected[s].selected" :binary="true" class="align-middle"
             @click="selectOnly(s)"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(s)">
@@ -278,11 +291,11 @@ updateDCs()
         v-for="loreIndex in Selected.loreKeys()" :key="'l' + loreIndex"
         :class="(loreIndex == 0) ? 'divider' : '' "
         class="mt-10"
-        @mouseover="Selected.lores[loreIndex]!.hover = true" @mouseleave="Selected.lores[loreIndex]!.hover = false"
+        @mouseleave="Selected.lores[loreIndex]!.hover = false" @mouseover="Selected.lores[loreIndex]!.hover = true"
     >
       <td>
         <Checkbox
-            v-model="Selected.lores[loreIndex]!.selected" class="align-middle" :binary="true"
+            v-model="Selected.lores[loreIndex]!.selected" :binary="true" class="align-middle"
             @click="selectOnlyLore(loreIndex)"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
@@ -318,7 +331,7 @@ updateDCs()
 
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .main-table {
   top: 0;
   left: 0;
@@ -329,6 +342,7 @@ updateDCs()
   overflow: scroll;
   display: inline-block;
 }
+
 .roll-type {
   font-weight: bold;
   user-select: none;
