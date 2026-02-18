@@ -156,43 +156,48 @@ export const Selected = reactive<managable>({
     }
 })
 
-type DCreact = {
-    value: number,
-    resetValue: number | undefined,
-    set(newValue: number, setReset: boolean, clearReset: boolean): void,
-    add(value: number): void,
-    setReset(): void
+const MIN_DC = 0;
+const MAX_DC = 60;
+
+function clampValue(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
 }
 
+type DCreact = {
+    value: number;
+    resetValue?: number;
+    set(newValue: number, shouldReset: boolean, shouldClearReset?: boolean): void;
+    add(addition: number, shouldReset: boolean): void;
+    setReset(): void;
+};
 
 export const DC = reactive<DCreact>({
     value: 15,
     resetValue: undefined,
-    minDC: 0,
-    maxDC: 60,
-    set(v: number, reset: boolean, clearReset = false) {
-        console.log("Set DC to ", v)
-        if (reset && this.resetValue == undefined && v != this.value)
-            this.resetValue = this.value
-        else if (clearReset)
-            this.resetValue = undefined
 
-        if (this.value < this.minDC)
-            this.value = this.minDC;
-        else if (this.value > this.maxDC)
-            this.value = this.maxDC
-        else
-            this.value = v
+    set(newValue, shouldReset, shouldClearReset = false) {
+        console.log("Set DC to", newValue);
+
+        if (shouldReset && this.resetValue == undefined && newValue !== this.value) {
+            this.resetValue = this.value;
+        }
+
+        if (shouldClearReset) {
+            this.resetValue = undefined;
+        }
+
+        // Use the clampValue function to apply boundaries
+        this.value = clampValue(newValue, MIN_DC, MAX_DC);
     },
 
-    add(addition: number, reset: boolean) {
-        this.set(this.value + addition, reset)
+    add(addition, shouldReset) {
+        this.set(this.value + addition, shouldReset);
     },
 
     setReset() {
-        this.value = this.resetValue;
-        this.resetValue = undefined;
-    }
-})
-
-
+        if (this.resetValue !== undefined) {
+            this.value = this.resetValue;
+            this.resetValue = undefined;
+        }
+    },
+});
