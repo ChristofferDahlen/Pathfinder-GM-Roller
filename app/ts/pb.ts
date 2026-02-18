@@ -70,6 +70,35 @@ export interface iSpellCaster {
     spells: Array<iSpellsAtLevel>
 }
 
+export interface iPbMod {
+    "Status Bonus"? : number,
+    "Item Bonus"? : number,
+    "Circumstance Bonus"? : number,
+}
+
+export interface iPBMods {
+    "perception": iPbMod,
+    "fortitude": iPbMod,
+    "reflex": iPbMod,
+    "will": iPbMod,
+    "acrobatics": iPbMod,
+    "arcana": iPbMod,
+    "athletics": iPbMod,
+    "crafting": iPbMod,
+    "deception": iPbMod,
+    "diplomacy": iPbMod,
+    "intimidation": iPbMod,
+    "medicine": iPbMod,
+    "nature": iPbMod,
+    "occultism": iPbMod,
+    "performance": iPbMod,
+    "religion": iPbMod,
+    "society": iPbMod,
+    "stealth": iPbMod,
+    "survival": iPbMod,
+    "thievery": iPbMod
+}
+
 export interface iPBBuild {
     name: string,
     class: string,
@@ -82,6 +111,7 @@ export interface iPBBuild {
     abilities: iPBAbilities,
     proficiencies: iPBProficiencies,
     spellCasters: Array<iSpellCaster>
+    mods: iPBMods;
 }
 
 export interface iAcTotal {
@@ -129,7 +159,7 @@ function toProfEnum(profAsPbNumber: number): proficiencyLevel {
 }
 
 
-export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
+export function updateCharacter(char: iCharacter, pbChar: iPBChar) {
 
     const pbCharBuild = pbChar.build;
     console.log(pbChar)
@@ -220,7 +250,7 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
         spellCasting.spells.forEach((spellsAtLvl: iSpellsAtLevel) => {
             if (spellsAtLvl.spellLevel == 0) {
                 spellsAtLvl.list.forEach((spell: string) => {
-                    if (spell == "Sheild") {
+                    if (spell == "Shield") {
                         char.protection.shield = Math.max(char.protection.shield, 1);
                         console.log("Found the Shield Spell")
                     }
@@ -228,6 +258,23 @@ export function updateCharatcer(char: iCharacter, pbChar: iPBChar) {
             }
         })
     })
+
+    console.info("Processing modifiers (mainly item bonuses)")
+    for (const mod in pbCharBuild.mods) {
+        console.log(mod)
+        if("Item Bonus" in pbCharBuild.mods[mod]) {
+            const lowerCaseMod = mod.toLowerCase();
+            console.log(char.item)
+            console.info("Found Item Bonus: ", mod , " = ",  pbCharBuild.mods[mod]["Item Bonus"], mod in char.item)
+            if(lowerCaseMod in char.item) {
+                char.item[lowerCaseMod] = pbCharBuild.mods[mod]["Item Bonus"]
+                console.info("Set", mod," Item Bonus to", char.item[lowerCaseMod])
+            }
+        }
+    }
+
+
+
 
     return char;
 }

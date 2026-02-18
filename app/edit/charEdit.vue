@@ -5,7 +5,7 @@ import {ref} from "vue";
 import {type iCharacters, newCharacter} from "../ts/types";
 
 
-import {type iPBChar, loadFromPB, updateCharatcer} from "../ts/pb";
+import {type iPBChar, loadFromPB, updateCharacter} from "../ts/pb";
 
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -46,7 +46,7 @@ function updateFromPB() {
       return
     }
     if (i in characters.value) {
-      characters.value[i] = updateCharatcer(characters.value[i] ?? newCharacter(i), Pb_json);
+      characters.value[i] = updateCharacter(characters.value[i] ?? newCharacter(i), Pb_json);
     }
   }
 
