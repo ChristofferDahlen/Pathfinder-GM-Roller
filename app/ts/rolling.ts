@@ -91,6 +91,10 @@ export function calculateBonusFromInfo(rollInfo: RollInfo): number {
     return calculateBonus(rollInfo.attrType, rollInfo.attrValue, rollInfo.item, proficiency, rollInfo.penalty);
 }
 
+export function calculateDcFromInfo(rollInfo: RollInfo): number {
+    return 10 + calculateBonusFromInfo(rollInfo);
+}
+
 export function calculateRollResult(dc: number, roll: number, bonus: number): RollOutcome {
     const value = roll + bonus;
     const {cSuccess, cFailure} = getCriticalModifiers(roll);

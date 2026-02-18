@@ -36,7 +36,16 @@ export enum Skill {
     thievery = "thievery",
 }
 
+export enum DefenseEnum { // Renamed enum to follow PascalCase convention
+    Fortitude = "fortitude",
+    Reflex = "reflex",
+    Will = "will",
+}
+
 export const attrBase = {
+    [DefenseEnum.Fortitude] : Attribute.con,
+    [DefenseEnum.Reflex] : Attribute.dex,
+    [DefenseEnum.Will] : Attribute.wis,
     [Skill.acrobatics]: Attribute.dex,
     [Skill.arcana]: Attribute.int,
     [Skill.athletics]: Attribute.str,
@@ -78,11 +87,7 @@ export const ProficiencyValueMap: Readonly<Record<proficiencyLevel, number>> = {
     [proficiencyLevel.Legendary]: 8,
 };
 
-export enum DefenseEnum { // Renamed enum to follow PascalCase convention
-    Fortitude = "fortitude",
-    Reflex = "reflex",
-    Will = "will",
-}
+
 
 export interface iAttribute {
     [Attribute.str]: number,
@@ -158,9 +163,9 @@ export interface iDC {
 export type iProficiencies = {
     classDC: proficiencyLevel,
     perception: proficiencyLevel,
-    [DefenseEnum.fortitude]: proficiencyLevel,
-    [DefenseEnum.will]: proficiencyLevel,
-    [DefenseEnum.reflex]: proficiencyLevel,
+    [DefenseEnum.Fortitude]: proficiencyLevel,
+    [DefenseEnum.Will]: proficiencyLevel,
+    [DefenseEnum.Reflex]: proficiencyLevel,
     [Skill.acrobatics]: proficiencyLevel,
     [Skill.arcana]: proficiencyLevel,
     [Skill.athletics]: proficiencyLevel,
@@ -217,9 +222,9 @@ function createDefaultProficiencies(): iProficiencies {
     return {
         classDC: DEFAULT_PROFICIENCY,
         perception: DEFAULT_PROFICIENCY,
-        [DefenseEnum.fortitude]: DEFAULT_PROFICIENCY,
-        [DefenseEnum.reflex]: DEFAULT_PROFICIENCY,
-        [DefenseEnum.will]: DEFAULT_PROFICIENCY,
+        [DefenseEnum.Fortitude]: DEFAULT_PROFICIENCY,
+        [DefenseEnum.Reflex]: DEFAULT_PROFICIENCY,
+        [DefenseEnum.Will]: DEFAULT_PROFICIENCY,
         ...createDefaultValues(proficiencyLevel.Untrained),
     };
 }
@@ -229,9 +234,9 @@ function createDefaultSkillValues(): iSkillVal {
     return {
         classDC: DEFAULT_SKILL_VALUE,
         perception: DEFAULT_SKILL_VALUE,
-        [DefenseEnum.fortitude]: DEFAULT_SKILL_VALUE,
-        [DefenseEnum.reflex]: DEFAULT_SKILL_VALUE,
-        [DefenseEnum.will]: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.Fortitude]: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.Reflex]: DEFAULT_SKILL_VALUE,
+        [DefenseEnum.Will]: DEFAULT_SKILL_VALUE,
         ...createDefaultValues(DEFAULT_SKILL_VALUE),
     };
 }

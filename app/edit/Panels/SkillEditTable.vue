@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import {capitalize, ref} from "vue";
-import {type iCharacter, attrBase, Attribute, type iDC, type iLore, proficiencyLevel, Skill} from "../../ts/types";
-import {calculateBonusFromInfo, calculateProficiency} from "../../ts/rolling";
+import {
+  type iCharacter,
+  attrBase,
+  Attribute,
+  type iDC,
+  type iLore,
+  proficiencyLevel,
+  Skill,
+  DefenseEnum
+} from "../../ts/types";
+import {calculateBonusFromInfo, calculateDcFromInfo, calculateProficiency} from "../../ts/rolling";
 import {Select} from "primevue";
 
 const char = defineModel<{ char: iCharacter }>();
@@ -70,6 +79,92 @@ function removeSpellDC(iLore: number) {
     <thead class="">
     <tr class="main-table-header bg-surface-950" style="position: sticky; top: 0; z-index: 1;">
       <th>
+        Defenses
+      </th>
+      <th class="px-2">
+        Proficiency
+      </th>
+      <th class="px-2">
+        Attribute
+      </th>
+      <th class="px-2">
+        Item Bonus
+      </th>
+      <th class="px-2">
+        Penalty
+      </th>
+      <th class="px-2">
+        DC
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <tr v-for="defense in DefenseEnum" :key="'edit_' + defense" :class="{ editDivider : false }">
+      <td class="table_skill">{{ capitalize(defense.toString()) }}</td>
+      <td class="text-center">
+        <div class="mx-auto">
+          <SelectButton
+              v-model="char.proficiencies[defense]"
+              :options="proficiencyOptions"
+              option-label="name"
+              option-value="value"
+              allow-empty
+              data-key="value"
+              @update:model-value="(v) => {
+                                  if(v === undefined || v === null)
+                                    char.proficiencies[defense] = proficiencyLevel.Untrained
+                                }"/>
+          <div class="table_prof_num">
+            {{ calculateProficiency(char.level, char.proficiencies[defense], char.untrainedImprovisation) }}
+          </div>
+        </div>
+      </td>
+      <td class="text-center">
+        <div class="mx-auto">
+          <div class="table_attr">{{ char.attributes[attrBase[defense]] }}</div>
+          <div class="table_attr_type">{{ attrBase[defense] }}</div>
+        </div>
+      </td>
+      <td class="">
+        <div class=" mx-auto text-center">
+          <InputNumber
+              v-model="char.item[defense]" class="number" show-buttons
+              button-layout="horizontal" fluid
+              :min="0" :max="30">
+            <template #incrementicon>
+              <MdiIcon size="14pt" icon="mdiPlus"/>
+            </template>
+            <template #decrementicon>
+              <MdiIcon size="14pt" icon="mdiMinus"/>
+            </template>
+          </InputNumber>
+        </div>
+      </td>
+      <td v-if="(attrBase[defense] === Attribute.str || attrBase[defense] === Attribute.dex)" class="text-center">
+        {{ char.checkPenalty }}
+      </td>
+      <td v-else/>
+      <td class="text-center">
+        {{
+          calculateDcFromInfo({
+            rollType: "T",
+            penalty: char.checkPenalty,
+            item: char.item[defense],
+            attrType: attrBase[defense],
+            level: char.level,
+            attrValue: char.attributes[attrBase[defense]],
+            untrainedImprovisation: false,
+            training: char.proficiencies[defense],
+          })
+        }}
+      </td>
+    </tr>
+
+
+    <tr class="main-table-header bg-surface-950" style="position: sticky; top: 0; z-index: 1;">
+      <th>
         Skill
       </th>
       <th class="px-2">
@@ -88,9 +183,6 @@ function removeSpellDC(iLore: number) {
         Total
       </th>
     </tr>
-    </thead>
-    <tbody>
-
 
     <tr v-for="skill in Skill" :key="'edit_' + skill" :class="{ editDivider : false }">
       <td class="table_skill">{{ capitalize(skill.toString()) }}</td>
@@ -270,9 +362,17 @@ function removeSpellDC(iLore: number) {
       <td/>
       <td class="text-center">
         {{
-          Number(char.attributes[char.keyAbility]) + Number(char.item.classDC) + calculateProficiency(char.level,
-              char.proficiencies.classDC, false)
-        }}
+            calculateDcFromInfo({
+                                  rollType: "T",
+                                  penalty: char.checkPenalty,
+                                  item: char.item.classDC,
+                                  attrType: char.keyAbility,
+                                  level: char.level,
+                                  attrValue: char.attributes[char.keyAbility],
+                                  untrainedImprovisation: false,
+                                  training: char.proficiencies.classDC,
+                                })
+          }}
       </td>
     </tr>
     <tr v-for="(spell, il) in char.spellDCs" :key="'edit_char_spell' + il">
@@ -331,8 +431,16 @@ function removeSpellDC(iLore: number) {
       <td/>
       <td class="text-center">
         {{
-          Number(char.attributes[spell.keyAttr]) + Number(spell.item) + calculateProficiency(char.level,
-              spell.proficiency, false)
+          calculateDcFromInfo({
+            rollType: "T",
+            penalty: char.checkPenalty,
+            item: spell.item,
+            attrType: spell.keyAttr,
+            level: char.level,
+            attrValue: char.attributes[spell.keyAttr],
+            untrainedImprovisation: false,
+            training: spell.proficiency,
+          })
         }}
       </td>
     </tr>
