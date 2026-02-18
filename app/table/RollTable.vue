@@ -325,6 +325,23 @@ updateDCs()
 
     </tr>
 
+    <tr>
+      <td/>
+      <td class="roll-type">Languages</td>
+      <td v-for="char in characters" :key="char.name">
+        <div class="flex content-center justify-center">
+          <div v-for="l in char.languages" :key="l" class="">
+            <div v-if="l !=''" class="border mx-1 px-1 border-gray-500 rounded inline-flex">
+              {{
+                capitalize(l)
+              }}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+
     </tbody>
 
   </table>

@@ -24,6 +24,7 @@ import DefensePanel from "./Panels/DefensePanel.vue";
 import RestistancePanel from "./Panels/RestistancePanel.vue";
 import VulnerabiliesPanel from "./Panels/VulnerabiliesPanel.vue";
 import SkillEditTable from "./Panels/SkillEditTable.vue";
+import LanguagePannel from "./Panels/LanguagePanel.vue";
 
 const characters = defineModel<iCharacters>({required: true, default: [newCharacter(0)]});
 
@@ -228,6 +229,8 @@ function onDrop(event: DragEvent) {
             <DefensePanel v-model="characters[i]"/>
             <RestistancePanel v-model="characters[i]"/>
             <VulnerabiliesPanel v-model="characters[i]"/>
+            <LanguagePannel v-model="characters[i]"/>
+
           </div>
         </scroll-panel>
         <ScrollPanel class="inline-block align-top" style=" height: 70vh; width: 65%">

@@ -203,6 +203,7 @@ export interface iCharacter {
     proficiencies: iProficiencies,
     item: iSkillVal,
     lores: Array<iLore>,
+    languages: Array<string>,
 }
 
 

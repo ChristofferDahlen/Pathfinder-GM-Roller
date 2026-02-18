@@ -26,7 +26,7 @@ function removeResistance(iRes: number) {
 <template>
   <Panel toggleable header="Resistances" class="overflow-scroll">
     <ul>
-      <li v-for="(res, ir) in char.resistances" :key="'res_' + ir" class="p-1">
+      <li v-for="(res, ir) in char.resistances" :key="'res_' + ir" class="p-0">
         <InputText
             v-model="res.name" placeholder="Type" pt:root:class="pt_rv_text"
             class="rv_text"/>
@@ -37,7 +37,7 @@ function removeResistance(iRes: number) {
           <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"/>
         </Button>
       </li>
-      <li class="p-1">
+      <li class="p-0">
         <InputText
             v-model="newResistance" placeholder="Type" pt:root:class="pt_rv_text"
             class="rv_text"/>

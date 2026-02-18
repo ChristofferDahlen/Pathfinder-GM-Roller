@@ -112,6 +112,7 @@ export interface iPBBuild {
     proficiencies: iPBProficiencies,
     spellCasters: Array<iSpellCaster>
     mods: iPBMods;
+    languages: Array<string>;
 }
 
 export interface iAcTotal {
@@ -273,7 +274,8 @@ export function updateCharacter(char: iCharacter, pbChar: iPBChar) {
         }
     }
 
-
+    console.info("Processing languages")
+    char.languages = pbCharBuild.languages
 
 
     return char;
