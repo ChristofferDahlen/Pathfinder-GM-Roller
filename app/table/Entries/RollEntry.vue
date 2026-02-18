@@ -20,7 +20,7 @@ interface Props {
   rollInfo: RollInfo
 }
 
-const {focus, hideMods, rollInfo} = defineProps<Props>();
+const {focus, rollInfo} = defineProps<Props>();
 
 const hover = ref<boolean>(false);
 const rollResult = ref<RollResult>({bonus: 0, proficiency: 0, passive: 0, activePenalty: 0});
@@ -102,9 +102,10 @@ generateRoll();
 
 <template>
   <div
+      :class="[focus ? '' : 'roll-unfocused']"
       class="center relative"
-      @mouseover="hover = true"
       @mouseleave="hover = false"
+      @mouseover="hover = true"
   >
     <div class="inline-block align-middle">
       <div class="relative w-fit m-auto">
@@ -128,7 +129,7 @@ generateRoll();
         <RollTooltip :dc="DC.value" :roll-info="rollInfo" :roll-result="rollResult">
           <div class="" @dblclick="generateRoll">
             <div
-                :class="[(focus) ? SuccessAsString[rollResult.result] : 'roll-unfocused', {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
+                :class="[ SuccessAsString[rollResult.result], {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
                 class="roll-result">
               <div class="inline-block relative w-11  text-center">{{ rollResult.total }}
                 <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
