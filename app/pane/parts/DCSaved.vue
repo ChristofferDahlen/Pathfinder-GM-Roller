@@ -1,30 +1,17 @@
 <script setup lang="ts">
+import {useMagicKeys,} from "@vueuse/core";
 
-import {onMounted, onUnmounted, ref, inject} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {DC} from "../../ts/sharedResources"
 
 import InputText from "primevue/inputtext";
-import type {RollerShortcuts} from "../../ts/settings.ts"
+import {magicKeys, onShortcutKey, RollerShortcuts, shortcutsEnum} from "../../ts/settings.ts"
 
 const minDC = 0;
 const maxDC = 60;
 
 const displayHeader = ref(true);
 
-/*
-
-onMounted(() => {
-  document.addEventListener('keydown', numbShortcut)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', numbShortcut)
-})
-
- */
-
-
-const shortcuts = inject<ref<RollerShortcuts>>("shortcuts")
 
 type savedDC = {
   val: number,
@@ -89,18 +76,20 @@ function update(dc: savedDC) {
   updateText(dc)
 }
 
-function save(dc: savedDC) {
+function save(i: number) {
+  const dc = saved_dcs.value[i]
   console.log("Save to DC", dc.val)
   dc.val = DC.value;
   updateText(dc)
 }
 
-function set(dc: savedDC) {
+function set(i: number) {
+  const dc = saved_dcs.value[i]
   DC.set(dc.val, true)
-
 }
 
-function swap(dc: savedDC) {
+function swap(i: number) {
+  const dc = saved_dcs.value[i]
   console.log("Swap DC", dc.val, DC.value)
   const tempDc = DC.value;
   DC.set(dc.val)
@@ -108,27 +97,6 @@ function swap(dc: savedDC) {
   updateText(dc)
 }
 
-/*
-function numbShortcut(key: KeyboardEvent) {
-  var keyIndex: number = -1
-
-  if(key.key == shortcuts.value.)
-    keyIndex = 0
-  else if(key.key == shortcuts.value.Saved2)
-    keyIndex = 1
-  else if(key.key == shortcuts.value.Saved3)
-    keyIndex = 2
-  else if(key.key == shortcuts.value.Saved4)
-    keyIndex = 3
-  else if(key.key == shortcuts.value.Saved5)
-    keyIndex = 4
-  else if(key.key == shortcuts.value.Saved6)
-    keyIndex = 5
-
-  if(keyIndex > 0)
-    load(saved_dcs.value[keyIndex] as savedDC)
-}
- */
 
 onMounted(() => {
   try {
@@ -159,6 +127,52 @@ onUnmounted(() => {
   localStorage.setItem("savedDCs", JSON.stringify(saved_dcs.value))
 })
 
+const setKeys = {
+  [shortcutsEnum.setSlot1]: 0,
+  [shortcutsEnum.setSlot2]: 1,
+  [shortcutsEnum.setSlot3]: 2,
+  [shortcutsEnum.setSlot4]: 3,
+  [shortcutsEnum.setSlot5]: 4,
+  [shortcutsEnum.setSlot6]: 5,
+}
+
+
+onShortcutKey([shortcutsEnum.setSlot1,
+      shortcutsEnum.setSlot2,
+      shortcutsEnum.setSlot3,
+      shortcutsEnum.setSlot4,
+      shortcutsEnum.setSlot5,
+      shortcutsEnum.setSlot6
+    ],
+    (k) => {
+      set(setKeys[k]);
+    }
+)
+
+
+const swapKeys = {
+  [shortcutsEnum.swapSlot1]: 0,
+  [shortcutsEnum.swapSlot2]: 1,
+  [shortcutsEnum.swapSlot3]: 2,
+  [shortcutsEnum.swapSlot4]: 3,
+  [shortcutsEnum.swapSlot5]: 4,
+  [shortcutsEnum.swapSlot6]: 5,
+}
+
+
+onShortcutKey([
+      shortcutsEnum.swapSlot1,
+      shortcutsEnum.swapSlot2,
+      shortcutsEnum.swapSlot3,
+      shortcutsEnum.swapSlot4,
+      shortcutsEnum.swapSlot5,
+      shortcutsEnum.swapSlot6
+    ],
+    (k) => {
+      swap(swapKeys[k]);
+    }
+)
+
 
 </script>
 
@@ -171,9 +185,9 @@ onUnmounted(() => {
             @focusout="SaveToStorage"/>
       </div>
       <div class="SaveButton">
-        <div class="button rounded-l" @click="save(dc)"><span class="px-2 text">Save</span></div>
-        <div class="button "><span class="px-2 border-r border-l text" @click="set(dc)">Set</span></div>
-        <div class="button"><span class="px-2 text" @click="swap(dc)">Swap</span></div>
+        <div class="button rounded-l" @click="save(i)"><span class="px-2 text">Save</span></div>
+        <div class="button "><span class="px-2 border-r border-l text" @click="set(i)">Set</span></div>
+        <div class="button"><span class="px-2 text" @click="swap(i)">Swap</span></div>
         <InputText
             v-model="dc.strVal"
             pt:root:class="pt_input"

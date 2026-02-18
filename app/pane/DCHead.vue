@@ -5,6 +5,11 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
 import {DC} from "../ts/sharedResources"
+import {RollerShortcuts} from "../ts/settings";
+
+
+
+import { useMagicKeys, onKeyStroke } from '@vueuse/core'
 
 
 const dcText = ref("15")
@@ -49,20 +54,7 @@ const checkDigit = (event: KeyboardEvent) => {
 };
 
 
-function setOldDcShortcut(key: KeyboardEvent) {
-  console.log(key.key, "oldDC", shortcuts.value.Reset)
-  if (key.key === shortcuts.value.Reset)
-    DC.setReset()
-}
 
-
-onMounted(() => {
-  document.addEventListener('keydown', setOldDcShortcut)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', setOldDcShortcut)
-})
 
 </script>
 
@@ -142,7 +134,7 @@ onUnmounted(() => {
       </div>
 
     </div>
-      <Slider v-model="dcScrollVal" class="align-middle pt-2 mt-2" :min="0" :max="60" @change="slideChange" @slideend="slideEnd"/>
+      <Slider v-model="dcScrollVal" class="align-middle pt-2 m-2" :min="0" :max="60" @change="slideChange" @slideend="slideEnd"/>
 
 
 
