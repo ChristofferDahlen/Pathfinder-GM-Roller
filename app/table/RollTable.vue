@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {Selected} from "../ts/sharedResources.ts";
+import {Roller, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
@@ -60,6 +60,7 @@ function rollAll() {
   console.log("Roll All");
   roller.value.forEach(inner => inner.forEach(roll => roll?.generateRoll()));
 }
+Roller.roller = rollAll;
 
 ///--------  Stuff regarding selection of skills / lores
 
@@ -86,34 +87,35 @@ onShortcutKey([shortcutsEnum.rollAll], (_, event) => {
 
 ///--------  Stuff regarding defenses
 
-const defenseMapping = {
+const defenseEnumMapping = {
   ShowFortitude: DefenseEnum.Fortitude,
   ShowReflex: DefenseEnum.Reflex,
   ShowWill: DefenseEnum.Will,
 };
 
-const isDefenseShown = (key: keyof typeof defenseMapping): boolean =>
+const isDefenseVisible = (key: keyof typeof defenseEnumMapping): boolean =>
     OrganizedSettings.value.Defenses[key]?.state ?? false;
 
-const ShownDefenses = computed<DefenseEnum[]>(() =>
-    Object.keys(defenseMapping)
-        .filter((key) => isDefenseShown(key as keyof typeof defenseMapping))
-        .map((key) => defenseMapping[key as keyof typeof defenseMapping])
-);
+const ShownDefenses = computed<DefenseEnum[]>(() => {
+  const filteredKeys = Object.keys(defenseEnumMapping).filter((key) =>
+      isDefenseVisible(key as keyof typeof defenseEnumMapping)
+  );
+
+  return filteredKeys.map((key) => {
+    const typedKey = key as keyof typeof defenseEnumMapping;
+    return defenseEnumMapping[typedKey];
+  });
+});
 
 ///--------  Stuff regarding Spell DCs
 
-
-const isSpellDCVisible = (): boolean => {
-  return OrganizedSettings.value.DCs.ShowSpellDC.state;
-};
 
 const getMaxSpellDCCount = (): number => {
   return Math.max(...characters.value.map(char => char.spellDCs.length), 0);
 };
 
 const SpellDCCount = computed<number[]>(() => {
-  if (!isSpellDCVisible()) {
+  if (!OrganizedSettings.value.DCs.ShowSpellDC.state) {
     console.info("Spell DC display is disabled. Returning an empty array.");
     return [];
   }

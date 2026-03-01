@@ -2,7 +2,8 @@
 
 import Checkbox from "primevue/checkbox";
 import InputNumber from "primevue/inputnumber";
-import {ref, onMounted, onUnmounted, watch} from "vue";
+import {ref, onMounted, onUnmounted, watch, computed} from "vue";
+import {Roller} from "../../ts/sharedResources";
 
 
 const isRolling = ref(false);
@@ -10,7 +11,6 @@ const rollSec = ref(0)
 const rollMins = ref(5)
 const timeout = ref()
 
-const emit = defineEmits(["roll"])
 
 onMounted(()=> {
   const autoRoll = localStorage.getItem("auto-roll");
@@ -29,7 +29,6 @@ onMounted(()=> {
 })
 
 function save() {
-  console.log("Saving", isRolling.value)
   localStorage.setItem("auto-roll", isRolling.value.toString());
   localStorage.setItem("auto-roll-sec", rollSec.value.toString());
   localStorage.setItem("auto-roll-min", rollMins.value.toString());
@@ -39,7 +38,19 @@ onUnmounted(() => {
 })
 
 function getTime() {
-  return 1000 * rollSec.value + 60000 * rollMins.value + 1
+  return Math.max(1000 * rollSec.value + 60000 * rollMins.value, 1000)
+}
+
+function roll() {
+  if(isRolling.value) {
+    const time = getTime();
+    timeout.value = setTimeout(roll, time)
+    console.log("Rolling", timeout.value, time )
+    Roller.rollAll();
+
+  } else {
+    clearTimeout(timeout.value);
+  }
 }
 
 function change() {
@@ -53,18 +64,7 @@ function change() {
   save()
 }
 
-function roll() {
-  if(isRolling.value) {
-    timeout.value = setTimeout(roll, getTime())
 
-    emit("roll");
-  } else {
-    clearTimeout(timeout.value);
-  }
-}
-
-watch(rollSec, restart);
-watch(rollMins, restart);
 
 function restart() {
   if(isRolling.value) {
@@ -74,6 +74,10 @@ function restart() {
   }
   save();
 }
+
+watch(rollSec, restart);
+watch(rollMins, restart);
+
 
 </script>
 

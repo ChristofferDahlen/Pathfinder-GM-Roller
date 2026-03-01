@@ -130,9 +130,33 @@ function clampValue(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }
 
+interface  rollingFunction {
+    (): void;
+}
+
+type roller = {
+    roller: rollingFunction | undefined;
+    rollAll() : void;
+
+}
+
+export const Roller = reactive<roller>({
+    roller: undefined,
+    setRoller(rf : rollingFunction) {
+        this.roller = rf
+    },
+    rollAll()  {
+        console.log("Rolling in roller")
+        if (this.roller != undefined) {
+            this.roller()
+        }
+    }
+});
+
 type DCreact = {
     value: number;
     resetValue?: number;
+    roller : rollingFunction | undefined
     set(newValue: number, shouldReset: boolean, shouldClearReset?: boolean): void;
     add(addition: number, shouldReset: boolean): void;
     setReset(): void;
