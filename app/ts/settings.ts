@@ -15,36 +15,78 @@ export function enableShortcuts() {
 
 export const  ShowArmorClass = ref(false)
 
+export type setting = {
+    name: string;
+    state: boolean
+}
+
+
+export type DefenseSettings = {
+    ShowArmorClass: setting;
+    ShowFortitude: setting;
+    ShowReflex: setting;
+    ShowWill: setting;
+    showVulnerabilities: setting;
+    showResistances: setting;
+}
+
+export type DCSettings = {
+    ShowClassDC: setting;
+    ShowSpellDC: setting;
+}
+
+
+export type SkillSettings = {
+    ShowPerception: setting;
+    ShowLores: setting;
+    ShowLanguages :setting;
+}
+
+
+export type MiscSettings = {
+    ShowClass :setting;
+    ShowPartyName : setting;
+    ShowPlayerName: setting;
+}
 
 
 
 
+export type OrganizedSettingsInterface = {
+    "Defenses" : DefenseSettings;
+    "DCs" :DCSettings;
+    "Skills": SkillSettings;
+    "Misc" : MiscSettings
+}
 
-export const  OrganizedSettings = ref({
-    "Defenses": {
-        ShowArmorClass: { name: "Show Armor Class", state: true},
-        ShowFortitude:  { name: "Show Fortitude", state: true},
-        ShowReflex:  { name: "Show Reflex", state: true},
-        ShowWill:  { name: "Show Will", state: true},
-        showVulnerabilities:  { name: "Show Vulnerabilities", state: true},
-        showResistances:  { name: "Show Resistances", state: true},
-    },
-    "DCs": {
-        ShowClassDC:  { name: "Show Class DC", state: true},
-        ShowSpellDC:  { name: "Show Spell DC", state: true},
-    },
-    "Skills" : {
-        ShowPerception:  { name: "Show Perception", state: true},
-        ShowLores:  { name: "Show Lores", state: true},
-        ShowLanguages : { name: "Show Languages", state: true},
-    },
-    "Misc" : {
-        ShowClass :{ name: "Show Class Name", state: true},
-        ShowPartyName : { name: "Show Party Name", state: true},
-        ShowPlayerName:  { name: "Show Player Names", state: true},
+export function BasicSettings() : OrganizedSettingsInterface {
+    return {
+        "Defenses": {
+            ShowArmorClass: {name: "Show Armor Class", state: true},
+            ShowFortitude: {name: "Show Fortitude", state: true},
+            ShowReflex: {name: "Show Reflex", state: true},
+            ShowWill: {name: "Show Will", state: true},
+            showVulnerabilities: {name: "Show Vulnerabilities", state: true},
+            showResistances: {name: "Show Resistances", state: true},
+        },
+        "DCs": {
+            ShowClassDC: {name: "Show Class DC", state: true},
+            ShowSpellDC: {name: "Show Spell DC", state: true},
+        },
+        "Skills": {
+            ShowPerception: {name: "Show Perception", state: true},
+            ShowLores: {name: "Show Lores", state: true},
+            ShowLanguages: {name: "Show Languages", state: true},
+        },
+        "Misc": {
+            ShowClass: {name: "Show Class Name", state: true},
+            ShowPartyName: {name: "Show Party Name", state: true},
+            ShowPlayerName: {name: "Show Player Names", state: true},
+        }
     }
+}
 
-})
+export const  OrganizedSettings = ref<OrganizedSettingsInterface>(BasicSettings())
 
 
 

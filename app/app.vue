@@ -1,151 +1,100 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, provide, ref, watch} from 'vue'
 
-import ToggleButton from 'primevue/togglebutton';
-import RollTable from "./table/RollTable.vue";
-import DCPane from "./pane/DC-pane.vue"
-import Dialog from "primevue/dialog";
-import Button from "primevue/button";
-
-import {type iParty, type iSkillTable, newParty} from "./ts/types.ts"
-import {
-  type RollerShortcuts,
-  disableShortcuts,
-  enableShortcuts, OrganizedSettings,
-} from "./ts/settings.ts";
-import CharEdit from "./edit/charEdit.vue";
+import {onMounted, onUnmounted, provide, ref, watch} from 'vue';
+import {newParty, type iParty} from "./ts/types.ts";
+import {BasicSettings, disableShortcuts, enableShortcuts, OrganizedSettings} from "./ts/settings.ts";
 import PartySave from "./save/PartySave.vue";
+import CharEdit from "./edit/charEdit.vue";
 import SettingsView from "./SettingsView.vue";
 import InfoView from "./InfoView.vue";
+import RollTable from "./table/RollTable.vue";
+import DCPane from "./pane/DC-pane.vue";
 
-interface IRoller {
-  rollAll(): never;
-
-  selectSkills(u: Array<keyof iSkillTable | string>): never;
-}
-
-const CHARACTERS_KEY = "characters";
+const CHARACTERS_KEY = "Characters";
 const SHORTCUTS_KEY = "Shortcuts";
 const SETTINGS_KEY = "Settings";
 
-const toggle = ref<boolean>(false);
-const isEditing = ref<boolean>(false);
-const hasPartyChanged = ref<boolean>(false);
-const openSettings = ref<boolean>(false);
-const openInfo = ref<boolean>(false);
+const toggle = ref(false);
+const isEditing = ref(false);
+const isLoading = ref(true)
+const openSettings = ref(true)
+const hasPartyChanged = ref(false);
+
 
 
 const roller = ref<IRoller>();
-const isLoading = ref(false);
 const shortcuts = ref<RollerShortcuts>();
 const party = ref<iParty>(newParty());
-const editDialog = ref(null);
-const partyDialog = ref(null);
-
 provide("shortcuts", shortcuts);
 
-function generateCharacterKey() : string {
-  const arr = new Uint8Array(10);
-  window.crypto.getRandomValues(arr);
-  return Array.from(arr, (byte) => ('0' + byte.toString(16)).slice(-2)).join("");
+function generateUniqueKey(): string {
+  return Array.from(window.crypto.getRandomValues(new Uint8Array(10)), (byte) =>
+      ('0' + byte.toString(16)).slice(-2)
+  ).join("");
 }
 
-function savePartyToLocalStorage(): void {
-  console.log("Saving party to localStorage", party.value);
-  localStorage.setItem(CHARACTERS_KEY, JSON.stringify(party.value));
+function saveToLocalStorage(key: string, value: unknown): void {
+  console.log(`Saving ${key} to localStorage`, value);
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
+function loadFromLocalStorage<T>(key: string, onError: () => T): T {
+  try {
+    const storedData = localStorage.getItem(key);
+    return storedData ? JSON.parse(storedData) : onError();
+  } catch (error) {
+    console.error(`Failed to load ${key}, initializing defaults...`, error);
+    return onError();
+  }
+}
 
+function toggleCssClass(selector: string, className: string, condition: boolean): void {
+  const element = document.querySelector(selector);
+  if (element) element.classList.toggle(className, condition);
+}
+
+function loadPartyFromLocalStorage(): void {
+  party.value = loadFromLocalStorage(CHARACTERS_KEY, newParty);
+}
+
+function loadShortcutsFromLocalStorage(): void {
+  shortcuts.value = loadFromLocalStorage(SHORTCUTS_KEY, () => {});
+}
+
+function loadSettingsFromLocalStorage(): void {
+  OrganizedSettings.value = loadFromLocalStorage(SETTINGS_KEY, BasicSettings);
+}
 
 function toggleDarkMode(): void {
-  const htmlElement = document.querySelector('html');
-  if (htmlElement) {
-    htmlElement.classList.toggle('dark', !toggle.value);
-  }
+  toggleCssClass('html', 'dark', !toggle.value);
 }
 
-function handleKeyDown(event: KeyboardEvent): void {
-  if (event.key === " " && !isEditing.value) {
-    roller.value?.rollAll();
-  }
-}
-
-function loadPartyFromLocalStorage() {
-  try {
-    const storedParty = localStorage.getItem(CHARACTERS_KEY);
-    if (storedParty) {
-      party.value = JSON.parse(storedParty);
-      console.log("Loaded party from storage", party.value);
-    } else {
-      party.value = newParty();
-    }
-  } catch (error) {
-    console.error("Failed to load party, initializing new party...", error);
-    party.value = newParty();
-  }
-}
-
-function initializePartyKeys() {
+function initializePartyKeys(): void {
   party.value.characters.forEach((character) => {
-    character.key = generateCharacterKey();
+    character.key = generateUniqueKey();
     character.name = character.name ?? "";
   });
 }
 
-function loadShortcutsFromLocalStorage() {
-  try {
-    const storedShortcuts = localStorage.getItem(SHORTCUTS_KEY);
-    if(storedShortcuts)
-      shortcuts.value =  JSON.parse(storedShortcuts);
-  } catch (error) {
-    console.error("Failed to load shortcuts, using defaults...", error);
-  }
+function handleKeyDown(event: KeyboardEvent): void {
+  if (event.key === " " && !isEditing.value) roller.value?.rollAll();
 }
 
-function saveSettings() : void {
-  console.log("Saving settings to localStorage", OrganizedSettings.value);
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(OrganizedSettings.value));
-
+function dialogOpen(): void {
+  disableShortcuts();
 }
 
-function loadSettingsFromLocalStorage(): void {
-  try {
-    const storedSettings = localStorage.getItem(SETTINGS_KEY);
-    if (storedSettings) {
-      const parsedSettings = JSON.parse(storedSettings);
-      // Assuming settings is a reactive variable containing the organized settings
-      OrganizedSettings.value = parsedSettings;
-
-      console.log("Loaded settings from localStorage", parsedSettings);
-    } else {
-      console.log("No saved settings found in localStorage, using defaults.");
-    }
-  } catch (error) {
-    console.error("Failed to load settings, using defaults...", error);
-  }
-}
-
-const edit = (): void => {
-  isEditing.value = true;
-};
-
-const roll = (): void => {
+function dialogClosed(): void {
+  enableShortcuts();
+  saveToLocalStorage(CHARACTERS_KEY, party.value);
+  saveToLocalStorage(SETTINGS_KEY, OrganizedSettings.value);
   roller.value?.rollAll();
-};
-
-function dialogOpen() {
-  disableShortcuts()
-}
-
-function dialogClosed() {
-  enableShortcuts()
-  savePartyToLocalStorage();
-  saveSettings();
-  roll();
 }
 
 
-watch(party, savePartyToLocalStorage);
+watch(party, () => {
+  saveToLocalStorage(CHARACTERS_KEY, party.value)
+});
 
 
 
@@ -160,6 +109,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener("keydown", handleKeyDown);
+  isLoading.value = true
 });
 </script>
 
@@ -175,25 +125,25 @@ onUnmounted(() => {
       <PartySave ref="partyDialog" v-model="party"/>
     </Dialog>
     <Dialog
-        v-model:visible="isEditing" modal header="Edit characters" :style="{ width:'98%'}"
-        @show="dialogOpen()"
-        @after-hide="dialogClosed()">
-      <char-edit ref="editDialog" v-model="party.characters"/>
-    </Dialog>
-    <Dialog
         v-model:visible="openSettings" modal header="Settings"
         @show="dialogOpen()"
         @after-hide="dialogClosed()">
       <SettingsView/>
     </Dialog>
     <Dialog
-        v-model:visible="openInfo" modal header="Edit characters" :style="{ width:'98%'}"
+        v-model:visible="isEditing" modal header="Edit characters" :style="{ width:'98%'}"
+        @show="dialogOpen()"
+        @after-hide="dialogClosed()">
+      <CharEdit ref="editDialog" v-model="party.characters"/>
+    </Dialog>
+    <Dialog
+        v-model:visible="openInfo" modal header="Info View" :style="{ width:'98%'}"
         @show="dialogOpen()"
         @after-hide="dialogClosed()">
       <InfoView/>
     </Dialog>
 
-    <RollTable ref="rt" v-model="party.characters" :settings="settings" :party-name="party.name" @edit="edit"/>
+    <RollTable ref="rt" v-model="party.characters" :party-name="party.name"/>
     <div class="inline-block align-top w-3/12 max-h-screen overflow-scroll">
       <div class="flex flex-row-reverse border-b">
         <div class=" m-2 flex justify-between w-full">
