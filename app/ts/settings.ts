@@ -12,27 +12,41 @@ export function enableShortcuts() {
     shortCutsActive.value = true;
 }
 
-export interface RollerSettings {
-    displayOptions: {
-        armorClass: boolean;
-        vulnerabilities: boolean;
-        resistances: boolean;
-        perception: boolean;
-        skills: boolean;
-        lores: boolean;
-    };
-}
 
-export const DEFAULT_ROLLER_SETTINGS: RollerSettings = {
-    displayOptions: {
-        armorClass: true,
-        vulnerabilities: true,
-        resistances: true,
-        perception: true,
-        skills: true,
-        lores: true,
+export const  ShowArmorClass = ref(false)
+
+
+
+
+
+
+export const  OrganizedSettings = reactive({
+    "Defenses": {
+        ShowArmorClass: { name: "Show Armor Class", state: true},
+        ShowFortitude:  { name: "Show Fortitude", state: true},
+        ShowReflex:  { name: "Show Reflex", state: true},
+        ShowWill:  { name: "Show Will", state: true},
+        showVulnerabilities:  { name: "Show Vulnerabilities", state: true},
+        showResistances:  { name: "Show Resistances", state: true},
+    },
+    "DCs": {
+        ShowClassDC:  { name: "Show Class DC", state: true},
+        ShowSpellDC:  { name: "Show Spell DC", state: true},
+    },
+    "Skills" : {
+        ShowPerception:  { name: "Show Perception", state: true},
+        ShowLores:  { name: "Show Lores", state: true},
+    },
+    "Misc" : {
+        ShowClass :{ name: "Show Class Name", state: true},
+        ShowPartyName : { name: "Show Party Name", state: true},
+        ShowLanguages : { name: "Show Languages", state: true},
+        ShowPlayerName:  { name: "Show Player Names", state: true},
     }
-};
+
+})
+
+
 
 export enum shortcutsEnum {
     rollAll = "Roll All",
@@ -53,8 +67,9 @@ export enum shortcutsEnum {
 }
 
 
-
 export const RollerShortcuts = reactive<Record<shortcutsEnum, string>>({
+    [shortcutsEnum.rollAll]: "space",
+
     [shortcutsEnum.setSlot1]: "1",
     [shortcutsEnum.setSlot2]: "2",
     [shortcutsEnum.setSlot3]: "3",
@@ -74,14 +89,23 @@ export const RollerShortcuts = reactive<Record<shortcutsEnum, string>>({
 
 export const OrganizedShortCuts =
     {
-        savedRolls: [
+        "Main": [
+            shortcutsEnum.rollAll
+        ],
+        "Saved Rolls": [
             shortcutsEnum.setSlot1,
             shortcutsEnum.setSlot2,
             shortcutsEnum.setSlot3,
             shortcutsEnum.setSlot4,
             shortcutsEnum.setSlot5,
+            shortcutsEnum.setSlot6,
+            shortcutsEnum.swapSlot1,
+            shortcutsEnum.swapSlot2,
+            shortcutsEnum.swapSlot3,
+            shortcutsEnum.swapSlot4,
+            shortcutsEnum.swapSlot5,
+            shortcutsEnum.swapSlot6,
         ],
-        actions: []
 
     }
 
@@ -93,20 +117,17 @@ export interface shortcutCode {
 }
 
 
-
-
 export const computed_ref = computed((): Record<shortcutsEnum, shortcutCode> => {
     const comp = {}
     for (const key in RollerShortcuts) {
 
-        const shortcutString =  RollerShortcuts[key].toLowerCase()
+        const shortcutString = RollerShortcuts[key].toLowerCase()
         let ctrl = false
         let shift = false
         let alt = false
         const keyPres = shortcutString.substring(shortcutString.length - 1)
 
-        if(/[+_-]/.test(shortcutString))
-        {
+        if (/[+_-]/.test(shortcutString)) {
             const keys = shortcutString.split(/[+_-]/g).map((i) => i.trim())
 
             ctrl = "ctrl" in keys;
@@ -123,7 +144,6 @@ export const computed_ref = computed((): Record<shortcutsEnum, shortcutCode> => 
 
     return comp
 },)
-
 
 
 export function onShortcutKey(keysTo: Array<shortcutsEnum>, func: (sc: shortcutsEnum, event: KeyboardEvent) => void) {

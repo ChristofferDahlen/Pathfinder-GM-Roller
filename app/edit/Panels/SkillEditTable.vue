@@ -7,7 +7,7 @@ import {
   type iDC,
   type iLore,
   proficiencyLevel,
-  Skill,
+  Skills,
   DefenseEnum
 } from "../../ts/types";
 import {calculateBonusFromInfo, calculateDcFromInfo, calculateProficiency} from "../../ts/rolling";
@@ -184,7 +184,7 @@ function removeSpellDC(iLore: number) {
       </th>
     </tr>
 
-    <tr v-for="skill in Skill" :key="'edit_' + skill" :class="{ editDivider : false }">
+    <tr v-for="skill in Skills" :key="'edit_' + skill" :class="{ editDivider : false }">
       <td class="table_skill">{{ capitalize(skill.toString()) }}</td>
       <td class="text-center">
         <div class="mx-auto">

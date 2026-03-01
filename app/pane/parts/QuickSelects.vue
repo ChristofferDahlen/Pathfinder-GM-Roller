@@ -2,7 +2,7 @@
 
 import Button from "primevue/button";
 import {capitalize} from "vue";
-import {type iSkillTable, Skill} from "../../ts/types.ts";
+import {type iSkillTable, Skills} from "../../ts/types.ts";
 import {Selected} from "../../ts/sharedResources";
 
 interface sklist {
@@ -11,12 +11,12 @@ interface sklist {
 }
 
 const creatureTable : Array<sklist> = [
-  {trait: "Magic", skills: [Skill.arcana, Skill.nature, Skill.occultism, Skill.religion]},
-  {trait: "Social", skills: [Skill.deception, Skill.diplomacy, Skill.intimidation, Skill.performance]},
-  {trait: "Stealth", skills: [Skill.stealth, Skill.thievery]},
-  {trait: "Physical", skills: [Skill.acrobatics, Skill.athletics, Skill.thievery]},
-  {trait: "Survival", skills: [Skill.medicine, Skill.survival]},
-  {trait: "Knowledge", skills: [Skill.arcana, Skill.crafting, Skill.medicine, Skill.nature, Skill.occultism, Skill.religion, Skill.society, Skill.survival, "lore"]},
+  {trait: "Magic", skills: [Skills.arcana, Skills.nature, Skills.occultism, Skills.religion]},
+  {trait: "Social", skills: [Skills.deception, Skills.diplomacy, Skills.intimidation, Skills.performance]},
+  {trait: "Stealth", skills: [Skills.stealth, Skills.thievery]},
+  {trait: "Physical", skills: [Skills.acrobatics, Skills.athletics, Skills.thievery]},
+  {trait: "Survival", skills: [Skills.medicine, Skills.survival]},
+  {trait: "Knowledge", skills: [Skills.arcana, Skills.crafting, Skills.medicine, Skills.nature, Skills.occultism, Skills.religion, Skills.society, Skills.survival, "lore"]},
 ]
 
 </script>

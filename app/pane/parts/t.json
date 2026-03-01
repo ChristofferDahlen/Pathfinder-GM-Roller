@@ -1,0 +1,794 @@
+{
+  "success": true,
+  "build": {
+    "name": "Belledonne Merena",
+    "class": "Fighter",
+    "dualClass": null,
+    "level": 11,
+    "xp": 0,
+    "ancestry": "Human",
+    "heritage": "Aiuvarin",
+    "background": "Guard (Legal)",
+    "alignment": "N",
+    "gender": "F",
+    "age": "65",
+    "deity": "Not set",
+    "size": 2,
+    "sizeName": "Medium",
+    "keyability": "str",
+    "languages": [
+      "Common",
+      "Elven"
+    ],
+    "rituals": [],
+    "resistances": [
+      "acid 5"
+    ],
+    "inventorMods": [],
+    "abilities": {
+      "str": 20,
+      "dex": 14,
+      "con": 16,
+      "int": 10,
+      "wis": 12,
+      "cha": 19,
+      "breakdown": {
+        "ancestryFree": [
+          "Str",
+          "Cha"
+        ],
+        "ancestryBoosts": [],
+        "ancestryFlaws": [],
+        "backgroundBoosts": [
+          "Cha",
+          "Str"
+        ],
+        "classBoosts": [
+          "Str"
+        ],
+        "mapLevelledBoosts": {
+          "1": [
+            "Str",
+            "Dex",
+            "Cha",
+            "Con"
+          ],
+          "10": [
+            "Str",
+            "Wis",
+            "Cha",
+            "Con"
+          ],
+          "5": [
+            "Cha",
+            "Dex",
+            "Con",
+            "Str"
+          ]
+        }
+      }
+    },
+    "attributes": {
+      "ancestryhp": 8,
+      "classhp": 10,
+      "bonushp": 0,
+      "bonushpPerLevel": 1,
+      "speed": 25,
+      "speedBonus": 5
+    },
+    "proficiencies": {
+      "classDC": 4,
+      "perception": 6,
+      "fortitude": 6,
+      "reflex": 4,
+      "will": 4,
+      "heavy": 4,
+      "medium": 4,
+      "light": 4,
+      "unarmored": 4,
+      "advanced": 2,
+      "martial": 4,
+      "simple": 4,
+      "unarmed": 4,
+      "castingArcane": 2,
+      "castingDivine": 0,
+      "castingOccult": 0,
+      "castingPrimal": 0,
+      "acrobatics": 6,
+      "arcana": 0,
+      "athletics": 6,
+      "crafting": 0,
+      "deception": 4,
+      "diplomacy": 6,
+      "intimidation": 4,
+      "medicine": 0,
+      "nature": 0,
+      "occultism": 0,
+      "performance": 0,
+      "religion": 0,
+      "society": 2,
+      "stealth": 2,
+      "survival": 0,
+      "thievery": 0,
+      "piloting": 0,
+      "computers": 0
+    },
+    "mods": {
+      "Diplomacy": {
+        "Item Bonus": 1
+      },
+      "Light Armor": {
+        "Status Bonus": 1
+      },
+      "Medium Armor": {
+        "Status Bonus": 1
+      },
+      "Heavy Armor": {
+        "Status Bonus": 1
+      },
+      "Unarmored": {
+        "Status Bonus": 1
+      },
+      "Simple Weapons": {
+        "Status Bonus": 1
+      },
+      "Martial Weapons": {
+        "Status Bonus": 1
+      },
+      "Advanced Weapons": {
+        "Status Bonus": 1
+      },
+      "Unarmed Attacks": {
+        "Status Bonus": 1
+      },
+      "Fortitude": {
+        "Item Bonus": 1
+      },
+      "Reflex": {
+        "Item Bonus": 1
+      },
+      "Will": {
+        "Item Bonus": 1
+      }
+    },
+    "feats": [
+      [
+        "Shield Block",
+        null,
+        "Awarded Feat",
+        1
+      ],
+      [
+        "Quick Coercion",
+        null,
+        "Awarded Feat",
+        1
+      ],
+      [
+        "Untrained Improvisation",
+        null,
+        "Awarded Feat",
+        5
+      ],
+      [
+        "Aiuvarin",
+        null,
+        "Heritage",
+        1,
+        "Heritage Feat",
+        "standardChoice",
+        null
+      ],
+      [
+        "Sudden Charge",
+        null,
+        "Class Feat",
+        1,
+        "Fighter Feat 1",
+        "standardChoice",
+        null
+      ],
+      [
+        "Nimble Elf",
+        null,
+        "Ancestry Feat",
+        1,
+        "Human Feat 1",
+        "standardChoice",
+        null
+      ],
+      [
+        "Bon Mot",
+        null,
+        "Skill Feat",
+        2,
+        "Skill Feat 2",
+        "standardChoice",
+        null
+      ],
+      [
+        "Lunge",
+        null,
+        "Class Feat",
+        2,
+        "Fighter Feat 2",
+        "standardChoice",
+        null
+      ],
+      [
+        "Marshal Dedication",
+        null,
+        "Archetype Feat",
+        2,
+        "Free Archetype 2",
+        "standardChoice",
+        null
+      ],
+      [
+        "Fleet",
+        null,
+        "General Feat",
+        3,
+        "General Feat 3",
+        "standardChoice",
+        null
+      ],
+      [
+        "Intimidating Prowess",
+        null,
+        "Skill Feat",
+        4,
+        "Skill Feat 4",
+        "standardChoice",
+        null
+      ],
+      [
+        "Swipe",
+        null,
+        "Class Feat",
+        4,
+        "Fighter Feat 4",
+        "standardChoice",
+        null
+      ],
+      [
+        "Inspiring Marshal Stance",
+        null,
+        "Archetype Feat",
+        4,
+        "Free Archetype 4",
+        "standardChoice",
+        null
+      ],
+      [
+        "Clever Improviser",
+        null,
+        "Ancestry Feat",
+        5,
+        "Human Feat 5",
+        "standardChoice",
+        null
+      ],
+      [
+        "Rapid Mantel",
+        null,
+        "Skill Feat",
+        6,
+        "Skill Feat 6",
+        "standardChoice",
+        null
+      ],
+      [
+        "Slam Down",
+        null,
+        "Class Feat",
+        6,
+        "Fighter Feat 6",
+        "standardChoice",
+        null
+      ],
+      [
+        "Snap Out of It!",
+        null,
+        "Archetype Feat",
+        6,
+        "Free Archetype 6",
+        "standardChoice",
+        null
+      ],
+      [
+        "Toughness",
+        null,
+        "General Feat",
+        7,
+        "General Feat 7",
+        "standardChoice",
+        null
+      ],
+      [
+        "Slippery Prey",
+        null,
+        "Skill Feat",
+        8,
+        "Skill Feat 8",
+        "standardChoice",
+        null
+      ],
+      [
+        "Blind-Fight",
+        null,
+        "Class Feat",
+        8,
+        "Fighter Feat 8",
+        "standardChoice",
+        null
+      ],
+      [
+        "Rogue Dedication",
+        null,
+        "Archetype Feat",
+        8,
+        "Free Archetype 8",
+        "parentChoice",
+        null
+      ],
+      [
+        "Assurance",
+        "Diplomacy",
+        "Skill Feat",
+        8,
+        "Rogue Dedication Skill Feat",
+        "childChoice",
+        "Free Archetype 8"
+      ],
+      [
+        "Disorienting Opening",
+        null,
+        "Fighter Feat",
+        9,
+        "Combat Flexibility",
+        "standardChoice",
+        null
+      ],
+      [
+        "Pinch Time",
+        null,
+        "Ancestry Feat",
+        9,
+        "Human Feat 9",
+        "standardChoice",
+        null
+      ],
+      [
+        "Cat Fall",
+        null,
+        "Skill Feat",
+        10,
+        "Skill Feat 10",
+        "standardChoice",
+        null
+      ],
+      [
+        "Crashing Slam",
+        null,
+        "Class Feat",
+        10,
+        "Fighter Feat 10",
+        "standardChoice",
+        null
+      ],
+      [
+        "Skill Mastery",
+        null,
+        "Archetype Feat",
+        10,
+        "Free Archetype 10",
+        "parentChoice",
+        null
+      ],
+      [
+        "Kip Up",
+        null,
+        "Skill Feat",
+        10,
+        "Free Archetype 10 Skill Mastery",
+        "childChoice",
+        "Free Archetype 10"
+      ],
+      [
+        "Diehard",
+        null,
+        "General Feat",
+        11,
+        "General Feat 11",
+        "standardChoice",
+        null
+      ]
+    ],
+    "specials": [
+      "Reactive Strike",
+      "Low-Light Vision",
+      "Intimidation",
+      "Bravery",
+      "Polearm",
+      "Battlefield Surveyor",
+      "Weapon Specialization",
+      "Surprise Attack",
+      "Combat Flexibility",
+      "Battle Hardened",
+      "Acrobatics",
+      "Deception",
+      "Armor Expertise",
+      "Fighter Expertise",
+      "Aiuvarin"
+    ],
+    "lores": [
+      [
+        "Legal",
+        4
+      ]
+    ],
+    "equipmentContainers": {
+      "1d789128-7a8b-4a31-bff3-6dc9ad4671de": {
+        "containerName": "Backpack",
+        "bagOfHolding": false,
+        "backpack": false,
+        "augmentations": false
+      },
+      "fe62a0c6-3b07-46f6-990c-08bc3fbd2683": {
+        "containerName": "Spacious pouch 25B",
+        "bagOfHolding": true,
+        "backpack": false,
+        "augmentations": false
+      }
+    },
+    "equipment": [
+      [
+        "Elixir of Life (Lesser)",
+        1,
+        "Invested"
+      ],
+      [
+        "Potion of Quickness",
+        1,
+        "Invested"
+      ],
+      [
+        "Caltrops",
+        4,
+        "Invested"
+      ],
+      [
+        "Antiplague (Lesser)",
+        2,
+        "Invested"
+      ],
+      [
+        "Rope",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Torch",
+        5,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Manacles (Simple)",
+        1,
+        "Invested"
+      ],
+      [
+        "Soap",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Recording Rod (Reusable)",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Climbing Kit",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Antivenom Potion",
+        1,
+        "Invested"
+      ],
+      [
+        "Darkvision Elixir (Moderate)",
+        1,
+        "Invested"
+      ],
+      [
+        "Tanglefoot Bag (Moderate)",
+        1,
+        "Invested"
+      ],
+      [
+        "Potion of Emergency Escape",
+        1,
+        "Invested"
+      ],
+      [
+        "Bedroll",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Pocket Stage",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Crowbar",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Feather Token (Bird)",
+        1,
+        "Invested"
+      ],
+      [
+        "Waterskin",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Charm of Resistance - Acid",
+        1,
+        "Invested"
+      ],
+      [
+        "Spacious Pouch I",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Bomb Snare",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Everlight Crystal",
+        1,
+        "Invested"
+      ],
+      [
+        "Chalk",
+        10,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Black Smear Poison",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Marvelous Miniature (Boat)",
+        1,
+        "Invested"
+      ],
+      [
+        "Glasses of Sociability",
+        1,
+        "Invested"
+      ],
+      [
+        "Manacles (Poor)",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Backpack",
+        1,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Arrows",
+        5,
+        "Invested"
+      ],
+      [
+        "Flint and Steel",
+        1,
+        "Invested"
+      ],
+      [
+        "Rations",
+        3,
+        "fe62a0c6-3b07-46f6-990c-08bc3fbd2683",
+        "Invested"
+      ],
+      [
+        "Healing Potion (Moderate)",
+        2,
+        "Invested"
+      ]
+    ],
+    "specificProficiencies": {
+      "trained": [],
+      "expert": [],
+      "master": [
+        "Fauchard"
+      ],
+      "legendary": []
+    },
+    "weapons": [
+      {
+        "name": "Fauchard",
+        "qty": 1,
+        "prof": "martial",
+        "die": "d8",
+        "pot": 2,
+        "str": "greaterStriking",
+        "mat": null,
+        "display": "+2 Striking (Greater) Fearsome Shifting Fauchard",
+        "runes": [
+          "Fearsome",
+          "Shifting"
+        ],
+        "damageType": "S",
+        "attack": 25,
+        "damageBonus": 8,
+        "extraDamage": [],
+        "increasedDice": false,
+        "isInventor": false,
+        "grade": ""
+      },
+      {
+        "name": "Nightstick",
+        "qty": 1,
+        "prof": "simple",
+        "die": "d4",
+        "pot": 0,
+        "str": "",
+        "mat": null,
+        "display": "Nightstick",
+        "runes": [],
+        "damageType": "B",
+        "attack": 21,
+        "damageBonus": 7,
+        "extraDamage": [],
+        "increasedDice": false,
+        "isInventor": false,
+        "grade": ""
+      },
+      {
+        "name": "Nightstick",
+        "qty": 1,
+        "prof": "simple",
+        "die": "d4",
+        "pot": 0,
+        "str": "",
+        "mat": null,
+        "display": "Nightstick",
+        "runes": [],
+        "damageType": "B",
+        "attack": 21,
+        "damageBonus": 7,
+        "extraDamage": [],
+        "increasedDice": false,
+        "isInventor": false,
+        "grade": ""
+      },
+      {
+        "name": "Composite Shortbow",
+        "qty": 1,
+        "prof": "martial",
+        "die": "d6",
+        "pot": 1,
+        "str": "striking",
+        "mat": null,
+        "display": "+1 Striking Composite Shortbow",
+        "runes": [],
+        "damageType": "P",
+        "attack": 19,
+        "damageBonus": 4,
+        "extraDamage": [],
+        "increasedDice": false,
+        "isInventor": false,
+        "grade": ""
+      }
+    ],
+    "money": {
+      "cp": 3,
+      "sp": 3,
+      "gp": 92,
+      "pp": 0
+    },
+    "armor": [
+      {
+        "name": "Splint Mail",
+        "qty": 1,
+        "prof": "heavy",
+        "pot": 1,
+        "res": "resilient",
+        "mat": null,
+        "display": "+1 Armor Resilient Raiment Splint Mail",
+        "worn": true,
+        "runes": [
+          "Raiment"
+        ],
+        "grade": ""
+      }
+    ],
+    "spellCasters": [
+      {
+        "name": "Pinch Time",
+        "magicTradition": "arcane",
+        "spellcastingType": "prepared",
+        "ability": "cha",
+        "proficiency": 2,
+        "focusPoints": 0,
+        "innate": true,
+        "perDay": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "spells": [
+          {
+            "spellLevel": 0,
+            "list": []
+          },
+          {
+            "spellLevel": 1,
+            "list": []
+          },
+          {
+            "spellLevel": 2,
+            "list": []
+          },
+          {
+            "spellLevel": 3,
+            "list": [
+              "Haste"
+            ]
+          }
+        ],
+        "prepared": [],
+        "blendedSpells": []
+      }
+    ],
+    "focusPoints": 0,
+    "focus": {},
+    "formula": [],
+    "acTotal": {
+      "acProfBonus": 15,
+      "acAbilityBonus": 1,
+      "acItemBonus": 6,
+      "acTotal": 32,
+      "shieldBonus": null
+    },
+    "pets": [],
+    "familiars": []
+  }
+}

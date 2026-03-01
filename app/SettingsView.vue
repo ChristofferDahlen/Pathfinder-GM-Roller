@@ -2,7 +2,13 @@
 import Tab from "primevue/tab";
 import TabList from "primevue/tablist";
 import TabPanels from "primevue/tabpanels";
-import {RollerShortcuts} from "./ts/settings";
+import {OrganizedSettings, OrganizedShortCuts, RollerShortcuts, ShowArmorClass} from "./ts/settings";
+
+function change() {
+  console.log(OrganizedSettings)
+}
+
+
 </script>
 
 
@@ -15,25 +21,35 @@ import {RollerShortcuts} from "./ts/settings";
     </TabList>
     <TabPanels class="overflow-clip">
       <TabPanel value="0">
-
-        aaa
-      </TabPanel>
-      <TabPanel value="1" class="">
-
         <Accordion multiple >
-          <AccordionPanel v-for="(shorts, group, i) in RollerShortcuts" :value="i" class="w-72" >
+          <AccordionPanel v-for="(shorts, group, i) in OrganizedSettings" :value="i" class="w-72" >
             <AccordionHeader class="m-2 p-2 w-72">
               {{group}}
             </AccordionHeader>
             <AccordionContent>
-              <div v-for="(a,b) in shorts" class="flex justify-between">
-                <div class="inline-block align-baseline ">{{b}}</div>
-                <Button class="inline-block">{{a}} </Button>
+              <div v-for="(object, key) in shorts" class="flex justify-between">
+                <div class="inline-block align-baseline ">{{object.name}}</div>
+                <Checkbox v-model="object.state" @valueChange="change" binary />
               </div>
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
-        bbb
+      </TabPanel>
+      <TabPanel value="1" class="">
+
+        <Accordion multiple >
+          <AccordionPanel v-for="(shorts, group, i) in OrganizedShortCuts" :value="i" class="w-72" >
+            <AccordionHeader class="m-2 p-2 w-72">
+              {{group}}
+            </AccordionHeader>
+            <AccordionContent>
+              <div v-for="(a) in shorts" class="flex justify-between">
+                <div class="inline-block align-baseline ">{{a}}</div>
+                <Button class="inline-block pt-1 pb-1" outlined>{{RollerShortcuts[a]}} </Button>
+              </div>
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
       </TabPanel>
     </TabPanels>
   </Tabs>

@@ -1,15 +1,16 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 
 import {type selectable, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
-import {capitalize, onMounted, onUnmounted, ref, watch} from "vue";
-import {attrBase, Attribute, DefenseEnum, type iCharacters, miscEnum, type RollInfo, Skill} from "../ts/types";
+import {capitalize, computed, onMounted, onUnmounted, ref, watch} from "vue";
+import {attrBase, Attribute, DefenseEnum, type iCharacters, miscEnum, type RollInfo, Skills} from "../ts/types";
 
 import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
 import DefenseEntry from "./Entries/DefenseEntry.vue";
+import {OrganizedSettings} from "../ts/settings";
 
 
 const CONTROL_KEY = "Control"; // Extracted constant for control key
@@ -26,10 +27,41 @@ onUnmounted(teardownKeyboardListeners);
 watch(characters, () => {
   console.log("Party");
   updateLores();
-  updateDCs();
 });
 
-const SpellDCCount = ref<number[]>([]);
+const defenseMapping = {
+  ShowFortitude: DefenseEnum.Fortitude,
+  ShowReflex: DefenseEnum.Reflex,
+  ShowWill: DefenseEnum.Will,
+};
+
+const isDefenseShown = (key: keyof typeof defenseMapping): boolean =>
+    OrganizedSettings.Defenses[key]?.state ?? false;
+
+const ShownDefenses = computed<DefenseEnum[]>(() =>
+    Object.keys(defenseMapping)
+        .filter((key) => isDefenseShown(key as keyof typeof defenseMapping))
+        .map((key) => defenseMapping[key as keyof typeof defenseMapping])
+);
+
+const SpellDCCount = computed<number[]>(()=> {
+  if(!OrganizedSettings.DCs.ShowSpellDC.state) {
+    console.info("Not shwoing spell DC")
+    return []
+  }
+  console.info("Showing spell DC");
+  const maxSpellDCCount = Math.max(...characters.value.map(char => char.spellDCs.length), 0);
+  return [...Array(maxSpellDCCount).keys()];
+},)
+
+const LoreIndices = computed(() => {
+  if(!OrganizedSettings.Skills.ShowLores.state)
+    return []
+  return Selected.loreKeys()
+},)
+
+
+
 const roller = ref<rollerDict>(new Map<string, charRollers>());
 
 function setupKeyboardListeners() {
@@ -90,11 +122,6 @@ function adjustLores(targetCount: number) {
   }
 }
 
-function updateDCs() {
-  console.info("Update DCs");
-  const maxSpellDCCount = Math.max(...characters.value.map(char => char.spellDCs.length), 0);
-  SpellDCCount.value = [...Array(maxSpellDCCount).keys()];
-}
 
 function selectOnly(skill: selectable) {
   if (isControlPressed.value) Selected.selectOnly(skill);
@@ -105,7 +132,6 @@ function selectOnlyLore(skillIndex: number) {
 }
 
 updateLores()
-updateDCs()
 </script>
 
 
@@ -120,16 +146,15 @@ updateDCs()
             @update:model-value="u => Selected.selectTotal(u)"/>
       </th>
       <th>
-        <div v-if="partyName">
-          <div>Party</div>
-          <div class="italic">{{ partyName }}</div>
+        <div v-if="partyName && OrganizedSettings.Misc.ShowPartyName.state" class="italic">
+          {{ partyName }}
         </div>
       </th>
       <th v-for="char in characters" :key="char.name">
         <div class="" @dblclick="() => rollCharacter(char.key)">
           <div class="text-2xl select-none"> {{ char.name }}</div>
-          <div class="opacity-50 select-none">{{ char.class }} {{ char.level }}</div>
-          <div class="opacity-50 select-none">{{ char.playerName }}</div>
+          <div class="opacity-50 select-none" v-if="OrganizedSettings.Misc.ShowClass.state">{{ char.class }} {{ char.level }}</div>
+          <div class="opacity-50 select-none" v-if="OrganizedSettings.Misc.ShowPlayerName.state">{{ char.playerName }}</div>
         </div>
       </th>
     </tr>
@@ -138,31 +163,32 @@ updateDCs()
     <tr>
       <td class=""/>
     </tr>
-    <tr>
+    <tr v-if="OrganizedSettings.Defenses.ShowArmorClass.state">
       <td/>
       <td class="roll-type ">AC</td>
       <td v-for="char in characters" :key="char" class="relative">
         <ACEntry :ac="char.protection.ac" :shield="char.protection.shield"/>
       </td>
     </tr>
-    <tr v-for="defense in DefenseEnum" :key="defense">
+    <tr v-for="defense in ShownDefenses" :key="defense">
       <td/>
       <td class="roll-type ">{{ capitalize(defense) }}</td>
       <td v-for="char in characters" :key="char" class="relative">
-        <DefenseEntry :roll-info="{
-            rollType: 'T',
-        penalty: char.checkPenalty,
-        item: char.item[defense],
-        attrType: attrBase[defense],
-        level: char.level,
-        attrValue: char.attributes[attrBase[defense]],
-        untrainedImprovisation: false,
-        training: char.proficiencies[defense],
+        <DefenseEntry
+        :roll-info="{
+          rollType: 'T',
+          penalty: char.checkPenalty,
+          item: char.item[defense],
+          attrType: attrBase[defense],
+          level: char.level,
+          attrValue: char.attributes[attrBase[defense]],
+          untrainedImprovisation: false,
+          training: char.proficiencies[defense],
         } as RollInfo"/>
       </td>
     </tr>
 
-    <tr>
+    <tr v-if="OrganizedSettings.Defenses.showResistances.state">
       <td/>
       <td class="roll-type">Resistances</td>
       <td v-for="char in characters" :key="char.name">
@@ -176,7 +202,7 @@ updateDCs()
         </div>
       </td>
     </tr>
-    <tr>
+    <tr v-if="OrganizedSettings.Defenses.showVulnerabilities.state">
       <td/>
       <td class="roll-type">Vulnerabilities</td>
       <td v-for="char in characters" :key="char">
@@ -191,12 +217,13 @@ updateDCs()
       </td>
     </tr>
     <tr
-        @mouseleave="Selected.perception.hover = false"
+        v-if="OrganizedSettings.Skills.ShowPerception.state"
         @mouseover="Selected.perception.hover = true"
+        @mouseleave="Selected.perception.hover = false"
     >
       <td>
         <Checkbox
-            v-model="Selected.perception.selected" :binary="true" class="align-middle"
+            v-model="Selected.perception.selected" class="align-middle" :binary="true"
             @click="selectOnly('perception')"/>
       </td>
       <td class="roll-type">
@@ -220,7 +247,7 @@ updateDCs()
         </div>
       </td>
     </tr>
-    <tr>
+    <tr v-if="OrganizedSettings.DCs.ShowClassDC.state">
       <td/>
       <td class="roll-type">Class DC</td>
       <td v-for="char in characters" :key="char.name" class="relative">
@@ -246,56 +273,56 @@ updateDCs()
       <td v-for="char in characters" :key="char + 'roll_type'" class="relative">
         <div v-if="spellIndex < char.spellDCs.length && char.spellDCs[spellIndex]?.name != ''">
           <SpellDCEntry
-              :attr="char.attributes[char.spellDCs[spellIndex]!.keyAttr]"
-              :attr-type="char.spellDCs[spellIndex]!.keyAttr"
-              :item="char.spellDCs[spellIndex]!.item"
-              :level="char.level"
               :name="char.spellDCs[spellIndex]!.name"
-              :training="char.spellDCs[spellIndex]!.proficiency"/>
+              :training="char.spellDCs[spellIndex]!.proficiency"
+              :attr="char.attributes[char.spellDCs[spellIndex]!.keyAttr]"
+              :level="char.level"
+              :item="char.spellDCs[spellIndex]!.item"
+              :attr-type="char.spellDCs[spellIndex]!.keyAttr"/>
         </div>
       </td>
     </tr>
 
 
     <tr
-        v-for="s in Skill" :key="s"
+        v-for="skill in Skills" :key="skill"
         :class="'divider' "
         class="mt-10"
-        @mouseleave="Selected[s].hover = false" @mouseover="Selected[s].hover = true"
+        @mouseover="Selected[skill].hover = true" @mouseleave="Selected[skill].hover = false"
     >
       <td>
         <Checkbox
-            v-model="Selected[s].selected" :binary="true" class="align-middle"
-            @click="selectOnly(s)"/>
+            v-model="Selected[skill].selected" class="align-middle" :binary="true"
+            @click="selectOnly(skill)"/>
       </td>
-      <td class="roll-type" @dblclick="() => rollSkill(s)">
-        {{ capitalize(s) }}
+      <td class="roll-type" @dblclick="() => rollSkill(skill)">
+        {{ capitalize(skill) }}
       </td>
       <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
         <RollEntry
-            :ref="(el) => setRoller(s, char.key, el as RollEntryType)"
-            :focus="(Selected[s].selected || Selected[s].hover)"
+            :ref="(el) => setRoller(skill, char.key, el as RollEntryType)"
+            :focus="(Selected[skill].selected || Selected[skill].hover)"
             :hide-mods="false"
             :roll-info="{
-                     rollType: capitalize(s),
-                     attrType: attrBase[s],
-                     attrValue: char.attributes[attrBase[s]],
-                     training: char.proficiencies[s],
+                     rollType: capitalize(skill),
+                     attrType: attrBase[skill],
+                     attrValue: char.attributes[attrBase[skill]],
+                     training: char.proficiencies[skill],
                      untrainedImprovisation: char.untrainedImprovisation,
                      level: char.level,
-                     item: char.item[s],
+                     item: char.item[skill],
                      penalty: char.checkPenalty } as RollInfo"/>
       </td>
     </tr>
     <tr
-        v-for="loreIndex in Selected.loreKeys()" :key="'l' + loreIndex"
+        v-for="loreIndex in LoreIndices" :key="'l' + loreIndex"
         :class="(loreIndex == 0) ? 'divider' : '' "
         class="mt-10"
-        @mouseleave="Selected.lores[loreIndex]!.hover = false" @mouseover="Selected.lores[loreIndex]!.hover = true"
+        @mouseover="Selected.lores[loreIndex]!.hover = true" @mouseleave="Selected.lores[loreIndex]!.hover = false"
     >
       <td>
         <Checkbox
-            v-model="Selected.lores[loreIndex]!.selected" :binary="true" class="align-middle"
+            v-model="Selected.lores[loreIndex]!.selected" class="align-middle" :binary="true"
             @click="selectOnlyLore(loreIndex)"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
@@ -325,12 +352,12 @@ updateDCs()
 
     </tr>
 
-    <tr>
+    <tr v-if="OrganizedSettings.Misc.ShowLanguages.state">
       <td/>
       <td class="roll-type">Languages</td>
       <td v-for="char in characters" :key="char.name">
-        <div class="flex content-center justify-center">
-          <div v-for="l in char.languages" :key="l" class="">
+        <div class="flex content-center justify-center flex-wrap">
+          <div v-for="l in char.languages" :key="l" class="pt-1">
             <div v-if="l !=''" class="border mx-1 px-1 border-gray-500 rounded inline-flex">
               {{
                 capitalize(l)
@@ -341,14 +368,13 @@ updateDCs()
       </td>
     </tr>
 
-
     </tbody>
 
   </table>
 
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .main-table {
   top: 0;
   left: 0;
