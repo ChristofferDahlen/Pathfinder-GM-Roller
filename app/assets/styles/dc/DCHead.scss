@@ -49,8 +49,8 @@
     .button {
       @extend .unselectable;
       align-content: center;
-      height: 0rem;
-      line-height: 0rem;
+      height: 0;
+      line-height: 0;
       padding: 1rem 0 1rem 0;
       overflow: clip;
 

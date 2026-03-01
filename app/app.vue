@@ -102,7 +102,7 @@ onUnmounted(() => {
 
 <template class="dark-mode">
 
-  <ConfirmDialog></ConfirmDialog>
+  <ConfirmDialog/>
   <div v-if="isLoading" class="background w-full h-full text-center">LOADING</div>
   <div v-else class="background w-full">
 

@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
 import {DC} from "../ts/sharedResources"
-import {RollerShortcuts} from "../ts/settings";
-
-
-
-import { useMagicKeys, onKeyStroke } from '@vueuse/core'
 
 
 const dcText = ref("15")

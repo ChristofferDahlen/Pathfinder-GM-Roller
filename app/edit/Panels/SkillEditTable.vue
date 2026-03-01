@@ -501,10 +501,7 @@ function removeSpellDC(iLore: number) {
 }
 
 .lore_button {
-  margin-left: 0.5rem;
-  margin-top: 0.2rem;
-  margin-bottom: 0.2rem;
-  margin-right: auto;
+  margin: 0.2rem auto 0.2rem 0.5rem;
   padding: 0.5rem;
   line-height: 0.5rem;
 }

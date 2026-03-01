@@ -16,8 +16,6 @@ const visible = ref<boolean>(false);
 const editingShortcut = ref<shortcutsEnum>();
 const shortcutToAdd = ref<string>();
 
-const confirm = useConfirm();
-
 /*
 function UpdateShortcuts(a: shortcutsEnum) {
 
@@ -56,7 +54,7 @@ const normalizeKey = (key: string) => {
 };
 
 const handler = (event: KeyboardEvent) => {
-  let keyCombination = ""
+  let keyCombination: string
   if(event.key === "Control" || event.key === "Alt" || event.key === "Shift")
     keyCombination = normalizeKey(event.key);
   else
@@ -130,7 +128,7 @@ const warningText = computed(()=> {
     <div class="ml-2">{{editingShortcut}}</div>
 
     <InputText v-model="shortcutToAdd" class="min-w-36 w-44"/>
-    <Button icon="plus" @click="SaveShortcut()" :disabled="shortcutToAdd === ''">          <MdiIcon icon="mdiPlus"/></Button>
+    <Button icon="plus" :disabled="shortcutToAdd === ''" @click="SaveShortcut()"><MdiIcon icon="mdiPlus"/></Button>
     <div v-if="warningText"><MdiIcon icon='mdiAlert' class="inline-block align-middle size-4 text-orange-500"/><div class="inline-block" >{{ warningText }}</div></div>
 
   </Dialog>
@@ -142,12 +140,12 @@ const warningText = computed(()=> {
     <TabPanels class="overflow-clip">
       <TabPanel value="0">
         <Accordion multiple :value="defenses">
-          <AccordionPanel v-for="(shorts, group, i) in OrganizedSettings" :value="i" class="w-72" >
+          <AccordionPanel v-for="(shorts, group, i) in OrganizedSettings" :key="i" :value="i" class="w-72" >
             <AccordionHeader class="m-2 p-2 w-72">
               {{group}}
             </AccordionHeader>
             <AccordionContent>
-              <div v-for="(object) in shorts" class="flex justify-between">
+              <div v-for="(object) in shorts" :key="object" class="flex justify-between">
                 <div class="inline-block align-baseline ">{{object.name}}</div>
                 <Checkbox v-model="object.state" @valueChange="change" binary />
               </div>
@@ -158,12 +156,12 @@ const warningText = computed(()=> {
       <TabPanel value="1" class="">
 
         <Accordion multiple :value="shortcutGroups">
-          <AccordionPanel v-for="(shorts, group, i) in OrganizedShortCuts" :value="i" class="w-72" >
+          <AccordionPanel v-for="(shorts, group, i) in OrganizedShortCuts" :key="i"  :value="i" class="w-72" >
             <AccordionHeader class="m-2 p-2 w-72">
               {{group}}
             </AccordionHeader>
             <AccordionContent>
-              <div v-for="(a) in shorts" class="flex justify-between">
+              <div v-for="(a) in shorts" :key="a"  class="flex justify-between">
                 <div class="inline-block align-baseline ">{{a}}</div>
                 <Button class="inline-block pt-1 pb-1" outlined @click="UpdateShortcuts(a)">{{RollerShortcuts[a]}} </Button>
               </div>
@@ -176,9 +174,6 @@ const warningText = computed(()=> {
 </template>
 
 <style scoped>
-
-.p-dialog-title { font-size: 4rem; color: #333; }
-
 
 
 </style>

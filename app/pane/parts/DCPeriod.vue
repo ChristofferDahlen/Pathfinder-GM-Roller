@@ -2,7 +2,7 @@
 
 import Checkbox from "primevue/checkbox";
 import InputNumber from "primevue/inputnumber";
-import {ref, onMounted, onUnmounted, watch, computed} from "vue";
+import {ref, onMounted, onUnmounted, watch} from "vue";
 import {Roller} from "../../ts/sharedResources";
 
 

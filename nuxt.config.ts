@@ -2,8 +2,7 @@
 
 import Aura from '@primeuix/themes/aura'
 import {definePreset} from "@primeuix/styled";
-
-const MyPreset = definePreset(Aura, {
+definePreset(Aura, {
   semantic: {
     light: {
       surface: {
@@ -64,7 +63,6 @@ const MyPreset = definePreset(Aura, {
     }
   }
 });
-
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
