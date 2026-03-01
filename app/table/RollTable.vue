@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {type selectable, Selected} from "../ts/sharedResources.ts";
+import {Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
@@ -25,36 +25,9 @@ watch(characters, () => {
   updateLores();
 });
 
-const defenseMapping = {
-  ShowFortitude: DefenseEnum.Fortitude,
-  ShowReflex: DefenseEnum.Reflex,
-  ShowWill: DefenseEnum.Will,
-};
 
-const isDefenseShown = (key: keyof typeof defenseMapping): boolean =>
-    OrganizedSettings.value.Defenses[key]?.state ?? false;
+///--------  Stuff regarding rolling
 
-const ShownDefenses = computed<DefenseEnum[]>(() =>
-    Object.keys(defenseMapping)
-        .filter((key) => isDefenseShown(key as keyof typeof defenseMapping))
-        .map((key) => defenseMapping[key as keyof typeof defenseMapping])
-);
-
-const SpellDCCount = computed<number[]>(()=> {
-  if(!OrganizedSettings.value.DCs.ShowSpellDC.state) {
-    console.info("Not shwoing spell DC")
-    return []
-  }
-  console.info("Showing spell DC");
-  const maxSpellDCCount = Math.max(...characters.value.map(char => char.spellDCs.length), 0);
-  return [...Array(maxSpellDCCount).keys()];
-},)
-
-const LoreIndices = computed(() => {
-  if(!OrganizedSettings.value.Skills.ShowLores.state)
-    return []
-  return Selected.value.loreKeys()
-},)
 
 type RollEntry = {
   generateRoll() : void;
@@ -88,20 +61,8 @@ function rollAll() {
   roller.value.forEach(inner => inner.forEach(roll => roll?.generateRoll()));
 }
 
-function updateLores() {
-  console.info("Update Lores");
-  const maxLoreCount = Math.max(...characters.value.map(char => char.lores.length), 0);
-  adjustLores(maxLoreCount);
-}
+///--------  Stuff regarding selection of skills / lores
 
-function adjustLores(targetCount: number) {
-  const currentCount = Selected.value.lores.length;
-  if (targetCount < currentCount) {
-    Selected.value.lores = Selected.value.lores.slice(0, targetCount);
-  } else if (targetCount > currentCount) {
-    Selected.value.lores.push(...Array.from({length: targetCount - currentCount}, () => ({selected: true, hover: false})));
-  }
-}
 
 const isControlPressed = ref<boolean>(false);
 function handleKeyEvent(event: KeyboardEvent) {
@@ -121,6 +82,81 @@ onShortcutKey([shortcutsEnum.rollAll], (_, event) => {
   rollAll();
   event.preventDefault();
 })
+
+
+///--------  Stuff regarding defenses
+
+const defenseMapping = {
+  ShowFortitude: DefenseEnum.Fortitude,
+  ShowReflex: DefenseEnum.Reflex,
+  ShowWill: DefenseEnum.Will,
+};
+
+const isDefenseShown = (key: keyof typeof defenseMapping): boolean =>
+    OrganizedSettings.value.Defenses[key]?.state ?? false;
+
+const ShownDefenses = computed<DefenseEnum[]>(() =>
+    Object.keys(defenseMapping)
+        .filter((key) => isDefenseShown(key as keyof typeof defenseMapping))
+        .map((key) => defenseMapping[key as keyof typeof defenseMapping])
+);
+
+///--------  Stuff regarding Spell DCs
+
+
+const isSpellDCVisible = (): boolean => {
+  return OrganizedSettings.value.DCs.ShowSpellDC.state;
+};
+
+const getMaxSpellDCCount = (): number => {
+  return Math.max(...characters.value.map(char => char.spellDCs.length), 0);
+};
+
+const SpellDCCount = computed<number[]>(() => {
+  if (!isSpellDCVisible()) {
+    console.info("Spell DC display is disabled. Returning an empty array.");
+    return [];
+  }
+
+  console.info("Spell DC display is enabled. Calculating Spell DC counts.");
+  const maximumSpellDCs = getMaxSpellDCCount();
+  return [...Array(maximumSpellDCs).keys()];
+});
+
+
+///--------  Stuff regarding lores
+
+const DEFAULT_LORE = {selected: true, hover: false};
+
+const LoreIndices = computed(() => {
+  if (!OrganizedSettings.value.Skills.ShowLores.state) return [];
+  return Selected.value.loreKeys();
+});
+
+function updateLores() {
+  console.info("Updating lores...");
+  const maximumLoreCount = calculateMaxLoreCount();
+  adjustLoreCount(maximumLoreCount);
+}
+
+function calculateMaxLoreCount(): number {
+  return Math.max(...characters.value.map(char => char.lores.length), 0);
+}
+
+function adjustLoreCount(targetCount: number) {
+  const currentCount = Selected.value.lores.length;
+
+  if (targetCount < currentCount) {
+    Selected.value.lores = Selected.value.lores.slice(0, targetCount);
+  } else if (targetCount > currentCount) {
+    const newLores = Array.from({length: targetCount - currentCount}, () => ({...DEFAULT_LORE}));
+    Selected.value.lores.push(...newLores);
+  }
+}
+
+
+
+/// Final Setup stuff
 
 
 updateLores()
