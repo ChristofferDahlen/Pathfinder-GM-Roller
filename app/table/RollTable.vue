@@ -36,7 +36,7 @@ const defenseMapping = {
 };
 
 const isDefenseShown = (key: keyof typeof defenseMapping): boolean =>
-    OrganizedSettings.Defenses[key]?.state ?? false;
+    OrganizedSettings.value.Defenses[key]?.state ?? false;
 
 const ShownDefenses = computed<DefenseEnum[]>(() =>
     Object.keys(defenseMapping)
@@ -45,7 +45,7 @@ const ShownDefenses = computed<DefenseEnum[]>(() =>
 );
 
 const SpellDCCount = computed<number[]>(()=> {
-  if(!OrganizedSettings.DCs.ShowSpellDC.state) {
+  if(!OrganizedSettings.value.DCs.ShowSpellDC.state) {
     console.info("Not shwoing spell DC")
     return []
   }
@@ -55,7 +55,7 @@ const SpellDCCount = computed<number[]>(()=> {
 },)
 
 const LoreIndices = computed(() => {
-  if(!OrganizedSettings.Skills.ShowLores.state)
+  if(!OrganizedSettings.value.Skills.ShowLores.state)
     return []
   return Selected.loreKeys()
 },)
@@ -352,7 +352,7 @@ updateLores()
 
     </tr>
 
-    <tr v-if="OrganizedSettings.Misc.ShowLanguages.state">
+    <tr v-if="OrganizedSettings.Skills.ShowLanguages.state">
       <td/>
       <td class="roll-type">Languages</td>
       <td v-for="char in characters" :key="char.name">

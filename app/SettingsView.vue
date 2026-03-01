@@ -2,32 +2,33 @@
 import Tab from "primevue/tab";
 import TabList from "primevue/tablist";
 import TabPanels from "primevue/tabpanels";
-import {OrganizedSettings, OrganizedShortCuts, RollerShortcuts, ShowArmorClass} from "./ts/settings";
+import {OrganizedSettings, OrganizedShortCuts, RollerShortcuts} from "./ts/settings";
 
 function change() {
   console.log(OrganizedSettings)
 }
 
 
+const defenses = ref<number[]>([0, 1,2,3])
+
 </script>
 
 
 <template>
-  <Tabs value="1" class="overflow-clip">
-
+  <Tabs value="0" class="overflow-clip">
     <TabList class="tabs">
       <Tab value="0">Main</Tab>
       <Tab value="1">Shortcuts</Tab>
     </TabList>
     <TabPanels class="overflow-clip">
       <TabPanel value="0">
-        <Accordion multiple >
+        <Accordion multiple :value="defenses">
           <AccordionPanel v-for="(shorts, group, i) in OrganizedSettings" :value="i" class="w-72" >
             <AccordionHeader class="m-2 p-2 w-72">
               {{group}}
             </AccordionHeader>
             <AccordionContent>
-              <div v-for="(object, key) in shorts" class="flex justify-between">
+              <div v-for="(object) in shorts" class="flex justify-between">
                 <div class="inline-block align-baseline ">{{object.name}}</div>
                 <Checkbox v-model="object.state" @valueChange="change" binary />
               </div>

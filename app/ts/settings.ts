@@ -20,7 +20,7 @@ export const  ShowArmorClass = ref(false)
 
 
 
-export const  OrganizedSettings = reactive({
+export const  OrganizedSettings = ref({
     "Defenses": {
         ShowArmorClass: { name: "Show Armor Class", state: true},
         ShowFortitude:  { name: "Show Fortitude", state: true},
@@ -36,11 +36,11 @@ export const  OrganizedSettings = reactive({
     "Skills" : {
         ShowPerception:  { name: "Show Perception", state: true},
         ShowLores:  { name: "Show Lores", state: true},
+        ShowLanguages : { name: "Show Languages", state: true},
     },
     "Misc" : {
         ShowClass :{ name: "Show Class Name", state: true},
         ShowPartyName : { name: "Show Party Name", state: true},
-        ShowLanguages : { name: "Show Languages", state: true},
         ShowPlayerName:  { name: "Show Player Names", state: true},
     }
 

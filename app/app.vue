@@ -9,11 +9,9 @@ import Button from "primevue/button";
 
 import {type iParty, type iSkillTable, newParty} from "./ts/types.ts"
 import {
-  RollerShortcuts,
+  type RollerShortcuts,
   disableShortcuts,
-  enableShortcuts,
-  type RollerSettings
-
+  enableShortcuts, OrganizedSettings,
 } from "./ts/settings.ts";
 import CharEdit from "./edit/charEdit.vue";
 import PartySave from "./save/PartySave.vue";
@@ -28,6 +26,7 @@ interface IRoller {
 
 const CHARACTERS_KEY = "characters";
 const SHORTCUTS_KEY = "Shortcuts";
+const SETTINGS_KEY = "Settings";
 
 const toggle = ref<boolean>(false);
 const isEditing = ref<boolean>(false);
@@ -38,7 +37,6 @@ const openInfo = ref<boolean>(false);
 
 const roller = ref<IRoller>();
 const isLoading = ref(false);
-const settings = ref<RollerSettings>();
 const shortcuts = ref<RollerShortcuts>();
 const party = ref<iParty>(newParty());
 const editDialog = ref(null);
@@ -46,31 +44,33 @@ const partyDialog = ref(null);
 
 provide("shortcuts", shortcuts);
 
-const generateCharacterKey = (): string => {
+function generateCharacterKey() : string {
   const arr = new Uint8Array(10);
   window.crypto.getRandomValues(arr);
   return Array.from(arr, (byte) => ('0' + byte.toString(16)).slice(-2)).join("");
-};
+}
 
-const savePartyToLocalStorage = (): void => {
+function savePartyToLocalStorage(): void {
   console.log("Saving party to localStorage", party.value);
   localStorage.setItem(CHARACTERS_KEY, JSON.stringify(party.value));
-};
+}
 
-const toggleDarkMode = (): void => {
+
+
+function toggleDarkMode(): void {
   const htmlElement = document.querySelector('html');
   if (htmlElement) {
     htmlElement.classList.toggle('dark', !toggle.value);
   }
-};
+}
 
-const handleKeyDown = (event: KeyboardEvent): void => {
+function handleKeyDown(event: KeyboardEvent): void {
   if (event.key === " " && !isEditing.value) {
     roller.value?.rollAll();
   }
-};
+}
 
-const loadPartyFromLocalStorage = (): void => {
+function loadPartyFromLocalStorage() {
   try {
     const storedParty = localStorage.getItem(CHARACTERS_KEY);
     if (storedParty) {
@@ -83,16 +83,16 @@ const loadPartyFromLocalStorage = (): void => {
     console.error("Failed to load party, initializing new party...", error);
     party.value = newParty();
   }
-};
+}
 
-const initializePartyKeys = (): void => {
+function initializePartyKeys() {
   party.value.characters.forEach((character) => {
     character.key = generateCharacterKey();
     character.name = character.name ?? "";
   });
-};
+}
 
-const loadShortcutsFromLocalStorage = (): void => {
+function loadShortcutsFromLocalStorage() {
   try {
     const storedShortcuts = localStorage.getItem(SHORTCUTS_KEY);
     if(storedShortcuts)
@@ -100,7 +100,30 @@ const loadShortcutsFromLocalStorage = (): void => {
   } catch (error) {
     console.error("Failed to load shortcuts, using defaults...", error);
   }
-};
+}
+
+function saveSettings() : void {
+  console.log("Saving settings to localStorage", OrganizedSettings.value);
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(OrganizedSettings.value));
+
+}
+
+function loadSettingsFromLocalStorage(): void {
+  try {
+    const storedSettings = localStorage.getItem(SETTINGS_KEY);
+    if (storedSettings) {
+      const parsedSettings = JSON.parse(storedSettings);
+      // Assuming settings is a reactive variable containing the organized settings
+      OrganizedSettings.value = parsedSettings;
+
+      console.log("Loaded settings from localStorage", parsedSettings);
+    } else {
+      console.log("No saved settings found in localStorage, using defaults.");
+    }
+  } catch (error) {
+    console.error("Failed to load settings, using defaults...", error);
+  }
+}
 
 const edit = (): void => {
   isEditing.value = true;
@@ -117,16 +140,20 @@ function dialogOpen() {
 function dialogClosed() {
   enableShortcuts()
   savePartyToLocalStorage();
+  saveSettings();
   roll();
 }
 
 
 watch(party, savePartyToLocalStorage);
 
+
+
 onMounted(() => {
   loadPartyFromLocalStorage();
   initializePartyKeys();
   loadShortcutsFromLocalStorage();
+  loadSettingsFromLocalStorage();
   document.addEventListener("keydown", handleKeyDown);
   isLoading.value = false;
 });
