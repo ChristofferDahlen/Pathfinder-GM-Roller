@@ -213,7 +213,7 @@ function onDrop(event: DragEvent) {
     </TabList>
 
     <TabPanels class="overflow-clip">
-      <TabPanel v-for="(char, i) in characters" :key="'edit_char_' + i" :value="i" class="h-full overflow-clip">
+      <TabPanel v-for="(_, i) in characters" :key="'edit_char_' + i" :value="i" class="h-full overflow-clip">
         <scroll-panel class="inline-block align-top" style=" height: 70vh; width: 35%">
           <div class="inline-block w-7/12 ">
             <MainPanel v-model="characters[i]"/>

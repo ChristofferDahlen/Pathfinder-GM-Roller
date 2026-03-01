@@ -4,28 +4,24 @@ import {type selectable, Selected} from "../ts/sharedResources.ts";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
-import {capitalize, computed, onMounted, onUnmounted, ref, watch} from "vue";
+import {capitalize, computed, ref, watch} from "vue";
 import {attrBase, Attribute, DefenseEnum, type iCharacters, miscEnum, type RollInfo, Skills} from "../ts/types";
 
 import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
 import DefenseEntry from "./Entries/DefenseEntry.vue";
-import {OrganizedSettings} from "../ts/settings";
+import {onShortcutKey, OrganizedSettings, shortcutsEnum} from "../ts/settings";
 
 
-const CONTROL_KEY = "Control"; // Extracted constant for control key
-const isControlPressed = ref<boolean>(false);
 
 const characters = defineModel<iCharacters>({required: true});
 defineExpose({rollAll});
 
 defineProps<{ partyName: string }>();
 
-onMounted(setupKeyboardListeners);
-onUnmounted(teardownKeyboardListeners);
-
 watch(characters, () => {
   console.log("Party");
+  rollAll();
   updateLores();
 });
 
@@ -57,34 +53,19 @@ const SpellDCCount = computed<number[]>(()=> {
 const LoreIndices = computed(() => {
   if(!OrganizedSettings.value.Skills.ShowLores.state)
     return []
-  return Selected.loreKeys()
+  return Selected.value.loreKeys()
 },)
 
-
-
-const roller = ref<rollerDict>(new Map<string, charRollers>());
-
-function setupKeyboardListeners() {
-  document.addEventListener("keydown", handleKeydown);
-  document.addEventListener("keyup", handleKeyup);
+type RollEntry = {
+  generateRoll() : void;
 }
 
-function teardownKeyboardListeners() {
-  document.removeEventListener("keydown", handleKeydown);
-  document.removeEventListener("keyup", handleKeyup);
-}
+type charRollers = Map<string, RollEntry>;
+const roller = ref<Map<string, charRollers>>(new Map<string, charRollers>());
 
-function handleKeydown(event: KeyboardEvent) {
-  if (event.key === CONTROL_KEY) isControlPressed.value = true;
-}
-
-function handleKeyup(event: KeyboardEvent) {
-  if (event.key === CONTROL_KEY) isControlPressed.value = false;
-}
-
-function setRoller(skillKey: string | number, charKey: string, roll: RollEntryType) {
+function setRoller(skillKey: string | number, charKey: string, roll: RollEntry) {
   if (!roller.value.has(skillKey)) {
-    roller.value.set(skillKey, new Map<string, RollEntryType>());
+    roller.value.set(skillKey, new Map<string, RollEntry>());
   }
   roller.value.get(skillKey)?.set(charKey, roll);
 }
@@ -114,22 +95,33 @@ function updateLores() {
 }
 
 function adjustLores(targetCount: number) {
-  const currentCount = Selected.lores.length;
+  const currentCount = Selected.value.lores.length;
   if (targetCount < currentCount) {
-    Selected.lores = Selected.lores.slice(0, targetCount);
+    Selected.value.lores = Selected.value.lores.slice(0, targetCount);
   } else if (targetCount > currentCount) {
-    Selected.lores.push(...Array.from({length: targetCount - currentCount}, () => ({selected: true, hover: false})));
+    Selected.value.lores.push(...Array.from({length: targetCount - currentCount}, () => ({selected: true, hover: false})));
   }
 }
 
-
-function selectOnly(skill: selectable) {
-  if (isControlPressed.value) Selected.selectOnly(skill);
+const isControlPressed = ref<boolean>(false);
+function handleKeyEvent(event: KeyboardEvent) {
+  isControlPressed.value = event.ctrlKey;
 }
 
-function selectOnlyLore(skillIndex: number) {
-  if (isControlPressed.value) Selected.selectOnlyLore(skillIndex);
+document.addEventListener("keydown", handleKeyEvent);
+document.addEventListener("keyup", handleKeyEvent);
+
+function selectOnly() {
+  // Sure this looks wierd but the selection on the skill/lore happens after this function is called
+  // So we set all to off and then its fliped on again...
+  if (isControlPressed.value) Selected.value.selectNone();
 }
+
+onShortcutKey([shortcutsEnum.rollAll], (_, event) => {
+  rollAll();
+  event.preventDefault();
+})
+
 
 updateLores()
 </script>
@@ -153,8 +145,8 @@ updateLores()
       <th v-for="char in characters" :key="char.name">
         <div class="" @dblclick="() => rollCharacter(char.key)">
           <div class="text-2xl select-none"> {{ char.name }}</div>
-          <div class="opacity-50 select-none" v-if="OrganizedSettings.Misc.ShowClass.state">{{ char.class }} {{ char.level }}</div>
-          <div class="opacity-50 select-none" v-if="OrganizedSettings.Misc.ShowPlayerName.state">{{ char.playerName }}</div>
+          <div v-if="OrganizedSettings.Misc.ShowClass.state" class="opacity-50 select-none">{{ char.class }} {{ char.level }}</div>
+          <div v-if="OrganizedSettings.Misc.ShowPlayerName.state" class="opacity-50 select-none">{{ char.playerName }}</div>
         </div>
       </th>
     </tr>
@@ -224,7 +216,7 @@ updateLores()
       <td>
         <Checkbox
             v-model="Selected.perception.selected" class="align-middle" :binary="true"
-            @click="selectOnly('perception')"/>
+            @click="selectOnly()"/>
       </td>
       <td class="roll-type">
         <div class="roll-type">Perception</div>
@@ -232,7 +224,7 @@ updateLores()
       <td v-for="char in characters" :key="char.name" class="relative">
         <div>
           <RollEntry
-              :ref="(el) => setRoller('perception', char.key, el as RollEntryType)"
+              :ref="(el) => setRoller('perception', char.key, el as RollEntry)"
               :focus="(Selected.perception.selected || Selected.perception.hover)"
               :hide-mods="false"
               :roll-info="{
@@ -293,14 +285,14 @@ updateLores()
       <td>
         <Checkbox
             v-model="Selected[skill].selected" class="align-middle" :binary="true"
-            @click="selectOnly(skill)"/>
+            @click="selectOnly()"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(skill)">
         {{ capitalize(skill) }}
       </td>
       <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
         <RollEntry
-            :ref="(el) => setRoller(skill, char.key, el as RollEntryType)"
+            :ref="(el) => setRoller(skill, char.key, el as RollEntry)"
             :focus="(Selected[skill].selected || Selected[skill].hover)"
             :hide-mods="false"
             :roll-info="{
@@ -323,7 +315,7 @@ updateLores()
       <td>
         <Checkbox
             v-model="Selected.lores[loreIndex]!.selected" class="align-middle" :binary="true"
-            @click="selectOnlyLore(loreIndex)"/>
+            @click="selectOnly()"/>
       </td>
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
         Lore {{ loreIndex + 1 }}
@@ -333,7 +325,7 @@ updateLores()
           <div>{{ capitalize(char.lores[loreIndex]!.name) }}</div>
           <div>
             <RollEntry
-                :ref="(el) => setRoller(loreIndex, char.key, el as RollEntryType)"
+                :ref="(el) => setRoller(loreIndex, char.key, el as RollEntry)"
                 :focus="(Selected.lores[loreIndex]!.selected || Selected.lores[loreIndex]!.hover)"
                 :hide-mods="false"
                 :roll-info="{

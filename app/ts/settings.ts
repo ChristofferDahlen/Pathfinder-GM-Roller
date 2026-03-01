@@ -108,26 +108,29 @@ export enum shortcutsEnum {
     swapSlot6 = "Swap slot 6",
 }
 
+export function BasicShortcuts(): Record<shortcutsEnum, string> {
+    return {
+        [shortcutsEnum.rollAll]: "space",
 
-export const RollerShortcuts = reactive<Record<shortcutsEnum, string>>({
-    [shortcutsEnum.rollAll]: "space",
+        [shortcutsEnum.setSlot1]: "1",
+        [shortcutsEnum.setSlot2]: "2",
+        [shortcutsEnum.setSlot3]: "3",
+        [shortcutsEnum.setSlot4]: "4",
+        [shortcutsEnum.setSlot5]: "5",
+        [shortcutsEnum.setSlot6]: "6",
 
-    [shortcutsEnum.setSlot1]: "1",
-    [shortcutsEnum.setSlot2]: "2",
-    [shortcutsEnum.setSlot3]: "3",
-    [shortcutsEnum.setSlot4]: "4",
-    [shortcutsEnum.setSlot5]: "5",
-    [shortcutsEnum.setSlot6]: "6",
+        [shortcutsEnum.swapSlot1]: "q",
+        [shortcutsEnum.swapSlot2]: "w",
+        [shortcutsEnum.swapSlot3]: "e",
+        [shortcutsEnum.swapSlot4]: "r",
+        [shortcutsEnum.swapSlot5]: "t",
+        [shortcutsEnum.swapSlot6]: "y",
 
-    [shortcutsEnum.swapSlot1]: "q",
-    [shortcutsEnum.swapSlot2]: "w",
-    [shortcutsEnum.swapSlot3]: "e",
-    [shortcutsEnum.swapSlot4]: "r",
-    [shortcutsEnum.swapSlot5]: "t",
-    [shortcutsEnum.swapSlot6]: "y",
+    }
+}
 
 
-})
+export const RollerShortcuts = ref<Record<shortcutsEnum, string>>(BasicShortcuts())
 
 export const OrganizedShortCuts =
     {
@@ -201,11 +204,9 @@ export function onShortcutKey(keysTo: Array<shortcutsEnum>, func: (sc: shortcuts
         if (usingInput.value || !shortCutsActive.value)
             return
 
-        console.log(keyEvent)
-
         for (const i in keysTo) {
             const key = keysTo[i]
-            if (magicKey[RollerShortcuts[key]].value) {
+            if (magicKey[RollerShortcuts.value[key]].value) {
                 console.info("Shortcut ", key, " occurred")
                 func(key, keyEvent)
                 break;

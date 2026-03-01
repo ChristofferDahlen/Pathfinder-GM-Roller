@@ -1,8 +1,14 @@
 <script setup lang="ts">
 
-import {onMounted, onUnmounted, provide, ref, watch} from 'vue';
+import {onMounted, onUnmounted, ref, watch} from 'vue';
 import {newParty, type iParty} from "./ts/types.ts";
-import {BasicSettings, disableShortcuts, enableShortcuts, OrganizedSettings} from "./ts/settings.ts";
+import {
+  BasicSettings, BasicShortcuts,
+  disableShortcuts,
+  enableShortcuts,
+  OrganizedSettings,
+   RollerShortcuts,
+} from "./ts/settings.ts";
 import PartySave from "./save/PartySave.vue";
 import CharEdit from "./edit/charEdit.vue";
 import SettingsView from "./SettingsView.vue";
@@ -20,12 +26,8 @@ const isLoading = ref(true)
 const openSettings = ref(true)
 const hasPartyChanged = ref(false);
 
-
-
 const roller = ref<IRoller>();
-const shortcuts = ref<RollerShortcuts>();
 const party = ref<iParty>(newParty());
-provide("shortcuts", shortcuts);
 
 function generateUniqueKey(): string {
   return Array.from(window.crypto.getRandomValues(new Uint8Array(10)), (byte) =>
@@ -53,17 +55,6 @@ function toggleCssClass(selector: string, className: string, condition: boolean)
   if (element) element.classList.toggle(className, condition);
 }
 
-function loadPartyFromLocalStorage(): void {
-  party.value = loadFromLocalStorage(CHARACTERS_KEY, newParty);
-}
-
-function loadShortcutsFromLocalStorage(): void {
-  shortcuts.value = loadFromLocalStorage(SHORTCUTS_KEY, () => {});
-}
-
-function loadSettingsFromLocalStorage(): void {
-  OrganizedSettings.value = loadFromLocalStorage(SETTINGS_KEY, BasicSettings);
-}
 
 function toggleDarkMode(): void {
   toggleCssClass('html', 'dark', !toggle.value);
@@ -74,10 +65,6 @@ function initializePartyKeys(): void {
     character.key = generateUniqueKey();
     character.name = character.name ?? "";
   });
-}
-
-function handleKeyDown(event: KeyboardEvent): void {
-  if (event.key === " " && !isEditing.value) roller.value?.rollAll();
 }
 
 function dialogOpen(): void {
@@ -99,22 +86,23 @@ watch(party, () => {
 
 
 onMounted(() => {
-  loadPartyFromLocalStorage();
+  party.value = loadFromLocalStorage(CHARACTERS_KEY, newParty);
+  RollerShortcuts.value = loadFromLocalStorage(SHORTCUTS_KEY, BasicShortcuts);
+  OrganizedSettings.value = loadFromLocalStorage(SETTINGS_KEY, BasicSettings);
+
   initializePartyKeys();
-  loadShortcutsFromLocalStorage();
-  loadSettingsFromLocalStorage();
-  document.addEventListener("keydown", handleKeyDown);
+
   isLoading.value = false;
 });
 
 onUnmounted(() => {
-  document.removeEventListener("keydown", handleKeyDown);
   isLoading.value = true
 });
 </script>
 
 <template class="dark-mode">
 
+  <ConfirmDialog></ConfirmDialog>
   <div v-if="isLoading" class="background w-full h-full text-center">LOADING</div>
   <div v-else class="background w-full">
 
@@ -176,7 +164,7 @@ onUnmounted(() => {
       </div>
 
       <div class=" ">
-        <DCPane @roll="roll"/>
+        <DCPane/>
       </div>
 
     </div>

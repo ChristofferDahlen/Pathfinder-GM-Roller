@@ -86,6 +86,9 @@ export default defineNuxtConfig({
       theme: {
           preset: Aura
       },
+      components: {
+        include: ['ConfirmDialog']
+      }
     }
   },
   css: [

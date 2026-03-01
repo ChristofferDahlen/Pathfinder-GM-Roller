@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import {useMagicKeys,} from "@vueuse/core";
 
 import {onMounted, onUnmounted, ref} from "vue";
 import {DC} from "../../ts/sharedResources"
 
 import InputText from "primevue/inputtext";
-import {magicKeys, onShortcutKey, RollerShortcuts, shortcutsEnum} from "../../ts/settings.ts"
+import {onShortcutKey, shortcutsEnum} from "../../ts/settings.ts"
 
 const minDC = 0;
 const maxDC = 60;

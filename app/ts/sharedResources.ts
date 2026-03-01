@@ -43,7 +43,7 @@ type managable = {
     partialSelect(): void
 }
 
-export const Selected = reactive<managable>({
+export const Selected = ref<managable>({
     checkAll: true,
     checkAllIntermediate: false,
     perception: {selected: true, hover: false},
@@ -83,37 +83,9 @@ export const Selected = reactive<managable>({
         console.log(this[skill].selected)
     },
 
-    selectOnly(skill: selectable) {
-        console.log("Select only lore", skill);
-
-        this.checkAll = false;
-        this.checkAllIntermediate = true;
-
-        this.skillKeys().forEach(otherSkill => {
-            console.log(otherSkill, skill, skill == otherSkill);
-            this[skill as Skills].selected = skill == otherSkill;
-        })
-        this.perception.selected = skill == 'perception';
-        this.lores.forEach(l => l.selected = false)
-    },
-
-    selectOnlyLore(n: number) {
-        this.checkAll = false;
-        this.checkAllIntermediate = true;
-
-        this.skillKeys().forEach(skill => {
-            this[skill as Skills].selected = false;
-        })
-
-        this.perception.selected = false;
-        this.lores.forEach((l, nn) => {
-            console.log(n, nn, n == nn);
-            l.selected = n == nn
-        })
-    },
 
     selectTotal(to: boolean) {
-        console.log(this.skillKeys())
+        console.log("Setting selection for all to be", to)
         this.skillKeys().forEach(skill => {
             this[skill as Skills].selected = to;
         })
@@ -149,11 +121,6 @@ export const Selected = reactive<managable>({
         this.checkAllIntermediate = true
         this.checkAll = false
     },
-
-    partialSelect() {
-        this.checkAllIntermediate = false
-        this.checkAll = false
-    }
 })
 
 const MIN_DC = 0;
