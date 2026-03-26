@@ -1,212 +1,195 @@
 <script setup lang="ts">
-
 import {capitalize, onMounted, onUnmounted, ref} from "vue";
 import type {iParty} from "../ts/types";
-import ScrollPanel from "primevue/scrollpanel";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import Panel from "primevue/panel";
+import {getClassColor} from "../ts/classColors";
 
+const isDark = computed(() => document.documentElement.classList.contains('dark'));
 
 const allParties = ref<Array<iParty>>([]);
-
-const currentParty = defineModel<iParty>({default: {name: "Gorbans Destoryers", characters: []}, required: true});
+const currentParty = defineModel<iParty>({ required: true });
 
 function getSavedIndex() {
-  for (const ip in allParties.value) {
-    const party = allParties.value[ip];
-    if (currentParty.value !== undefined && party?.name == currentParty.value.name)
-      return ip;
-  }
-  return -1;
+  return allParties.value.findIndex(p => p.name === currentParty.value.name);
 }
 
 function sortParties() {
-  allParties.value.sort((a: iParty, b: iParty) => capitalize(a.name) > capitalize(b.name) ? -1 : 1)
+  allParties.value.sort((a, b) => capitalize(a.name) > capitalize(b.name) ? 1 : -1);
 }
 
-
 function save() {
-  console.info("Saving Party:", currentParty.value?.name)
-  const lcopy = JSON.parse(JSON.stringify(currentParty.value));
-  const i = +getSavedIndex()
-  if (i < 0) {
-    allParties.value?.push(lcopy)
-  } else {
-    allParties.value[i] = lcopy
-  }
-  console.log(allParties.value)
-  sortParties()
+  const copy = JSON.parse(JSON.stringify(currentParty.value));
+  const i = getSavedIndex();
+  if (i < 0) allParties.value.push(copy);
+  else allParties.value[i] = copy;
+  sortParties();
   localStorage.setItem("saved_parties", JSON.stringify(allParties.value));
-  console.log(localStorage.getItem("saved_parties"))
+}
 
+function loadParty(party: iParty) {
+  currentParty.value = JSON.parse(JSON.stringify(party));
+}
+
+function deleteParty(i: number) {
+  allParties.value.splice(i, 1);
+  localStorage.setItem("saved_parties", JSON.stringify(allParties.value));
 }
 
 onMounted(() => {
-  console.info("Loading saved parties from cache")
-
   try {
-    const loading_parites = localStorage.getItem("saved_parties");
-    if (loading_parites !== null)
-      allParties.value = JSON.parse(loading_parites) as Array<iParty>;
-  } catch (e) {
-    console.error(e);
-    allParties.value = []
-  }
-})
+    const stored = localStorage.getItem("saved_parties");
+    if (stored) allParties.value = JSON.parse(stored);
+  } catch { allParties.value = []; }
+});
+
 onUnmounted(() => {
   localStorage.setItem("saved_parties", JSON.stringify(allParties.value));
-
-})
-
-function loadParty(party: iParty) {
-  currentParty.value = party;
-  sortParties()
-}
-
-function deleteParty(index: number) {
-  console.log("Delete", index)
-  try {
-    allParties.value.splice(index, 1);
-    sortParties()
-  } catch {
-    allParties.value = []
-  }
-
-}
-
-
+});
 </script>
 
 <template>
-  <Panel header="Saved Parties" class="inline-block align-top mr-1" style="width: 79%">
-    <ScrollPanel class="" style="height: 60vh">
+  <div class="party-save">
 
-      <div class="grid" style="grid-template-columns: 20% auto 10rem">
-        <div class="grid__item text-center">Saved Parties</div>
-        <div class="grid__item text-center">Members</div>
-        <div class="grid__item text-center"/>
-
-        <template v-for="(party,i) in allParties" :key="i">
-          <div class="grid__item text-center">
-            {{ party.name }}
-
+    <!-- Current party -->
+    <div class="current-panel">
+      <div class="panel-header">Current Party</div>
+      <div class="flex flex-col gap-3">
+        <InputText v-model="currentParty.name" size="small" placeholder="Party name" class="w-full"/>
+        <div class="char-list">
+          <div v-for="char in currentParty.characters" :key="char.name" class="char-chip"
+               :style="getClassColor(char.class, isDark)
+                 ? { backgroundColor: getClassColor(char.class, isDark), borderColor: getClassColor(char.class, isDark), color: isDark ? '#1f2937' : '#e5e7eb' }
+                 : {}">
+            <span class="font-medium">{{ char.name }}</span>
+            <span class="text-xs ml-1 opacity-70">{{ char.class }} {{ char.level }}</span>
           </div>
-          <div class="grid__item text-center">
-            <div v-for="char in party.characters" :key="char.name" class="charBorder ">
-              <div>
-                <div>{{ char.name }}</div>
-                <div class="text-center text-xs"> {{ char.class }} {{ char.level }}</div>
-              </div>
-            </div>
-          </div>
-          <div class=" grid__item text-center">
-            <Button class="inline m-1" @click="loadParty(party)">Load</Button>
-            <Button class="inline m-1" @click="deleteParty(i)">Delete</Button>
-          </div>
-        </template>
-      </div>
-    </ScrollPanel>
-  </Panel>
-
-  <div class="w-1/5 inline-block">
-    <Panel header="Current Party" class="mb-1">
-
-      <div class="inline-block h-full">
-        <label for="partyName" class="m-2">Party Name</label>
-
-        <InputText
-            id="partyName" v-model="currentParty.name" class="w-full" aria-describedby="Party Name"
-            placeholder="Party Name"/>
-        <scroll-panel class="mb-auto" style="height: 30vh; width: 100%">
-          <div>
-            <div>
-              <div v-for="char in currentParty.characters" :key="char.name" class="charBorder">
-                <div>
-                  <div>{{ char.name }}</div>
-                  <div class="charSubText"> {{ char.class }} {{ char.level }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </scroll-panel>
-        <div class="w-fit ml-auto my-auto">
-          <Button class="inline m-1" @click="save">Save</Button>
         </div>
-
-        <div class="w-fit mt-auto ml-auto my-auto"/>
-
+        <Button size="small" class="w-full" @click="save">
+          <MdiIcon icon="mdiContentSave" class="mr-2"/>
+          Save Party
+        </Button>
       </div>
-    </Panel>
-    <Panel header="Backup Json" class="">
-      <div class="w-full text-center ">
-        <Button class="m-1 ml-auto">Save</Button>
-        <Button class="m-1 mr-auto">Load</Button>
-      </div>
+    </div>
 
-    </Panel>
+    <!-- Saved parties -->
+    <div class="saved-panel">
+      <div class="panel-header">Saved Parties</div>
+      <div v-if="allParties.length === 0" class="empty-state">No saved parties yet</div>
+      <div v-else class="party-list">
+        <div v-for="(party, i) in allParties" :key="i" class="party-row">
+          <div class="party-info">
+            <div class="party-name">{{ party.name }}</div>
+            <div class="char-chips">
+              <span v-for="char in party.characters" :key="char.name" class="char-chip small"
+                    :style="getClassColor(char.class, isDark)
+                      ? { backgroundColor: getClassColor(char.class, isDark), borderColor: getClassColor(char.class, isDark), color: isDark ? '#1f2937' : '#e5e7eb' }
+                      : {}">
+                {{ char.name }}
+                <span class="text-xs opacity-70">{{ char.class }} {{ char.level }}</span>
+              </span>
+            </div>
+          </div>
+          <div class="party-actions">
+            <Button size="small" outlined @click="loadParty(party)">
+              <MdiIcon icon="mdiDownload" size="14pt"/>
+            </Button>
+            <Button size="small" outlined severity="danger" @click="deleteParty(i)">
+              <MdiIcon icon="mdiDelete" size="14pt"/>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <style scoped lang="scss">
-
-
-.grid {
-
-  // Locally scoped variables
-  --gap: 1rem;
-  --line-offset: calc(var(--gap) / 2);
-  --line-thickness: 1px;
-  --line-color: var(--surface-border);
-
-  // Grid layout (Can be anything)
+.party-save {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  overflow: hidden;
-  gap: var(--gap);
+  grid-template-columns: 220px 1fr;
+  gap: 1rem;
+  min-height: 400px;
 }
 
-// Make Grid Items Control Absolute Pseudo Positioning
-.grid__item {
-  position: relative;
+.panel-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  margin-bottom: 0.75rem;
 }
 
-// Pseudo Element Shared Styling
-.grid__item::before,
-.grid__item::after {
-  content: '';
-  position: absolute;
-  @apply bg-gray-600;
-  z-index: 1;
+.current-panel, .saved-panel {
+  @apply bg-neutral-200 dark:bg-surface-800 border border-neutral-400 dark:border-surface-600;
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 
-// Row Borders
-.grid__item::after {
-  inline-size: 100vw;
-  block-size: var(--line-thickness);
-  inset-inline-start: 0;
-  inset-block-start: calc(var(--line-offset) * -1);
+.char-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 2rem;
 }
 
-// Column Borders
-.grid__item::before {
-  inline-size: var(--line-thickness);
-  inset-inline-start: calc(var(--line-offset) * -1);
-}
-
-.charBorder {
+.char-chip {
   display: inline-flex;
-  padding: 0.5rem;
-  margin: 2pt;
-  @apply border-surface-600;
-  border-width: 1pt;
-  border-radius: 10pt;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  @apply bg-neutral-300 dark:bg-surface-700 border border-neutral-400 dark:border-surface-500;
 
-
-  .charSubText {
-    text-align: center;
-    font-size: x-small;
+  &.small {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.5rem;
   }
+}
 
+.party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.party-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  @apply bg-neutral-300 dark:bg-surface-700 border border-neutral-400 dark:border-surface-600;
+}
+
+.party-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+.char-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.party-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  opacity: 0.4;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 2rem 0;
 }
 </style>
+

@@ -11,6 +11,9 @@ import ClassEntry from "./Entries/ClassDCEntry.vue";
 import SpellDCEntry from "./Entries/SpellDCEntry.vue";
 import DefenseEntry from "./Entries/DefenseEntry.vue";
 import {onShortcutKey, OrganizedSettings, shortcutsEnum} from "../ts/settings";
+import {getClassColor} from "../ts/classColors";
+
+const isDark = computed(() => document.documentElement.classList.contains('dark'));
 
 
 
@@ -166,7 +169,8 @@ updateLores();
       <th v-for="char in characters" :key="char.name">
         <div class="" @dblclick="() => rollCharacter(char.key)">
           <div class="text-2xl select-none"> {{ char.name }}</div>
-          <div v-if="OrganizedSettings.Misc.ShowClass.state" class="opacity-50 select-none">{{ char.class }} {{ char.level }}</div>
+          <div v-if="OrganizedSettings.Misc.ShowClass.state" class="select-none text-xs px-2 py-0.5 rounded w-fit mx-auto"
+               :style="getClassColor(char.class, isDark) ? { backgroundColor: getClassColor(char.class, isDark), color: isDark ? '#1f2937' : '#e5e7eb' } : { opacity: 0.5 }">{{ char.class }} {{ char.level }}</div>
           <div v-if="OrganizedSettings.Misc.ShowPlayerName.state" class="opacity-50 select-none">{{ char.playerName }}</div>
         </div>
       </th>

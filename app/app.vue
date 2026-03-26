@@ -127,7 +127,7 @@ onUnmounted(() => {
   <ConfirmDialog/>
 
     <Dialog
-        v-model:visible="hasPartyChanged" modal header="Save / Load Party" :style="{ width:'98%'}"
+        v-model:visible="hasPartyChanged" modal header="Save / Load Party" :style="{ width:'70%'}"
         @show="dialogOpen()"
         @after-hide="dialogClosed()">
       <PartySave ref="partyDialog" v-model="party"/>
