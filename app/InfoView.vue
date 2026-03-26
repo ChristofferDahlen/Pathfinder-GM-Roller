@@ -18,7 +18,7 @@
           <li><kbd>Double-click</kbd> a result to reroll that check</li>
           <li><kbd>Double-click</kbd> a row label to roll all characters for that skill</li>
           <li><kbd>Double-click</kbd> a character header to roll all their skills</li>
-          <li>Hover a result to see modifier breakdown and ±1–4 previews</li>
+          <li>Hover a result to see modifier breakdown and ±1–4 previews (can be toggled in Settings)</li>
           <li>Check a row checkbox to keep it focused — unfocused rows dim</li>
           <li>Hold <kbd>Ctrl</kbd> + click checkbox to select only that row</li>
         </ul>

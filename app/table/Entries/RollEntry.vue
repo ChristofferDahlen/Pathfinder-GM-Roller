@@ -12,6 +12,7 @@ import {
   SuccessAsString
 } from "../../ts/rolling";
 import {DC} from "../../ts/sharedResources"
+import {OrganizedSettings} from "../../ts/settings"
 
 
 interface Props {
@@ -113,14 +114,14 @@ generateRoll();
           <div class="">
             <div
                 v-for="b in splitArray(negativeMods, 'first')" :key="b" class="mod inline-block"
-                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
                 :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
           <div class="">
             <div
                 v-for="b in splitArray(negativeMods, 'last')" :key="b" class="mod inline-block"
-                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
                 :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
             </div>
           </div>
@@ -145,14 +146,14 @@ generateRoll();
           <div style="margin:0; padding: 0">
             <div
                 v-for="b in splitArray(positiveMods, 'first')" :key="b" class="mod unselectable inline-block"
-                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
                 :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>
           <div class="">
             <div
                 v-for="b in splitArray(positiveMods, 'second')" :key="b" class="mod unselectable inline-block"
-                :style="{visibility: hover ? 'visible' : 'hidden'}"
+                :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
                 :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
             </div>
           </div>

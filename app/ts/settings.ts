@@ -35,6 +35,7 @@ export type MiscSettings = {
     ShowClass: setting
     ShowPartyName: setting
     ShowPlayerName: setting
+    ShowHoverModifiers: setting
 }
 
 export type OrganizedSettingsInterface = {
@@ -64,9 +65,10 @@ export function BasicSettings(): OrganizedSettingsInterface {
             ShowLanguages:  { name: "Show Languages",  state: true },
         },
         Misc: {
-            ShowClass:      { name: "Show Class Name",    state: true },
-            ShowPartyName:  { name: "Show Party Name",    state: true },
-            ShowPlayerName: { name: "Show Player Names",  state: true },
+            ShowClass:           { name: "Show Class Name",       state: true },
+            ShowPartyName:       { name: "Show Party Name",       state: true },
+            ShowPlayerName:      { name: "Show Player Names",     state: true },
+            ShowHoverModifiers:  { name: "Show Hover Modifiers",  state: true },
         },
     };
 }
