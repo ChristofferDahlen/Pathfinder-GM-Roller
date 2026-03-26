@@ -18,16 +18,20 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: node:24-alpine
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build Docker image
+        run: docker build -t pf2-roller-build .
 
-      - name: Build
-        run: npm run generate
+      - name: Extract static files from image
+        run: |
+          docker create --name extract pf2-roller-build || true
+          mkdir -p .output/public
+          docker cp extract:/public/. .output/public/
+          docker rm extract
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -37,6 +41,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
