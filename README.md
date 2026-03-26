@@ -61,6 +61,14 @@ The project deploys automatically to GitHub Pages via GitHub Actions on every pu
 
 To enable: go to **Settings → Pages** in the repository and set the source to **GitHub Actions**.
 
+## License
+
+MIT — see [LICENSE](LICENSE)
+
+## Acknowledgements
+
+Special thanks to **Ashley Hemerik** for inspiration from [pathfinderdashboard.com](https://pathfinderdashboard.com/).
+
 ## Tech Stack
 
 - [Nuxt 4](https://nuxt.com) — Vue framework

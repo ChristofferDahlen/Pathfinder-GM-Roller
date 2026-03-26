@@ -100,6 +100,18 @@
       </div>
 
     </div>
+
+    <div class="info-card mt-4" style="max-width:400px">
+      <div class="card-header">
+        <MdiIcon icon="mdiHeart" class="card-icon"/>
+        <span>Acknowledgements</span>
+      </div>
+      <p class="mt-2 text-sm" style="opacity:0.85">
+        Special thanks to <strong>Ashley Hemerik</strong> for help from
+        <a href="https://pathfinderdashboard.com/" target="_blank" rel="noopener" class="thanks-link">pathfinderdashboard.com</a>.
+      </p>
+    </div>
+
   </div>
 </template>
 
@@ -182,5 +194,11 @@ kbd {
   padding: 0.1rem 0.35rem;
   font-size: 0.8rem;
   font-family: monospace;
+}
+
+.thanks-link {
+  @apply text-primary-500;
+  text-decoration: underline;
+  &:hover { @apply text-primary-400; }
 }
 </style>
