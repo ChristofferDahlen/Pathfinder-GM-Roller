@@ -139,7 +139,7 @@ onUnmounted(() => {
       <SettingsView/>
     </Dialog>
     <Dialog
-        v-model:visible="isEditing" modal header="Edit characters" :style="{ width:'98%'}"
+        v-model:visible="isEditing" modal header="Edit Characters" :style="{ width:'98%'}"
         @show="dialogOpen()"
         @after-hide="dialogClosed()">
       <CharEdit ref="editDialog" v-model="party.characters"/>

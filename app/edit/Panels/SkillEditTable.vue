@@ -78,24 +78,12 @@ function removeSpellDC(iLore: number) {
   <table class="w-full" style="border-collapse: collapse">
     <thead class="">
     <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;">
-      <th>
-        Defenses
-      </th>
-      <th class="px-2">
-        Proficiency
-      </th>
-      <th class="px-2">
-        Attribute
-      </th>
-      <th class="px-2">
-        Item Bonus
-      </th>
-      <th class="px-2">
-        Penalty
-      </th>
-      <th class="px-2">
-        DC
-      </th>
+      <th class="text-left pl-3 py-1 text-xs font-semibold uppercase tracking-wider opacity-60">Defenses</th>
+      <th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Proficiency</th>
+      <th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Attribute</th>
+      <th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Item Bonus</th>
+      <th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Penalty</th>
+      <th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">DC</th>
     </tr>
     </thead>
     <tbody>
@@ -163,24 +151,7 @@ function removeSpellDC(iLore: number) {
     </tr>
 
 
-    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th>Skill
-      </th>
-      <th class="px-2">
-        Proficiency
-      </th>
-      <th class="px-2">
-        Attribute
-      </th>
-      <th class="px-2">
-        Item Bonus
-      </th>
-      <th class="px-2">
-        Penalty
-      </th>
-      <th class="px-2">
-        Total
-      </th>
-    </tr>
+    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th class="text-left pl-3 py-1 text-xs font-semibold uppercase tracking-wider opacity-60">Skill</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Proficiency</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Attribute</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Item Bonus</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Penalty</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Total</th></tr>
 
     <tr v-for="skill in Skills" :key="'edit_' + skill" :class="{ editDivider : false }">
       <td class="table_skill">{{ capitalize(skill.toString()) }}</td>
@@ -242,6 +213,9 @@ function removeSpellDC(iLore: number) {
         }}
       </td>
     </tr>
+    <tr v-if="char.lores.length > 0" class="main-table-header">
+      <th colspan="6" class="text-left pl-3 py-1 text-xs font-semibold uppercase tracking-wider opacity-60">Lores</th>
+    </tr>
     <tr v-for="(lore, il) in char.lores" :key="'edit_char_lore_' + il" :class="{editDivider : il == 0}">
       <td class="text-center flex">
         <div class="mx-auto">
@@ -302,22 +276,7 @@ function removeSpellDC(iLore: number) {
         </Button>
       </td>
     </tr>
-    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th>DCs
-      </th>
-      <th class="px-2">
-        Proficiency
-      </th>
-      <th class="px-2">
-        Attribute
-      </th>
-      <th class="px-2">
-        Item Bonus
-      </th>
-      <th class="px-2"/>
-      <th class="px-2">
-        DC
-      </th>
-    </tr>
+    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th class="text-left pl-3 py-1 text-xs font-semibold uppercase tracking-wider opacity-60">DCs</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Proficiency</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Attribute</th><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">Item Bonus</th><th class="px-2"/><th class="px-2 text-xs font-semibold uppercase tracking-wider opacity-60">DC</th></tr>
     <tr>
       <td class="table_skill">Class DC</td>
       <td class="text-center">
@@ -530,6 +489,7 @@ tbody tr:nth-child(odd):not(.main-table-header) {
   @apply bg-neutral-200 dark:bg-surface-900;
 }
 </style>
+
 
 
 

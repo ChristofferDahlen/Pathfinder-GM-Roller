@@ -41,7 +41,7 @@ function removeVul(i: number) { char.value.vulnerabilities.splice(i, 1) }
     <div class="flex gap-1 mb-3">
       <InputText v-model="newResName" size="small" placeholder="Type" style="width:8rem"
                  @keydown.enter.prevent="addRes"/>
-      <InputText v-model.number="newResValue" type="number" size="small" style="width:3.5rem; text-align:center" min="0" max="999"/>
+      <InputText v-model.number="newResValue" type="number" size="small" style="width:3.5rem; text-align:center" min="0" max="999" />
       <Button size="small" outlined @click="addRes">
         <MdiIcon icon="mdiPlus" size="12pt"/>
       </Button>
