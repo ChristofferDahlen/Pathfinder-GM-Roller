@@ -106,3 +106,12 @@ html:not(.dark) .p-selectbutton [data-p-checked="true"] .p-togglebutton-label {
   --p-form-field-background: #09090b !important;
   --p-form-field-border-color: #52525b !important;
 }
+
+.p-scrollpanel-bar {
+  background: #737373 !important;
+  opacity: 1 !important;
+}
+
+.dark .p-scrollpanel-bar {
+  background: #525252 !important;
+}

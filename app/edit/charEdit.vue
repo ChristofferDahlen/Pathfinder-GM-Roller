@@ -22,7 +22,6 @@ import MainPanel from "./Panels/MainPanel.vue";
 import AttributePanel from "./Panels/AttributePanel.vue";
 import DefensePanel from "./Panels/DefensePanel.vue";
 import RestistancePanel from "./Panels/RestistancePanel.vue";
-import VulnerabiliesPanel from "./Panels/VulnerabiliesPanel.vue";
 import SkillEditTable from "./Panels/SkillEditTable.vue";
 import LanguagePannel from "./Panels/LanguagePanel.vue";
 
@@ -234,26 +233,31 @@ function onDrop(event: DragEvent) {
 
     <TabPanels class="overflow-clip">
       <TabPanel v-for="(_, i) in characters" :key="'edit_char_' + i" :value="i" class="h-full overflow-clip">
-        <scroll-panel class="inline-block align-top" style=" height: 70vh; width: 35%">
-          <div class="inline-block w-7/12 ">
+        <scroll-panel class="inline-block align-top pr-2" style="height: 70vh; width: 42%">
+          <div class="inline-block w-1/2 pr-2">
             <MainPanel v-model="characters[i]"/>
-            <AttributePanel v-model="characters[i]"/>
-          </div>
-          <div class="inline-block align-top w-5/12">
-            <Panel toggleable header="Other" class="">
-              <div class="pl-2">
-                <Button class="mr-2" @click="rLoading = true;">Import from<br>Pathbuilder</Button>
-                <Button class="" @click="removeCharacter">Delete<br> Character</Button>
+            <Panel toggleable header="Actions" class="">
+              <div class="flex flex-col gap-2 p-1">
+                <Button outlined severity="secondary" class="w-full" @click="rLoading = true;">
+                  <MdiIcon icon="mdiImport" class="mr-2"/>
+                  Load from Pathbuilder
+                </Button>
+                <Button outlined severity="danger" class="w-full" @click="removeCharacter">
+                  <MdiIcon icon="mdiDelete" class="mr-2"/>
+                  Delete Character
+                </Button>
               </div>
             </Panel>
-            <DefensePanel v-model="characters[i]"/>
-            <RestistancePanel v-model="characters[i]"/>
-            <VulnerabiliesPanel v-model="characters[i]"/>
             <LanguagePannel v-model="characters[i]"/>
 
           </div>
+          <div class="inline-block align-top w-1/2 pl-1">
+            <AttributePanel v-model="characters[i]"/>
+            <DefensePanel v-model="characters[i]"/>
+            <RestistancePanel v-model="characters[i]"/>
+          </div>
         </scroll-panel>
-        <ScrollPanel class="inline-block align-top" style=" height: 70vh; width: 65%">
+        <ScrollPanel class="inline-block align-top" style="height: 70vh; width: 58%">
           <SkillEditTable v-model="characters[i]"/>
         </ScrollPanel>
       </TabPanel>
@@ -272,33 +276,17 @@ function onDrop(event: DragEvent) {
   }
 
   .hoverL {
-    @apply border-l-2;
-    @apply border-double;
-    @apply border-surface-700;
+    @apply border-l-2 border-double border-surface-700;
   }
 
   .hoverR {
-    @apply border-r-2;
-    @apply border-double;
-    @apply border-surface-700;
+    @apply border-r-2 border-double border-surface-700;
   }
-
 
   .dragged {
     @apply opacity-20;
   }
 }
 
-.pt_rv_text {
-  font-size: small;
-  @apply align-middle;
-
-  padding: 0;
-}
-
-
-.table_total {
-
-}
-
 </style>
+

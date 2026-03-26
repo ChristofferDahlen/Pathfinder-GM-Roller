@@ -81,9 +81,11 @@ const keyAttr = ref([
 
 .number {
   width: 8rem;
-  font-size: 4rem;
   text-align: center;
+}
 
+.select-small {
+  width: 6rem;
 }
 
 
