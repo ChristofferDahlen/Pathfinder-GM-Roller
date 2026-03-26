@@ -218,7 +218,7 @@ export function updateCharacter(char: iCharacter, pbChar: iPBChar): iCharacter {
     }
 
     // Languages
-    char.languages = build.languages;
+    char.languages = build.languages.filter(l => l.toLowerCase() !== 'none selected');
 
     return char;
 }

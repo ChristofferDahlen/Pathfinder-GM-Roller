@@ -170,7 +170,8 @@ function onDrop(event: DragEvent) {
       <div class="flex flex-col gap-1">
         <label class="text-sm font-semibold opacity-70">Pathbuilder Build ID</label>
         <div class="flex gap-2">
-          <InputText v-model="pathbuilderID" placeholder="e.g. 123456" class="flex-1"/>
+          <InputText v-model="pathbuilderID" placeholder="e.g. 123456" class="flex-1"
+                     @keydown.enter="rLoading = false; updateFromPB()"/>
         </div>
         <span class="text-xs opacity-50">Find your build ID in Pathbuilder 2e under Share → Export</span>
       </div>
