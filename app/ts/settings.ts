@@ -78,13 +78,17 @@ export const OrganizedSettings = ref<OrganizedSettingsInterface>(BasicSettings()
 // ── Shortcuts ─────────────────────────────────────────────────────────────────
 
 export enum shortcutsEnum {
-    rollAll  = "Roll All",
-    setSlot1 = "Set slot 1",
-    setSlot2 = "Set slot 2",
-    setSlot3 = "Set slot 3",
-    setSlot4 = "Set slot 4",
-    setSlot5 = "Set slot 5",
-    setSlot6 = "Set slot 6",
+    rollAll   = "Roll All",
+    dcUp      = "DC +1",
+    dcDown    = "DC -1",
+    dcUp5     = "DC +5",
+    dcDown5   = "DC -5",
+    setSlot1  = "Set slot 1",
+    setSlot2  = "Set slot 2",
+    setSlot3  = "Set slot 3",
+    setSlot4  = "Set slot 4",
+    setSlot5  = "Set slot 5",
+    setSlot6  = "Set slot 6",
     swapSlot1 = "Swap slot 1",
     swapSlot2 = "Swap slot 2",
     swapSlot3 = "Swap slot 3",
@@ -96,6 +100,10 @@ export enum shortcutsEnum {
 export function BasicShortcuts(): Record<shortcutsEnum, string> {
     return {
         [shortcutsEnum.rollAll]:  "space",
+        [shortcutsEnum.dcUp]:     "+",
+        [shortcutsEnum.dcDown]:   "-",
+        [shortcutsEnum.dcUp5]:    "alt++",
+        [shortcutsEnum.dcDown5]:  "alt+-",
         [shortcutsEnum.setSlot1]: "1",
         [shortcutsEnum.setSlot2]: "2",
         [shortcutsEnum.setSlot3]: "3",
@@ -114,7 +122,7 @@ export function BasicShortcuts(): Record<shortcutsEnum, string> {
 export const RollerShortcuts = ref<Record<shortcutsEnum, string>>(BasicShortcuts());
 
 export const OrganizedShortCuts = {
-    "Main": [shortcutsEnum.rollAll],
+    "Main": [shortcutsEnum.rollAll, shortcutsEnum.dcUp, shortcutsEnum.dcDown, shortcutsEnum.dcUp5, shortcutsEnum.dcDown5],
     "Saved Rolls": [
         shortcutsEnum.setSlot1, shortcutsEnum.setSlot2, shortcutsEnum.setSlot3,
         shortcutsEnum.setSlot4, shortcutsEnum.setSlot5, shortcutsEnum.setSlot6,
@@ -152,7 +160,6 @@ export function onShortcutKey(
     keysTo: shortcutsEnum[],
     func: (sc: shortcutsEnum, event: KeyboardEvent) => void
 ) {
-    const magicKey = useMagicKeys();
     const activeElement = useActiveElement();
     const usingInput = computed(() =>
         activeElement.value?.tagName === 'TEXTAREA' || activeElement.value?.tagName === 'INPUT'
@@ -160,9 +167,25 @@ export function onShortcutKey(
 
     return onKeyStroke((event) => {
         if (usingInput.value || !shortCutsActive.value) return;
+        if (event.repeat) return;
 
         for (const key of keysTo) {
-            if (magicKey[RollerShortcuts.value[key]]?.value) {
+                const raw = RollerShortcuts.value[key].toLowerCase();
+            // Handle combos like "ctrl++", "ctrl+-" where last char is the literal key
+            // Split modifiers from the main key: everything before the last separator
+            const modMatch = raw.match(/^((?:(?:ctrl|shift|alt)[+_])+)(.+)$/);
+            const parts = modMatch ? modMatch[1].split(/[+_]/g).filter(Boolean) : [];
+            const mainKey = modMatch ? modMatch[2] : raw;
+            const needsCtrl  = parts.includes("ctrl");
+            const needsShift = parts.includes("shift");
+            const needsAlt   = parts.includes("alt");
+
+            if (
+                event.key.toLowerCase() === mainKey &&
+                event.ctrlKey  === needsCtrl &&
+                event.shiftKey === needsShift &&
+                event.altKey   === needsAlt
+            ) {
                 func(key, event);
                 break;
             }
