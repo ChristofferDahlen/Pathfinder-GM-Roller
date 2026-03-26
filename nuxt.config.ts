@@ -46,6 +46,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   app: {
+    baseURL: '/Pathfinder-GM-Roller/',
     head: {
       style: [
         { innerHTML: 'html, body { margin: 0; padding: 0; background: #030712; }' }
