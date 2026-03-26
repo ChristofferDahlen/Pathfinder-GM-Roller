@@ -164,6 +164,7 @@ onUnmounted(() => {
             </Button>
           </div>
           <div class="inline-block">
+            <!--
             <ToggleButton
                 v-model="toggle"
                 on-label="Locked" off-label="Unlocked" on-icon="dropdownicon"
@@ -173,6 +174,7 @@ onUnmounted(() => {
               <MdiIcon v-if="toggle" icon="mdiWeatherSunny"/>
               <MdiIcon v-if="!toggle" icon="mdiWeatherNight"/>
             </ToggleButton>
+          -->
             <Button outlined class="mx-1" @click="hasPartyChanged=true">
               <MdiIcon icon="mdiAccountGroup"/>
             </Button>
