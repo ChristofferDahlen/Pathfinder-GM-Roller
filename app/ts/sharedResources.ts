@@ -1,79 +1,66 @@
-import {reactive, ref} from 'vue'
-import {Skills} from "./types";
+import { reactive, ref } from 'vue'
+import { Skills } from "./types";
+
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface iCheckState {
-    selected: boolean,
-    hover: boolean,
+    selected: boolean
+    hover: boolean
 }
-
 
 export type selectable = Skills | 'perception'
 
-type managable = {
-    checkAll: boolean,
-    checkAllIntermediate: boolean,
-    perception: iCheckState,
-    [Skills.acrobatics]: iCheckState,
-    [Skills.arcana]: iCheckState,
-    [Skills.athletics]: iCheckState,
-    [Skills.crafting]: iCheckState,
-    [Skills.deception]: iCheckState,
-    [Skills.diplomacy]: iCheckState,
-    [Skills.intimidation]: iCheckState,
-    [Skills.medicine]: iCheckState,
-    [Skills.nature]: iCheckState,
-    [Skills.occultism]: iCheckState,
-    [Skills.performance]: iCheckState,
-    [Skills.religion]: iCheckState,
-    [Skills.society]: iCheckState,
-    [Skills.stealth]: iCheckState,
-    [Skills.survival]: iCheckState,
-    [Skills.thievery]: iCheckState,
-    lores: Array<iCheckState>,
-    loreCount(): number,
-    loreKeys(): Array<number>,
-    skillKeys(): Array<Skills>,
-    toggle(skill: selectable): void,
-    selectOnly(skill: selectable): void,
-    selectOnlyLore(n: number): void,
-    selectTotal(b: boolean): void,
-    selectNone(): void,
-    selectAll(): void,
+type Managable = {
+    checkAll: boolean
+    checkAllIntermediate: boolean
+    perception: iCheckState
+    lores: iCheckState[]
+    [skill: string]: unknown
+    loreCount(): number
+    loreKeys(): number[]
+    skillKeys(): Skills[]
+    toggle(skill: selectable): void
+    selectOnly(skill: selectable): void
+    selectOnlyLore(n: number): void
+    selectTotal(b: boolean): void
+    selectNone(): void
+    selectAll(): void
     selectSkills(skills: Array<selectable | 'lore'>): void
     partialSelect(): void
-}
+} & { [K in Skills]: iCheckState }
 
-export const Selected = ref<managable>({
+// ── Selected skills state ─────────────────────────────────────────────────────
+
+const defaultSkillState = (): iCheckState => ({ selected: true, hover: false })
+
+export const Selected = ref<Managable>({
     checkAll: true,
     checkAllIntermediate: false,
-    perception: {selected: true, hover: false},
-    [Skills.acrobatics]: {selected: true, hover: false},
-    [Skills.arcana]: {selected: true, hover: false},
-    [Skills.athletics]: {selected: true, hover: false},
-    [Skills.crafting]: {selected: true, hover: false},
-    [Skills.deception]: {selected: true, hover: false},
-    [Skills.diplomacy]: {selected: true, hover: false},
-    [Skills.intimidation]: {selected: true, hover: false},
-    [Skills.medicine]: {selected: true, hover: false},
-    [Skills.nature]: {selected: true, hover: false},
-    [Skills.occultism]: {selected: true, hover: false},
-    [Skills.performance]: {selected: true, hover: false},
-    [Skills.religion]: {selected: true, hover: false},
-    [Skills.society]: {selected: true, hover: false},
-    [Skills.stealth]: {selected: true, hover: false},
-    [Skills.survival]: {selected: true, hover: false},
-    [Skills.thievery]: {selected: true, hover: false},
-    lores: Array<iCheckState>(),
-    loreCount() {
-        return this.lores.length
-    },
+    perception: defaultSkillState(),
+    [Skills.acrobatics]: defaultSkillState(),
+    [Skills.arcana]: defaultSkillState(),
+    [Skills.athletics]: defaultSkillState(),
+    [Skills.crafting]: defaultSkillState(),
+    [Skills.deception]: defaultSkillState(),
+    [Skills.diplomacy]: defaultSkillState(),
+    [Skills.intimidation]: defaultSkillState(),
+    [Skills.medicine]: defaultSkillState(),
+    [Skills.nature]: defaultSkillState(),
+    [Skills.occultism]: defaultSkillState(),
+    [Skills.performance]: defaultSkillState(),
+    [Skills.religion]: defaultSkillState(),
+    [Skills.society]: defaultSkillState(),
+    [Skills.stealth]: defaultSkillState(),
+    [Skills.survival]: defaultSkillState(),
+    [Skills.thievery]: defaultSkillState(),
+    lores: [] as iCheckState[],
 
-    loreKeys(): Array<number> {
-        return Array.from(Array(this.lores.length).keys())
-    },
+    loreCount() { return this.lores.length },
+    loreKeys() { return Array.from({ length: this.lores.length }, (_, i) => i) },
+    skillKeys() { return Object.values(Skills) },
 
-    skillKeys(): Array<Skills> {
-        return Array.from(Object.values(Skills));
+    toggle(skill: selectable) {
+        this[skill as Skills].selected = !this[skill as Skills].selected;
     },
 
     selectOnly(skill: selectable) {
@@ -81,53 +68,31 @@ export const Selected = ref<managable>({
     },
 
     selectOnlyLore(n: number) {
-        this.lores.forEach((l, i) => l.selected = i === n);
+        this.lores.forEach((l, i) => { l.selected = i === n });
     },
-
-    toggle(skill: selectable) {
-        console.log("Toggle", skill, !this[skill as Skills].selected);
-        console.log(this[skill].selected)
-        this[skill as Skills].selected = !this[skill as Skills].selected;
-        console.log(this[skill].selected)
-    },
-
 
     selectTotal(to: boolean) {
-        console.log("Setting selection for all to be", to)
-        this.skillKeys().forEach(skill => {
-            this[skill as Skills].selected = to;
-        })
-
-        this.lores.forEach(k => k.selected = to);
-        this.perception.selected = to
-
-        this.checkAllIntermediate = false;
+        this.skillKeys().forEach(skill => { this[skill].selected = to });
+        this.lores.forEach(l => { l.selected = to });
+        this.perception.selected = to;
         this.checkAll = to;
+        this.checkAllIntermediate = false;
     },
 
-    selectNone() {
-        this.selectTotal(false)
-    },
-
-    selectAll() {
-        this.selectTotal(true)
-    },
+    selectNone() { this.selectTotal(false) },
+    selectAll()  { this.selectTotal(true) },
 
     selectSkills(skills: Array<selectable | 'lore'>) {
-        console.log("Selecting skills", skills)
-        this.selectNone()
-
-        skills.forEach(skill => {
-            if (skill == 'lore') {
-                this.lores.forEach(l => l.selected = true)
+        this.selectNone();
+        for (const skill of skills) {
+            if (skill === 'lore') {
+                this.lores.forEach(l => { l.selected = true });
             } else {
                 this[skill as selectable].selected = true;
             }
-            console.log("on", skill)
-        })
-
-        this.checkAllIntermediate = true
-        this.checkAll = false
+        }
+        this.checkAll = false;
+        this.checkAllIntermediate = true;
     },
 
     partialSelect() {
@@ -138,67 +103,46 @@ export const Selected = ref<managable>({
     },
 })
 
+// ── Roller ────────────────────────────────────────────────────────────────────
+
+type RollingFn = () => void
+
+export const Roller = reactive({
+    roller: undefined as RollingFn | undefined,
+
+    setRoller(fn: RollingFn) { this.roller = fn },
+
+    rollAll() {
+        this.roller?.();
+    },
+})
+
+// ── DC state ──────────────────────────────────────────────────────────────────
+
 const MIN_DC = 0;
 const MAX_DC = 60;
 
-function clampValue(value: number, min: number, max: number): number {
+function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }
 
-interface  rollingFunction {
-    (): void;
-}
-
-type roller = {
-    roller: rollingFunction | undefined;
-    setRoller(rf: rollingFunction): void;
-    rollAll() : void;
-}
-
-export const Roller = reactive<roller>({
-    roller: undefined,
-    setRoller(rf : rollingFunction) {
-        this.roller = rf
-    },
-    rollAll()  {
-        console.log("Rolling in roller")
-        if (this.roller != undefined) {
-            this.roller()
-        }
-    }
-});
-
-type DCreact = {
-    value: number;
-    resetValue?: number;
-    roller: rollingFunction | undefined;
-    set(newValue: number, shouldReset: boolean, shouldClearReset?: boolean): void;
-    add(addition: number, shouldReset: boolean): void;
-    setReset(): void;
-};
-
-export const DC = reactive<DCreact>({
+export const DC = reactive({
     value: 15,
-    resetValue: undefined,
-    roller: undefined,
+    resetValue: undefined as number | undefined,
+    roller: undefined as RollingFn | undefined,
 
-    set(newValue, shouldReset, shouldClearReset = false) {
-        console.log("Set DC to", newValue);
-
-        if (shouldReset && this.resetValue == undefined && newValue !== this.value) {
+    set(newValue: number, shouldReset: boolean, shouldClearReset = false) {
+        if (shouldReset && this.resetValue === undefined && newValue !== this.value) {
             this.resetValue = this.value;
         }
-
         if (shouldClearReset) {
             this.resetValue = undefined;
         }
-
-        // Use the clampValue function to apply boundaries
-        this.value = clampValue(newValue, MIN_DC, MAX_DC);
+        this.value = clamp(newValue, MIN_DC, MAX_DC);
     },
 
-    add(addition, shouldReset) {
-        this.set(this.value + addition, shouldReset);
+    add(amount: number, shouldReset: boolean) {
+        this.set(this.value + amount, shouldReset);
     },
 
     setReset() {
@@ -207,5 +151,4 @@ export const DC = reactive<DCreact>({
             this.resetValue = undefined;
         }
     },
-});
-
+})

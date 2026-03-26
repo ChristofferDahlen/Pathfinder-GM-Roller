@@ -23,7 +23,7 @@ const SETTINGS_KEY = "Settings";
 const toggle = ref(false);
 const isEditing = ref(false);
 const isLoading = ref(true)
-const openSettings = ref(true)
+const openSettings = ref(false)
 const openInfo = ref(false)
 const hasPartyChanged = ref(false);
 
@@ -187,9 +187,4 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
-<script>
-
-</script>
-
 

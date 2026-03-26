@@ -20,14 +20,11 @@ defineExpose({rollAll});
 defineProps<{ partyName: string }>();
 
 watch(characters, () => {
-  console.log("Party");
   rollAll();
   updateLores();
 });
 
-
-///--------  Stuff regarding rolling
-
+// ── Rolling ───────────────────────────────────────────────────────────────────
 
 type RollEntry = {
   generateRoll() : void;
@@ -45,26 +42,19 @@ function setRoller(skillKey: string | number, charKey: string, roll: RollEntry) 
 }
 
 function rollCharacter(characterKey: string) {
-  console.log("Roll Character", characterKey);
   roller.value.forEach(inner => inner.get(characterKey)?.generateRoll());
 }
 
 function rollSkill(skillKey: string | number) {
-  console.log("Roll Skill", skillKey);
-  roller.value.get(skillKey.toString())?.forEach((value, key) => {
-    console.log(key);
-    value?.generateRoll();
-  });
+  roller.value.get(String(skillKey))?.forEach(roll => roll?.generateRoll());
 }
 
 function rollAll() {
-  console.log("Roll All");
   roller.value.forEach(inner => inner.forEach(roll => roll?.generateRoll()));
 }
 Roller.roller = rollAll;
 
-///--------  Stuff regarding selection of skills / lores
-
+// ── Skill/lore selection ──────────────────────────────────────────────────────
 
 const isControlPressed = ref<boolean>(false);
 function handleKeyEvent(event: KeyboardEvent) {
@@ -83,11 +73,9 @@ function selectOnly() {
 onShortcutKey([shortcutsEnum.rollAll], (_, event) => {
   rollAll();
   event.preventDefault();
-})
+});
 
-
-///--------  Stuff regarding defenses
-
+// ── Defenses ──────────────────────────────────────────────────────────────────
 const defenseEnumMapping = {
   ShowFortitude: DefenseEnum.Fortitude,
   ShowReflex: DefenseEnum.Reflex,
@@ -108,8 +96,7 @@ const ShownDefenses = computed<DefenseEnum[]>(() => {
   });
 });
 
-///--------  Stuff regarding Spell DCs
-
+// ── Spell DCs ─────────────────────────────────────────────────────────────────
 
 const getMaxSpellDCCount = (): number => {
   return Math.max(...characters.value.map(char => char.spellDCs.length), 0);
@@ -126,9 +113,7 @@ const SpellDCCount = computed<number[]>(() => {
   return [...Array(maximumSpellDCs).keys()];
 });
 
-
-///--------  Stuff regarding lores
-
+// ── Lores ─────────────────────────────────────────────────────────────────────
 const DEFAULT_LORE = {selected: true, hover: false};
 
 const LoreIndices = computed(() => {
@@ -159,10 +144,7 @@ function adjustLoreCount(targetCount: number) {
 
 
 
-/// Final Setup stuff
-
-
-updateLores()
+updateLores();
 </script>
 
 

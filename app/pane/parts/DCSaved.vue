@@ -19,22 +19,21 @@ type savedDC = {
 }
 
 
-const saved_dcs = ref<Array<savedDC>>([
-  {val: Number(15), strVal: "15", header: "Saved 1"},
-  {val: Number(15), strVal: "15", header: "Saved 2"},
-  {val: Number(15), strVal: "15", header: "Saved 3"},
-  {val: Number(15), strVal: "15", header: "Saved 4"},
-  {val: Number(15), strVal: "15", header: "Saved 5"},
-  {val: Number(15), strVal: "15", header: "Saved 6"}])
+// Default DC value used for all saved slots
+const DEFAULT_DC = 15;
+
+function makeDefaultSlots(): savedDC[] {
+  return Array.from({ length: 6 }, (_, i) => ({
+    val: DEFAULT_DC,
+    strVal: String(DEFAULT_DC),
+    header: `Saved ${i + 1}`,
+  }));
+}
+
+const saved_dcs = ref<savedDC[]>(makeDefaultSlots());
 
 function setDefaultSaved() {
-  saved_dcs.value = [
-    {val: Number(15), strVal: "15", header: "Saved 1"},
-    {val: Number(15), strVal: "15", header: "Saved 2"},
-    {val: Number(15), strVal: "15", header: "Saved 3"},
-    {val: Number(15), strVal: "15", header: "Saved 4"},
-    {val: Number(15), strVal: "15", header: "Saved 5"},
-    {val: Number(15), strVal: "15", header: "Saved 6"}]
+  saved_dcs.value = makeDefaultSlots();
 }
 
 function selectAll(event: FocusEvent | KeyboardEvent) {
@@ -102,27 +101,20 @@ function swap(i: number) {
 
 onMounted(() => {
   try {
-    const dcs = localStorage.getItem("savedDCs")
-    console.log("Loading Saved DCs", dcs);
-    //const stored_characters = null;
-    if (dcs !== null) {
-      const sDCs: Array<savedDC> = JSON.parse(dcs)
-      console.log("Tes")
-      saved_dcs.value = sDCs
+    const stored = localStorage.getItem("savedDCs")
+    if (stored !== null) {
+      saved_dcs.value = JSON.parse(stored) as savedDC[]
     } else {
-      console.log("Failure")
       setDefaultSaved()
     }
   } catch (e) {
-    console.error(e)
-    console.log("Failure 2 ")
+    console.error("Failed to load saved DCs:", e)
     setDefaultSaved()
   }
 })
 
 function SaveToStorage() {
   localStorage.setItem("savedDCs", JSON.stringify(saved_dcs.value))
-
 }
 
 onUnmounted(() => {

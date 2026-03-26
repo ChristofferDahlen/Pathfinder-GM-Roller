@@ -9,7 +9,6 @@ const newLanguage = ref("")
 
 
 function addLanguage() {
-  console.log(char.value.languages)
   char.value.languages.push(newLanguage.value)
   newLanguage.value = ""
 }
@@ -25,7 +24,7 @@ function removeLanguage(iRes: number) {
 <template>
   <Panel toggleable header="Languages" class="overflow-scroll">
     <ul>
-      <li v-for="(res, ir) in char.languages" :key="'res_' + ir" class="p-0">
+      <li v-for="(_, ir) in char.languages" :key="'lang_' + ir" class="p-0">
         <InputText
             v-model="char.languages[ir]" placeholder="Type" pt:root:class="pt_rv_text"
             class="rv_text"/>
