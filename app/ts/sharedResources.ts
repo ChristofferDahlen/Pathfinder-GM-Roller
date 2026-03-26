@@ -121,13 +121,22 @@ export const Roller = reactive({
 
 const MIN_DC = 0;
 const MAX_DC = 60;
+const DC_STORAGE_KEY = "DC";
 
 function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }
 
+function loadDC(): number {
+    try {
+        const stored = localStorage.getItem(DC_STORAGE_KEY);
+        if (stored !== null) return clamp(parseInt(stored), MIN_DC, MAX_DC);
+    } catch { /* ignore */ }
+    return 15;
+}
+
 export const DC = reactive({
-    value: 15,
+    value: loadDC(),
     resetValue: undefined as number | undefined,
     roller: undefined as RollingFn | undefined,
 
@@ -139,6 +148,7 @@ export const DC = reactive({
             this.resetValue = undefined;
         }
         this.value = clamp(newValue, MIN_DC, MAX_DC);
+        localStorage.setItem(DC_STORAGE_KEY, String(this.value));
     },
 
     add(amount: number, shouldReset: boolean) {
@@ -149,6 +159,7 @@ export const DC = reactive({
         if (this.resetValue !== undefined) {
             this.value = this.resetValue;
             this.resetValue = undefined;
+            localStorage.setItem(DC_STORAGE_KEY, String(this.value));
         }
     },
 })

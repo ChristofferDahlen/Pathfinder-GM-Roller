@@ -6,10 +6,8 @@ import Button from "primevue/button";
 
 import {DC} from "../ts/sharedResources"
 
-
-const dcText = ref("15")
-const dcScrollVal = ref(15)
-
+const dcText = ref(DC.value.toString())
+const dcScrollVal = ref(DC.value)
 
 function updateViaTextBox() {
   DC.set(parseInt(dcText.value), false, true);
