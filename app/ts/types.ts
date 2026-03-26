@@ -245,7 +245,7 @@ function createDefaultSkillValues(): iSkillVal {
 export function newCharacter(n: number): iCharacter {
     return {
         key: "",
-        name: ("char " + n),
+        name: ("Character " + n),
         playerName: "",
         level: 1,
         keyAbility: Attribute.str,
