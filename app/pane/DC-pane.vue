@@ -69,8 +69,4 @@ const emit = defineEmits(["roll"])
 
 </script>
 
-<style scoped lang="scss">
-@use "../assets/styles/dc-pane" as *;
 
-
-</style>

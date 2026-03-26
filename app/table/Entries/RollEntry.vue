@@ -182,7 +182,86 @@ generateRoll();
 
 
 <style scoped lang="scss">
-@use "../../assets/styles/table/roll-box" as *;
+@use "../../assets/styles/box-base" as *;
 
+.result {
+  color: white;
 
+  &.cs {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(5 46 22); // green-950
+  }
+
+  &.s {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(30 58 138); // blue-900
+  }
+
+  &.f {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(69 10 10); // red-950
+  }
+
+  &.cf {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(194 65 12); // orange-700
+  }
+
+  &.n20 {
+    border-color: rgb(132 204 22); // lime-500
+  }
+
+  &.n1 {
+    border-color: rgb(254 251 232); // amber-100
+  }
+}
+
+.roll-unfocused {
+  opacity: 0.2;
+}
+
+.roll_details {
+  @extend .unselectable;
+  @extend .result;
+  @extend .box-main;
+}
+
+.modifiers {
+  position: absolute;
+  width: 3.5rem;
+  height: 3rem;
+  z-index: 1;
+
+  &.left {
+    top: -0.6rem;
+    right: 3.7rem;
+  }
+
+  &.right {
+    top: -0.6rem;
+    left: 3.7rem;
+  }
+}
+
+.mod {
+  @extend .unselectable;
+  @extend .result;
+
+  border: 1pt solid white;
+  width: 1.2rem;
+  text-align: center;
+  background-color: gray;
+  border-radius: 20pt;
+  font-size: small;
+}
+
+.roll-result {
+  @extend .unselectable;
+  @extend .result;
+  @extend .box-base;
+}
+
+.table-border {
+  border-top: gray double;
+}
 </style>
