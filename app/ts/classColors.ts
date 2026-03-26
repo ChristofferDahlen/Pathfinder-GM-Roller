@@ -26,6 +26,7 @@ const classColorMap: Record<string, { light: string; dark: string }> = {
 }
 
 export function getClassColor(className: string, dark = false): string | undefined {
+  if (!className || !classColorMap) return undefined
   const entry = classColorMap[className.toLowerCase().trim()]
   if (!entry) return undefined
   return dark ? entry.dark : entry.light
