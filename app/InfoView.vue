@@ -107,7 +107,7 @@
         <span>Acknowledgements</span>
       </div>
       <p class="mt-2 text-sm" style="opacity:0.85">
-        Special thanks to <strong>Ashley Hemerik</strong> for help from
+        Special thanks to <strong>Ashley Hemerik</strong> (and her community) for help from
         <a href="https://pathfinderdashboard.com/" target="_blank" rel="noopener" class="thanks-link">pathfinderdashboard.com</a>.
       </p>
     </div>

@@ -67,7 +67,7 @@ MIT — see [LICENSE](LICENSE)
 
 ## Acknowledgements
 
-Special thanks to **Ashley Hemerik** for the help from [pathfinderdashboard.com](https://pathfinderdashboard.com/).
+Special thanks to **Ashley Hemerik** (and her community) for the help from [pathfinderdashboard.com](https://pathfinderdashboard.com/).
 
 ## Tech Stack
 

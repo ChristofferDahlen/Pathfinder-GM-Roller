@@ -165,16 +165,36 @@ function onDrop(event: DragEvent) {
 
 
 <template>
-  <Dialog v-model:visible="rLoading" modal class="z-10 w-1/2" header="Update from Pathbuilder Json">
-    <span class="text-surface-500 dark:text-surface-400 block">Input the ID.</span>
-    <InputText v-model="pathbuilderID"/>
-    <span class="text-surface-500 dark:text-surface-400 block">
-              or Paste the Json data for the character.</span>
-    <Textarea v-model="pathbuilderText" class="w-full"/>
-    <div>Note: Following fields aren't updated: Check penalty, Item bonuses & player name</div>
-    <div class="flex justify-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="rLoading = false"/>
-      <Button type="button" label="Update" @click="rLoading = false; updateFromPB()"/>
+  <Dialog v-model:visible="rLoading" modal class="z-10 w-1/2" header="Load from Pathbuilder">
+    <div class="flex flex-col gap-4 p-2">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold opacity-70">Pathbuilder Build ID</label>
+        <div class="flex gap-2">
+          <InputText v-model="pathbuilderID" placeholder="e.g. 123456" class="flex-1"/>
+        </div>
+        <span class="text-xs opacity-50">Find your build ID in Pathbuilder 2e under Share → Export</span>
+      </div>
+
+      <div class="flex items-center gap-2 opacity-40">
+        <div class="flex-1 border-t border-current"/>
+        <span class="text-xs">or</span>
+        <div class="flex-1 border-t border-current"/>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold opacity-70">Paste JSON</label>
+        <Textarea v-model="pathbuilderText" class="w-full" rows="6" placeholder="Paste exported JSON here..."/>
+      </div>
+
+      <div class="text-xs opacity-50 flex gap-1 items-start">
+        <span>Player name are not updated by import.</span>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-1">
+        <Button type="button" label="Cancel" severity="secondary" @click="rLoading = false"/>
+        <Button type="button" label="Import" @click="rLoading = false; updateFromPB()"/>
+      </div>
     </div>
   </Dialog>
 
@@ -222,7 +242,7 @@ function onDrop(event: DragEvent) {
           <div class="inline-block align-top w-5/12">
             <Panel toggleable header="Other" class="">
               <div class="pl-2">
-                <Button class="mr-2" @click="rLoading = true;">Load from<br>Pathbuilder</Button>
+                <Button class="mr-2" @click="rLoading = true;">Import from<br>Pathbuilder</Button>
                 <Button class="" @click="removeCharacter">Delete<br> Character</Button>
               </div>
             </Panel>
