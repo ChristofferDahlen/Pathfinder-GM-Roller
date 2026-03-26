@@ -1,0 +1,23 @@
+// Shared styles for list-style edit panels (Resistances, Vulnerabilities, Languages)
+
+.rv_text {
+  width: 40%;
+  height: 1.75rem;
+  margin: 0.1rem;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0;
+}
+
+.rv_field {
+  height: 1.75rem;
+  width: 20%;
+  margin: 0.1rem;
+  vertical-align: middle;
+}
+
+.rv_button {
+  height: 1.5rem;
+  vertical-align: middle;
+  margin: 0.1rem;
+}

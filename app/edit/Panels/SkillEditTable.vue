@@ -459,32 +459,29 @@ function removeSpellDC(iLore: number) {
 </template>
 
 <style scoped lang="scss">
-
 .number {
   width: 8rem;
   font-size: 4rem;
   text-align: center;
-
 }
-
 
 .table_prof_num {
   display: inline-block;
-  border: white 1px solid;
+  border: 1px solid white;
   border-radius: 0.5rem;
   width: 2rem;
   height: 2.1rem;
-  @apply m-1;
-  @apply p-1;
-  @apply opacity-50;
-  @apply align-middle;
-  @apply content-center;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  opacity: 0.5;
+  vertical-align: middle;
+  align-content: center;
 }
 
 .table_attr_type {
   display: inline-block;
-  @apply w-6;
-  @apply opacity-30;
+  width: 1.5rem;
+  opacity: 0.3;
 }
 
 .table_attr {
@@ -493,10 +490,14 @@ function removeSpellDC(iLore: number) {
   text-align: center;
 }
 
+.table_skill {
+  text-align: center;
+  font-weight: bold;
+}
 
 .lore_skill {
-  @apply table_skill;
-  @apply w-40;
+  @extend .table_skill;
+  width: 10rem;
   margin-left: auto;
 }
 
@@ -506,13 +507,7 @@ function removeSpellDC(iLore: number) {
   line-height: 0.5rem;
 }
 
-.table_skill {
-  text-align: center;
-  font-weight: bold;
-}
-
 .editDivider {
   border-top: 0.5pt solid gray;
 }
-
 </style>

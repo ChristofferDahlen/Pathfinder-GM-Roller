@@ -50,32 +50,5 @@ function removeVulnerability(iRes: number) {
 
 </script>
 <style scoped lang="scss">
-
-.rv_text {
-  width: 40%;
-  height: 1.75rem;
-  margin: 0.1rem;
-
-  @apply align-middle;
-  text-align: center;
-  padding: 0;
-}
-
-.rv_field {
-  height: 1.75rem;
-  width: 20%;
-  margin: 0.1rem;
-
-  @apply align-middle;
-
-}
-
-.rv_button {
-  height: 1.5rem;
-  @apply align-middle;
-  margin: 0.1rem;
-
-}
-
-
+@use "../../assets/styles/panel-list" as *;
 </style>

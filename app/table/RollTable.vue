@@ -151,7 +151,7 @@ updateLores();
 <template>
   <table class="main-table w-9/12" style="border-collapse: collapse">
     <thead class="w-full">
-    <tr class="main-table-header z-20" style="position: sticky; top: 0; z-index: 10;">
+    <tr class="main-table-header z-20">
       <th class="p-2">
         <Checkbox
             v-model="Selected.checkAll" :indeterminate="Selected.checkAllIntermediate"
@@ -404,27 +404,18 @@ updateLores();
   user-select: none;
 }
 
-
 .main-table-header {
-  @apply bg-surface-950;
-  @apply dark:bg-surface-200;
-  @apply text-white;
-
-  .th {
-    @apply bg-surface-500;
-    @apply dark:bg-surface-200;
-    @apply text-white;
-  }
+  @apply bg-surface-950 dark:bg-surface-200 text-white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .main-table tr:nth-child(even) {
-  @apply bg-surface-200;
-  @apply dark:bg-surface-800;
+  @apply bg-surface-200 dark:bg-surface-800;
 }
 
-
 .main-table tr:nth-child(odd) {
-  @apply bg-surface-300;
-  @apply dark:bg-surface-900;
+  @apply bg-surface-300 dark:bg-surface-900;
 }
 </style>
