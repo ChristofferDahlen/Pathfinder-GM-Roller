@@ -2,6 +2,7 @@
 import PrimeUI from 'tailwindcss-primeui';
 
 export default {
+  darkMode: 'class',
   content: [
     './node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}', // PrimeVue components
     './node_modules/tailwindcss-primeui/**/*.js', // PrimeUI classes

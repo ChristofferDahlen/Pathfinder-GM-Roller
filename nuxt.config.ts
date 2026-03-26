@@ -2,7 +2,7 @@
 
 import Aura from '@primeuix/themes/aura'
 import {definePreset} from "@primeuix/styled";
-definePreset(Aura, {
+const MyPreset = definePreset(Aura, {
   semantic: {
     light: {
       surface: {
@@ -34,7 +34,7 @@ definePreset(Aura, {
     },
     dark: {
       surface: {
-        0: '#00000',
+        0: '#000000',
         50: '{slate.50}',
         100: '{slate.100}',
         200: '{slate.200}',
@@ -68,6 +68,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  app: {
+    head: {
+      htmlAttrs: { class: 'dark' },
+      style: [
+        { innerHTML: 'html, body { margin: 0; padding: 0; background: #030712; }' }
+      ]
+    }
+  },
+
+  ssr: false,
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
@@ -82,7 +93,10 @@ export default defineNuxtConfig({
   primevue: {
     options: {
       theme: {
-          preset: Aura
+        preset: MyPreset,
+        options: {
+          darkModeSelector: '.dark'
+        }
       },
       components: {
         include: ['ConfirmDialog']
@@ -90,6 +104,7 @@ export default defineNuxtConfig({
     }
   },
   css: [
+    '@/assets/styles/main.scss'
   ]
 
 

@@ -109,6 +109,7 @@ onMounted(() => {
 
   initializePartyKeys();
 
+  toggleCssClass('html', 'dark', !toggle.value);
   isLoading.value = false;
 });
 
@@ -119,9 +120,9 @@ onUnmounted(() => {
 
 <template class="dark-mode">
 
-  <ConfirmDialog/>
-  <div v-if="isLoading" class="background w-full h-full text-center">LOADING</div>
+  <div v-if="isLoading" style="position:fixed;inset:0;background:#030712;display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;z-index:9999;">LOADING</div>
   <div v-else class="background w-full">
+  <ConfirmDialog/>
 
     <Dialog
         v-model:visible="hasPartyChanged" modal header="Save / Load Party" :style="{ width:'98%'}"

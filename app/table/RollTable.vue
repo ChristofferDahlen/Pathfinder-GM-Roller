@@ -405,17 +405,17 @@ updateLores();
 }
 
 .main-table-header {
-  @apply bg-surface-950 dark:bg-surface-200 text-white;
+  @apply bg-surface-950 dark:bg-surface-950 text-white;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .main-table tr:nth-child(even) {
-  @apply bg-surface-200 dark:bg-surface-800;
+  @apply bg-surface-800 dark:bg-surface-800;
 }
 
 .main-table tr:nth-child(odd) {
-  @apply bg-surface-300 dark:bg-surface-900;
+  @apply bg-surface-900 dark:bg-surface-900;
 }
 </style>
