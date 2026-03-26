@@ -83,6 +83,9 @@ export enum shortcutsEnum {
     dcDown    = "DC -1",
     dcUp5     = "DC +5",
     dcDown5   = "DC -5",
+    dcPartyLvl = "DC by Party Level",
+    selectAll  = "Select All Skills",
+    selectNone = "Deselect All Skills",
     setSlot1  = "Set slot 1",
     setSlot2  = "Set slot 2",
     setSlot3  = "Set slot 3",
@@ -102,8 +105,11 @@ export function BasicShortcuts(): Record<shortcutsEnum, string> {
         [shortcutsEnum.rollAll]:  "space",
         [shortcutsEnum.dcUp]:     "+",
         [shortcutsEnum.dcDown]:   "-",
-        [shortcutsEnum.dcUp5]:    "alt++",
-        [shortcutsEnum.dcDown5]:  "alt+-",
+        [shortcutsEnum.dcUp5]:     "alt++",
+        [shortcutsEnum.dcDown5]:   "alt+-",
+        [shortcutsEnum.dcPartyLvl]: "l",
+        [shortcutsEnum.selectAll]:  "a",
+        [shortcutsEnum.selectNone]: "d",
         [shortcutsEnum.setSlot1]: "1",
         [shortcutsEnum.setSlot2]: "2",
         [shortcutsEnum.setSlot3]: "3",
@@ -122,7 +128,7 @@ export function BasicShortcuts(): Record<shortcutsEnum, string> {
 export const RollerShortcuts = ref<Record<shortcutsEnum, string>>(BasicShortcuts());
 
 export const OrganizedShortCuts = {
-    "Main": [shortcutsEnum.rollAll, shortcutsEnum.dcUp, shortcutsEnum.dcDown, shortcutsEnum.dcUp5, shortcutsEnum.dcDown5],
+    "Main": [shortcutsEnum.rollAll, shortcutsEnum.dcUp, shortcutsEnum.dcDown, shortcutsEnum.dcUp5, shortcutsEnum.dcDown5, shortcutsEnum.dcPartyLvl, shortcutsEnum.selectAll, shortcutsEnum.selectNone],
     "Saved Rolls": [
         shortcutsEnum.setSlot1, shortcutsEnum.setSlot2, shortcutsEnum.setSlot3,
         shortcutsEnum.setSlot4, shortcutsEnum.setSlot5, shortcutsEnum.setSlot6,

@@ -1,5 +1,6 @@
 import { reactive, ref } from 'vue'
-import { Skills } from "./types";
+import { Skills, type iCharacters } from "./types";
+import dcByLvl from '../assets/dc_by_lvl.json'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -102,6 +103,20 @@ export const Selected = ref<Managable>({
         this.checkAllIntermediate = !allSelected && !noneSelected;
     },
 })
+
+// ── Party ─────────────────────────────────────────────────────────────────────
+
+export const PartyCharacters = ref<iCharacters>([])
+
+export function getPartyLevelDC(): number {
+    if (PartyCharacters.value.length === 0) return 15;
+    const avgLevel = PartyCharacters.value.reduce((sum, c) => sum + (c.level ?? 0), 0) / PartyCharacters.value.length;
+    const rounded = Math.round(avgLevel);
+    const entry = dcByLvl.reduce((prev, curr) =>
+        Math.abs(curr.level - rounded) < Math.abs(prev.level - rounded) ? curr : prev
+    );
+    return entry.dc;
+}
 
 // ── Roller ────────────────────────────────────────────────────────────────────
 

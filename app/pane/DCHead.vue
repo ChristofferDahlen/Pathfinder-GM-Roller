@@ -4,13 +4,14 @@ import {ref, watch} from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
-import {DC} from "../ts/sharedResources"
+import {DC, getPartyLevelDC} from "../ts/sharedResources"
 import {onShortcutKey, shortcutsEnum} from "../ts/settings"
 
-onShortcutKey([shortcutsEnum.dcUp],    () => DC.add(1, false));
-onShortcutKey([shortcutsEnum.dcDown],  () => DC.add(-1, false));
-onShortcutKey([shortcutsEnum.dcUp5],   () => DC.add(5, false));
-onShortcutKey([shortcutsEnum.dcDown5], () => DC.add(-5, false));
+onShortcutKey([shortcutsEnum.dcUp],      () => DC.add(1, false));
+onShortcutKey([shortcutsEnum.dcDown],    () => DC.add(-1, false));
+onShortcutKey([shortcutsEnum.dcUp5],     () => DC.add(5, false));
+onShortcutKey([shortcutsEnum.dcDown5],   () => DC.add(-5, false));
+onShortcutKey([shortcutsEnum.dcPartyLvl], () => DC.set(getPartyLevelDC(), true));
 
 const dcText = ref(DC.value.toString())
 const dcScrollVal = ref(DC.value)

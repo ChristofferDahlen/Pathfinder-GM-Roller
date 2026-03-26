@@ -78,6 +78,9 @@ onShortcutKey([shortcutsEnum.rollAll], (_, event) => {
   event.preventDefault();
 });
 
+onShortcutKey([shortcutsEnum.selectAll],  () => Selected.value.selectAll());
+onShortcutKey([shortcutsEnum.selectNone], () => Selected.value.selectNone());
+
 // ── Defenses ──────────────────────────────────────────────────────────────────
 const defenseEnumMapping = {
   ShowFortitude: DefenseEnum.Fortitude,

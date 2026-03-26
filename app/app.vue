@@ -15,6 +15,7 @@ import SettingsView from "./SettingsView.vue";
 import InfoView from "./InfoView.vue";
 import RollTable from "./table/RollTable.vue";
 import DCPane from "./pane/DC-pane.vue";
+import {PartyCharacters} from "./ts/sharedResources";
 
 const CHARACTERS_KEY = "Characters";
 const SHORTCUTS_KEY = "Shortcuts";
@@ -97,6 +98,7 @@ function dialogClosed(): void {
 
 watch(party, () => {
   saveToLocalStorage(CHARACTERS_KEY, party.value)
+  PartyCharacters.value = party.value.characters
 });
 
 
@@ -110,6 +112,7 @@ onMounted(() => {
   );
 
   initializePartyKeys();
+  PartyCharacters.value = party.value.characters;
 
   toggleCssClass('html', 'dark', !toggle.value);
   isLoading.value = false;
