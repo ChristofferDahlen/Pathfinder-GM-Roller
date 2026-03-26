@@ -28,6 +28,7 @@ defineProps<{
   @extend .box-base;
 
   @apply bg-orange-900;
+  color: white;
   text-align: center;
   display: inline-block;
   vertical-align: middle;

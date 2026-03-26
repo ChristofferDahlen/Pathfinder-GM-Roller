@@ -72,6 +72,8 @@ function toggleCssClass(selector: string, className: string, condition: boolean)
 
 
 function toggleDarkMode(): void {
+  // toggle.value is already updated by ToggleButton before @click fires,
+  // so toggle=true means "light mode" (sun icon), toggle=false means "dark mode"
   toggleCssClass('html', 'dark', !toggle.value);
 }
 
@@ -150,7 +152,7 @@ onUnmounted(() => {
     </Dialog>
 
     <RollTable ref="rt" v-model="party.characters" :party-name="party.name"/>
-    <div class="inline-block align-top w-3/12 max-h-screen overflow-scroll">
+    <div class="inline-block align-top w-3/12 max-h-screen overflow-scroll bg-neutral-300 dark:bg-neutral-800">
       <div class="flex flex-row-reverse border-b">
         <div class=" m-2 flex justify-between w-full">
           <div class="inline-block">
@@ -164,7 +166,7 @@ onUnmounted(() => {
                 on-label="Locked" off-label="Unlocked" on-icon="dropdownicon"
                 off-icon="dropdownicon"
                 class="mx-1"
-                @click="toggleDarkMode()">
+                @update:model-value="toggleDarkMode">
               <MdiIcon v-if="toggle" icon="mdiWeatherSunny"/>
               <MdiIcon v-if="!toggle" icon="mdiWeatherNight"/>
             </ToggleButton>

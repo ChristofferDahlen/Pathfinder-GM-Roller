@@ -27,12 +27,10 @@ defineProps<{
   @extend .box-base;
 
   @apply bg-purple-900;
+  color: white;
   text-align: center;
   display: inline-block;
   vertical-align: middle;
   width: fit-content;
 
-}
-
-
-</style>
+}</style>

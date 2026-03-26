@@ -10,9 +10,99 @@ html, body {
 }
 
 .divider {
-  border-top: 1px solid #171717;
+  border-top: 1px solid #a3a3a3;
+  @apply dark:border-neutral-700;
 }
 
 .background {
-  @apply bg-neutral-800;
+  @apply bg-neutral-300 dark:bg-neutral-800;
+}
+
+// Override PrimeVue surface CSS variables in light mode to use neutral grays
+// Use :root:root for higher specificity than PrimeVue's :root injection
+:root:not(.dark) {
+  --p-surface-0: #ffffff !important;
+  --p-surface-50: #fafafa !important;
+  --p-surface-100: #f5f5f5 !important;
+  --p-surface-200: #e5e5e5 !important;
+  --p-surface-300: #d4d4d4 !important;
+  --p-surface-400: #a3a3a3 !important;
+  --p-surface-500: #737373 !important;
+  --p-surface-600: #525252 !important;
+  --p-surface-700: #404040 !important;
+  --p-surface-800: #262626 !important;
+  --p-surface-900: #171717 !important;
+  --p-surface-950: #0a0a0a !important;
+  --p-content-background: #d4d4d4 !important;
+  --p-content-hover-background: #e5e5e5 !important;
+  --p-content-border-color: #a3a3a3 !important;
+  --p-primary-50: #f0fdf4 !important;
+  --p-primary-100: #dcfce7 !important;
+  --p-primary-200: #bbf7d0 !important;
+  --p-primary-300: #86efac !important;
+  --p-primary-400: #4ade80 !important;
+  --p-primary-500: #16a34a !important;
+  --p-primary-600: #15803d !important;
+  --p-primary-700: #166534 !important;
+  --p-primary-800: #14532d !important;
+  --p-primary-900: #052e16 !important;
+  --p-primary-950: #022c22 !important;
+  --p-primary-color: #22c55e !important;
+  --p-primary-hover-color: #16a34a !important;
+  --p-primary-active-color: #15803d !important;
+  --p-focus-ring-color: #16a34a !important;
+  --p-primary-contrast-color: #ffffff !important;
+  --p-button-outlined-primary-border-color: #166534 !important;
+  --p-button-outlined-primary-color: #166534 !important;
+  --p-form-field-focus-border-color: #166534 !important;
+  --p-form-field-border-color: #15803d !important;
+  --p-dialog-background: #d4d4d4 !important;
+  --p-dialog-border-color: #a3a3a3 !important;
+  --p-panel-background: #d4d4d4 !important;
+  --p-panel-border-color: #a3a3a3 !important;
+  --p-panel-header-background: #a3a3a3 !important;
+  --p-tabs-tablist-background: #d4d4d4 !important;
+  --p-tabs-tab-background: #d4d4d4 !important;
+  --p-tabs-tab-active-background: #e5e5e5 !important;
+  --p-scrollpanel-bar-background: #a3a3a3 !important;
+  --p-selectbutton-option-selected-background: #16a34a !important;
+  --p-selectbutton-option-selected-color: #ffffff !important;
+  --p-selectbutton-option-background: #e5e5e5 !important;
+  --p-selectbutton-option-color: #171717 !important;
+}
+
+html:not(.dark) .p-selectbutton .p-togglebutton.p-togglebutton-checked {
+  background: #16a34a !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+}
+
+html:not(.dark) .p-selectbutton .p-togglebutton.p-togglebutton-checked .p-togglebutton-label,
+html:not(.dark) .p-selectbutton .p-togglebutton.p-togglebutton-checked span {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .p-selectbutton .p-togglebutton-checked > .p-togglebutton-content {
+  background: #16a34a !important;
+  color: #ffffff !important;
+}
+
+html:not(.dark) .p-selectbutton [data-p-checked="true"],
+html:not(.dark) .p-selectbutton [data-p-checked="true"] .p-togglebutton-content,
+html:not(.dark) .p-selectbutton [data-p-checked="true"] .p-togglebutton-label {
+  background: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.p-selectbutton .p-togglebutton-checked {
+  font-weight: bold !important;
+}
+
+// Ensure dark mode text colors are not affected
+.dark {
+  --p-text-color: rgba(255, 255, 255, 0.87) !important;
+  --p-text-muted-color: rgba(255, 255, 255, 0.6) !important;
+  --p-form-field-color: rgba(255, 255, 255, 0.87) !important;
+  --p-form-field-background: #09090b !important;
+  --p-form-field-border-color: #52525b !important;
 }

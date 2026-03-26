@@ -27,6 +27,7 @@ const props = defineProps({
   @extend .box-base;
 
   background-color: darkblue;
+  color: white;
   text-align: center;
   display: inline-block;
   vertical-align: middle;
@@ -39,12 +40,12 @@ const props = defineProps({
   position: absolute;
   border-radius: 10pt;
   background-color: slategrey;
+  color: white;
   text-align: center;
   display: inline-block;
   vertical-align: top;
   width: fit-content;
   padding: 0 4pt;
   @apply border-gray-100;
-
 }
 </style>

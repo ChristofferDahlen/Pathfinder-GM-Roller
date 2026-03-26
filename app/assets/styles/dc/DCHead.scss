@@ -22,7 +22,7 @@
 
 .saved-field {
   .SaveButton {
-    border: 1px solid rgb(var(--p-primary-700));
+    border: 1px solid var(--p-primary-700);
     border-radius: 0.25rem;
 
     .text {
@@ -71,8 +71,8 @@
     width: 2.5rem;
     text-align: center;
     border-radius: 0 0.25rem 0.25rem 0;
-    background-color: rgba(var(--p-primary-rgb), 0.1);
-    color: rgb(var(--p-primary-300));
+    background-color: color-mix(in srgb, var(--p-primary-500), transparent 90%);
+    color: var(--p-primary-300);
     font-weight: bold;
     font-size: small;
   }

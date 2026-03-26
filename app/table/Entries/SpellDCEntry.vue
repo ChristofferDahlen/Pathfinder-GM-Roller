@@ -58,6 +58,7 @@ function getProficiencyLabel(p: proficiencyLevel): string {
   @extend .box-base;
 
   @apply bg-purple-900;
+  color: white;
   text-align: center;
   display: inline-block;
   vertical-align: middle;

@@ -399,23 +399,27 @@ updateLores();
   display: inline-block;
 }
 
+.main-table tr {
+  @apply border-t border-neutral-400 dark:border-neutral-700;
+}
+
 .roll-type {
   font-weight: bold;
   user-select: none;
 }
 
 .main-table-header {
-  @apply bg-surface-950 dark:bg-surface-950 text-white;
+  @apply bg-neutral-400 dark:bg-surface-950 text-surface-900 dark:text-white;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .main-table tr:nth-child(even) {
-  @apply bg-surface-800 dark:bg-surface-800;
+  @apply bg-neutral-300 dark:bg-surface-800;
 }
 
 .main-table tr:nth-child(odd) {
-  @apply bg-surface-900 dark:bg-surface-900;
+  @apply bg-neutral-200 dark:bg-surface-900;
 }
 </style>

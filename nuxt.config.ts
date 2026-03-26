@@ -4,61 +4,38 @@ import Aura from '@primeuix/themes/aura'
 import {definePreset} from "@primeuix/styled";
 const MyPreset = definePreset(Aura, {
   semantic: {
-    light: {
-      surface: {
-        0: '#ffffff',
-        50: '{slate.50}',
-        100: '{slate.100}',
-        200: '{slate.200}',
-        300: '{slate.300}',
-        400: '{slate.400}',
-        500: '{slate.500}',
-        600: '{slate.600}',
-        700: '{slate.700}',
-        800: '{slate.800}',
-        900: '{slate.900}',
-        950: '{slate.950}'
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#ffffff',
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0a0a0a'
+        }
       },
-      primary: {
-        color: '{primary.500}',
-        contrastColor: '#ffffff',
-        hoverColor: '{primary.600}',
-        activeColor: '{primary.700}'
-      },
-      highlight: {
-        background: '{primary.100}',
-        focusBackground: '{primary.100}',
-        color: '{primary.700}',
-        focusColor: '{primary.800}'
-      },
-    },
-    dark: {
-      surface: {
-        0: '#000000',
-        50: '{slate.50}',
-        100: '{slate.100}',
-        200: '{slate.200}',
-        300: '{slate.300}',
-        400: '{slate.400}',
-        500: '{slate.500}',
-        600: '{slate.600}',
-        700: '{slate.700}',
-        800: '{slate.800}',
-        900: '{slate.900}',
-        950: '{slate.950}'
-      },
-      primary: {
-        darkMode: true,
-        color: '{primary.400}',
-        contrastColor: '{surface.900}',
-        hoverColor: '{primary.300}',
-        activeColor: '{primary.200}'
-      },
-      highlight: {
-        background: 'color-mix(in srgb, {primary.400}, transparent 84%)',
-        focusBackground: 'color-mix(in srgb, {primary.400}, transparent 76%)',
-        color: 'rgba(255,255,255,.87)',
-        focusColor: 'rgba(255,255,255,.87)'
+      dark: {
+        surface: {
+          0: '#000000',
+          50: '{slate.50}',
+          100: '{slate.100}',
+          200: '{slate.200}',
+          300: '{slate.300}',
+          400: '{slate.400}',
+          500: '{slate.500}',
+          600: '{slate.600}',
+          700: '{slate.700}',
+          800: '{slate.800}',
+          900: '{slate.900}',
+          950: '{slate.950}'
+        }
       }
     }
   }
@@ -70,7 +47,6 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { class: 'dark' },
       style: [
         { innerHTML: 'html, body { margin: 0; padding: 0; background: #030712; }' }
       ]

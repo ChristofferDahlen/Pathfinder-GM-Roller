@@ -77,7 +77,7 @@ function removeSpellDC(iLore: number) {
 <template>
   <table class="w-full" style="border-collapse: collapse">
     <thead class="">
-    <tr class="main-table-header bg-surface-950" style="position: sticky; top: 0; z-index: 1;">
+    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;">
       <th>
         Defenses
       </th>
@@ -163,9 +163,7 @@ function removeSpellDC(iLore: number) {
     </tr>
 
 
-    <tr class="main-table-header bg-surface-950" style="position: sticky; top: 0; z-index: 1;">
-      <th>
-        Skill
+    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th>Skill
       </th>
       <th class="px-2">
         Proficiency
@@ -297,16 +295,14 @@ function removeSpellDC(iLore: number) {
 
     </tr>
     <tr>
-      <td class="text-center flex">
+      <td colspan="6" class="text-left pl-2">
         <InputText v-model="rNewLore" class="lore_skill" flex placeholder="New Lore"/>
         <Button outlined class="lore_button" @click="addLore()">
           <MdiIcon icon="mdiPlus"/>
         </Button>
       </td>
     </tr>
-    <tr class="main-table-header bg-surface-950" style="position: sticky; top: 0; z-index: 1;">
-      <th>
-        DCs
+    <tr class="main-table-header" style="position: sticky; top: 0; z-index: 1;"><th>DCs
       </th>
       <th class="px-2">
         Proficiency
@@ -446,7 +442,7 @@ function removeSpellDC(iLore: number) {
     </tr>
 
     <tr>
-      <td class="text-center flex">
+      <td colspan="6" class="text-left pl-2">
         <InputText v-model="rNewSpellDC" class="lore_skill" flex placeholder="New Spell DC"/>
         <Button outlined class="lore_button" @click="addSpellDC()">
           <MdiIcon icon="mdiPlus"/>
@@ -510,4 +506,31 @@ function removeSpellDC(iLore: number) {
 .editDivider {
   border-top: 0.5pt solid gray;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  @apply border-t border-neutral-400 dark:border-neutral-700;
+}
+
+tr.main-table-header {
+  @apply bg-neutral-400 dark:bg-surface-950 text-surface-900 dark:text-white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+tbody tr:nth-child(even):not(.main-table-header) {
+  @apply bg-neutral-300 dark:bg-surface-800;
+}
+
+tbody tr:nth-child(odd):not(.main-table-header) {
+  @apply bg-neutral-200 dark:bg-surface-900;
+}
 </style>
+
+
+
+
