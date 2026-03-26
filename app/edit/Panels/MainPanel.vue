@@ -5,7 +5,7 @@ import {Attribute} from "../../ts/types";
 import {ref} from "vue";
 import {Select} from "primevue";
 
-const char  = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 
 const keyAttr = ref([

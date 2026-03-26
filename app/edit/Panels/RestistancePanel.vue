@@ -3,7 +3,7 @@
 import type {iCharacter} from "../../ts/types";
 import {ref} from "vue";
 
-const char = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 const newResistance = ref("")
 const newResistanceValue = ref(0)

@@ -50,8 +50,8 @@ const checkDigit = (event: KeyboardEvent, index: number) => {
       event.preventDefault();
     }
   } else {
-    if (index in saved_dcs.value)
-      update(saved_dcs.value[index] as savedDC);
+    const target = saved_dcs.value[index]
+    if (target) update(target);
     selectAll(event)
     event.preventDefault();
   }
@@ -77,6 +77,7 @@ function update(dc: savedDC) {
 
 function save(i: number) {
   const dc = saved_dcs.value[i]
+  if (!dc) return
   console.log("Save to DC", dc.val)
   dc.val = DC.value;
   updateText(dc)
@@ -84,14 +85,16 @@ function save(i: number) {
 
 function set(i: number) {
   const dc = saved_dcs.value[i]
+  if (!dc) return
   DC.set(dc.val, true)
 }
 
 function swap(i: number) {
   const dc = saved_dcs.value[i]
+  if (!dc) return
   console.log("Swap DC", dc.val, DC.value)
   const tempDc = DC.value;
-  DC.set(dc.val)
+  DC.set(dc.val, true)
   dc.val = tempDc
   updateText(dc)
 }
@@ -126,7 +129,7 @@ onUnmounted(() => {
   localStorage.setItem("savedDCs", JSON.stringify(saved_dcs.value))
 })
 
-const setKeys = {
+const setKeys: Partial<Record<shortcutsEnum, number>> = {
   [shortcutsEnum.setSlot1]: 0,
   [shortcutsEnum.setSlot2]: 1,
   [shortcutsEnum.setSlot3]: 2,
@@ -144,12 +147,13 @@ onShortcutKey([shortcutsEnum.setSlot1,
       shortcutsEnum.setSlot6
     ],
     (k) => {
-      set(setKeys[k]);
+      const idx = setKeys[k]
+      if (idx !== undefined) set(idx);
     }
 )
 
 
-const swapKeys = {
+const swapKeys: Partial<Record<shortcutsEnum, number>> = {
   [shortcutsEnum.swapSlot1]: 0,
   [shortcutsEnum.swapSlot2]: 1,
   [shortcutsEnum.swapSlot3]: 2,
@@ -168,7 +172,8 @@ onShortcutKey([
       shortcutsEnum.swapSlot6
     ],
     (k) => {
-      swap(swapKeys[k]);
+      const idx = swapKeys[k]
+      if (idx !== undefined) swap(idx);
     }
 )
 

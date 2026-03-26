@@ -2,7 +2,7 @@
 
 import type {iCharacter} from "../../ts/types";
 
-const char = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 
 </script>

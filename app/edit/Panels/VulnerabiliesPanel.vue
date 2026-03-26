@@ -31,7 +31,7 @@
 import type {iCharacter} from "../../ts/types";
 import {ref} from "vue";
 
-const char = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 const newVulnerability = ref("")
 const newVulnerabilityValue = ref(0)

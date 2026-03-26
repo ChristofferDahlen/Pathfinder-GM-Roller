@@ -37,10 +37,11 @@ type charRollers = Map<string, RollEntry>;
 const roller = ref<Map<string, charRollers>>(new Map<string, charRollers>());
 
 function setRoller(skillKey: string | number, charKey: string, roll: RollEntry) {
-  if (!roller.value.has(skillKey)) {
-    roller.value.set(skillKey, new Map<string, RollEntry>());
+  const key = String(skillKey)
+  if (!roller.value.has(key)) {
+    roller.value.set(key, new Map<string, RollEntry>());
   }
-  roller.value.get(skillKey)?.set(charKey, roll);
+  roller.value.get(key)?.set(charKey, roll);
 }
 
 function rollCharacter(characterKey: string) {
@@ -196,14 +197,14 @@ updateLores()
     <tr v-if="OrganizedSettings.Defenses.ShowArmorClass.state">
       <td/>
       <td class="roll-type ">AC</td>
-      <td v-for="char in characters" :key="char" class="relative">
+      <td v-for="char in characters" :key="char.key" class="relative">
         <ACEntry :ac="char.protection.ac" :shield="char.protection.shield"/>
       </td>
     </tr>
     <tr v-for="defense in ShownDefenses" :key="defense">
       <td/>
       <td class="roll-type ">{{ capitalize(defense) }}</td>
-      <td v-for="char in characters" :key="char" class="relative">
+      <td v-for="char in characters" :key="char.key" class="relative">
         <DefenseEntry
         :roll-info="{
           rollType: 'T',
@@ -235,9 +236,9 @@ updateLores()
     <tr v-if="OrganizedSettings.Defenses.showVulnerabilities.state">
       <td/>
       <td class="roll-type">Vulnerabilities</td>
-      <td v-for="char in characters" :key="char">
+      <td v-for="char in characters" :key="char.key">
         <div class="flex content-center justify-center">
-          <div v-for="r in char.vulnerabilities" :key="r" class="">
+          <div v-for="r in char.vulnerabilities" :key="r.name" class="">
             <div v-if="r.name!=''" class="border mx-1 px-1 border-red-600 rounded inline-flex">{{
                 capitalize(r.name)
               }} {{ r.value }}
@@ -262,7 +263,7 @@ updateLores()
       <td v-for="char in characters" :key="char.name" class="relative">
         <div>
           <RollEntry
-              :ref="(el) => setRoller('perception', char.key, el as RollEntry)"
+              :ref="(el) => setRoller('perception', char.key, el as unknown as RollEntry)"
               :focus="(Selected.perception.selected || Selected.perception.hover)"
               :hide-mods="false"
               :roll-info="{
@@ -328,9 +329,9 @@ updateLores()
       <td class="roll-type" @dblclick="() => rollSkill(skill)">
         {{ capitalize(skill) }}
       </td>
-      <td v-for="char in characters" :key="char" class="" style="width: 2000px">
+      <td v-for="char in characters" :key="char.key" class="" style="width: 2000px">
         <RollEntry
-            :ref="(el) => setRoller(skill, char.key, el as RollEntry)"
+            :ref="(el) => setRoller(skill, char.key, el as unknown as RollEntry)"
             :focus="(Selected[skill].selected || Selected[skill].hover)"
             :hide-mods="false"
             :roll-info="{
@@ -358,12 +359,12 @@ updateLores()
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
         Lore {{ loreIndex + 1 }}
       </td>
-      <td v-for="char in characters" :key="char" class="" style="width: 2000px">
+      <td v-for="char in characters" :key="char.key" class="" style="width: 2000px">
         <div v-if="loreIndex < char.lores.length && char.lores[loreIndex]!.name != ''">
           <div>{{ capitalize(char.lores[loreIndex]!.name) }}</div>
           <div>
             <RollEntry
-                :ref="(el) => setRoller(loreIndex, char.key, el as RollEntry)"
+                :ref="(el) => setRoller(loreIndex, char.key, el as unknown as RollEntry)"
                 :focus="(Selected.lores[loreIndex]!.selected || Selected.lores[loreIndex]!.hover)"
                 :hide-mods="false"
                 :roll-info="{

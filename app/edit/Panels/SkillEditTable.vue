@@ -13,7 +13,7 @@ import {
 import {calculateBonusFromInfo, calculateDcFromInfo, calculateProficiency} from "../../ts/rolling";
 import {Select} from "primevue";
 
-const char = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 const keyAttr = ref([
   {key: Attribute.str, name: "Str"},

@@ -5,7 +5,7 @@ import {attrFullname, Attribute} from "../../ts/types";
 import {getPrefix} from "../../ts/rolling";
 
 
-const char = defineModel<{ char: iCharacter }>();
+const char = defineModel<iCharacter>({ required: true });
 
 </script>
 
