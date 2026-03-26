@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="card">
+    <div class="card bg-neutral-800 dark:bg-surface-900 rounded-b border-b-2 border-primary-500">
       <DCHead/>
     </div>
 
