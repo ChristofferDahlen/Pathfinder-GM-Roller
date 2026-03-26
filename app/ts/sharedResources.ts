@@ -1,4 +1,4 @@
-import {reactive} from 'vue'
+import {reactive, ref} from 'vue'
 import {Skills} from "./types";
 
 export interface iCheckState {
@@ -76,6 +76,14 @@ export const Selected = ref<managable>({
         return Array.from(Object.values(Skills));
     },
 
+    selectOnly(skill: selectable) {
+        this[skill as Skills].selected = true;
+    },
+
+    selectOnlyLore(n: number) {
+        this.lores.forEach((l, i) => l.selected = i === n);
+    },
+
     toggle(skill: selectable) {
         console.log("Toggle", skill, !this[skill as Skills].selected);
         console.log(this[skill].selected)
@@ -121,6 +129,13 @@ export const Selected = ref<managable>({
         this.checkAllIntermediate = true
         this.checkAll = false
     },
+
+    partialSelect() {
+        const allSelected = this.skillKeys().every(s => this[s].selected) && this.perception.selected;
+        const noneSelected = this.skillKeys().every(s => !this[s].selected) && !this.perception.selected;
+        this.checkAll = allSelected;
+        this.checkAllIntermediate = !allSelected && !noneSelected;
+    },
 })
 
 const MIN_DC = 0;
@@ -136,8 +151,8 @@ interface  rollingFunction {
 
 type roller = {
     roller: rollingFunction | undefined;
+    setRoller(rf: rollingFunction): void;
     rollAll() : void;
-
 }
 
 export const Roller = reactive<roller>({
@@ -156,7 +171,7 @@ export const Roller = reactive<roller>({
 type DCreact = {
     value: number;
     resetValue?: number;
-    roller : rollingFunction | undefined
+    roller: rollingFunction | undefined;
     set(newValue: number, shouldReset: boolean, shouldClearReset?: boolean): void;
     add(addition: number, shouldReset: boolean): void;
     setReset(): void;
@@ -165,6 +180,7 @@ type DCreact = {
 export const DC = reactive<DCreact>({
     value: 15,
     resetValue: undefined,
+    roller: undefined,
 
     set(newValue, shouldReset, shouldClearReset = false) {
         console.log("Set DC to", newValue);

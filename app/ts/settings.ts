@@ -163,10 +163,10 @@ export interface shortcutCode {
 
 
 export const computed_ref = computed((): Record<shortcutsEnum, shortcutCode> => {
-    const comp = {}
-    for (const key in RollerShortcuts) {
+    const comp = {} as Record<shortcutsEnum, shortcutCode>
+    for (const key in RollerShortcuts.value) {
 
-        const shortcutString = RollerShortcuts[key].toLowerCase()
+        const shortcutString = RollerShortcuts.value[key as shortcutsEnum].toLowerCase()
         let ctrl = false
         let shift = false
         let alt = false
@@ -175,14 +175,13 @@ export const computed_ref = computed((): Record<shortcutsEnum, shortcutCode> => 
         if (/[+_-]/.test(shortcutString)) {
             const keys = shortcutString.split(/[+_-]/g).map((i) => i.trim())
 
-            ctrl = "ctrl" in keys;
-            shift = "shift" in keys;
-            alt = "alt" in keys;
+            ctrl = keys.includes("ctrl");
+            shift = keys.includes("shift");
+            alt = keys.includes("alt");
             console.log("K", keys)
         }
-        console.log()
 
-        comp[key] = {key: keyPres, ctrl: ctrl, shift: shift, alt: alt}
+        comp[key as shortcutsEnum] = {key: keyPres, ctrl: ctrl, shift: shift, alt: alt}
     }
     console.log("Update")
     console.log(comp)

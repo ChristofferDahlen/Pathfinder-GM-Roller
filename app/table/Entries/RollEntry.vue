@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref} from 'vue'
 import RollTooltip from "./RollTooltip.vue";
-import type {RollInfo} from "../../ts/types.ts";
+import type {RollInfo} from "../../ts/types";
 import type {
   RollOutcome, RollResult
-} from "../../ts/rolling.ts";
+} from "../../ts/rolling";
 import {
   calculateRollResult,
   evaluateRollBonuses,
   getProficiencyString,
   SuccessAsString
-} from "../../ts/rolling.ts";
+} from "../../ts/rolling";
 import {DC} from "../../ts/sharedResources"
 
 
@@ -63,7 +63,7 @@ function generateRoll() {
     ...rollResult.value,
     roll: randomRoll,
     total: rollResult.value.bonus + randomRoll,
-    result: calculateRollResult(DC.value, randomRoll, rollResult.value.bonus, 0),
+    result: calculateRollResult(DC.value, randomRoll, rollResult.value.bonus),
   };
   //console.debug("Rolling", rollInfo.rollType, "bonus:", rollResult.value.bonus, "Total:", rollResult.value.total, "Result:", rollResult.value.result);
 

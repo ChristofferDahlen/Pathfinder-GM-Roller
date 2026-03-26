@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {Roller, Selected} from "../ts/sharedResources.ts";
+import {Roller, Selected} from "../ts/sharedResources";
 import Checkbox from "primevue/checkbox";
 import ACEntry from "./Entries/ACEntry.vue";
 import RollEntry from "./Entries/RollEntry.vue";
@@ -328,7 +328,7 @@ updateLores()
       <td class="roll-type" @dblclick="() => rollSkill(skill)">
         {{ capitalize(skill) }}
       </td>
-      <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
+      <td v-for="char in characters" :key="char" class="" style="width: 2000px">
         <RollEntry
             :ref="(el) => setRoller(skill, char.key, el as RollEntry)"
             :focus="(Selected[skill].selected || Selected[skill].hover)"
@@ -358,7 +358,7 @@ updateLores()
       <td class="roll-type" @dblclick="() => rollSkill(loreIndex)">
         Lore {{ loreIndex + 1 }}
       </td>
-      <td v-for="char in characters" :key="char" ref="{{char.name}}" class="" style="width: 2000px">
+      <td v-for="char in characters" :key="char" class="" style="width: 2000px">
         <div v-if="loreIndex < char.lores.length && char.lores[loreIndex]!.name != ''">
           <div>{{ capitalize(char.lores[loreIndex]!.name) }}</div>
           <div>

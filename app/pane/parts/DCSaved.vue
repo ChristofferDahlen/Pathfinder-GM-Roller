@@ -4,7 +4,7 @@ import {onMounted, onUnmounted, ref} from "vue";
 import {DC} from "../../ts/sharedResources"
 
 import InputText from "primevue/inputtext";
-import {onShortcutKey, shortcutsEnum} from "../../ts/settings.ts"
+import {onShortcutKey, shortcutsEnum} from "../../ts/settings"
 
 const minDC = 0;
 const maxDC = 60;

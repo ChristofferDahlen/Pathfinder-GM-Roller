@@ -303,9 +303,9 @@ export interface RollInfo {
 
 export interface iSkillTable {
     AC: iTableDisplay,
-    [defenseEnum.fortitude]: iTableDisplay,
-    [defenseEnum.reflex]: iTableDisplay,
-    [defenseEnum.will]: iTableDisplay,
+    [DefenseEnum.Fortitude]: iTableDisplay,
+    [DefenseEnum.Reflex]: iTableDisplay,
+    [DefenseEnum.Will]: iTableDisplay,
     perception: iSelectedDisplay,
     resistances: iTableDisplay,
     vulnerabilities: iTableDisplay,

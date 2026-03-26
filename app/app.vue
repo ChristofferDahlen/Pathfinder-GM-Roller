@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
 import {onMounted, onUnmounted, ref, watch} from 'vue';
-import {newParty, type iParty} from "./ts/types.ts";
+import {newParty, type iParty} from "./ts/types";
 import {
   BasicSettings, BasicShortcuts,
   disableShortcuts,
   enableShortcuts,
   OrganizedSettings,
-   RollerShortcuts,
-} from "./ts/settings.ts";
+  RollerShortcuts,
+} from "./ts/settings";
 import PartySave from "./save/PartySave.vue";
 import CharEdit from "./edit/charEdit.vue";
 import SettingsView from "./SettingsView.vue";
@@ -24,9 +24,9 @@ const toggle = ref(false);
 const isEditing = ref(false);
 const isLoading = ref(true)
 const openSettings = ref(true)
+const openInfo = ref(false)
 const hasPartyChanged = ref(false);
 
-const roller = ref<IRoller>();
 const party = ref<iParty>(newParty());
 
 function generateUniqueKey(): string {
@@ -48,6 +48,21 @@ function loadFromLocalStorage<T>(key: string, onError: () => T): T {
     console.error(`Failed to load ${key}, initializing defaults...`, error);
     return onError();
   }
+}
+
+function mergeWithDefaults<T extends object>(stored: T, defaults: T): T {
+  const result = { ...defaults };
+  for (const key in stored) {
+    const storedVal = stored[key];
+    const defaultVal = defaults[key];
+    if (storedVal && typeof storedVal === 'object' && !Array.isArray(storedVal) &&
+        defaultVal && typeof defaultVal === 'object') {
+      result[key] = mergeWithDefaults(storedVal as object, defaultVal as object) as T[typeof key];
+    } else {
+      result[key] = storedVal;
+    }
+  }
+  return result;
 }
 
 function toggleCssClass(selector: string, className: string, condition: boolean): void {
@@ -75,7 +90,6 @@ function dialogClosed(): void {
   enableShortcuts();
   saveToLocalStorage(CHARACTERS_KEY, party.value);
   saveToLocalStorage(SETTINGS_KEY, OrganizedSettings.value);
-  roller.value?.rollAll();
 }
 
 
@@ -88,7 +102,10 @@ watch(party, () => {
 onMounted(() => {
   party.value = loadFromLocalStorage(CHARACTERS_KEY, newParty);
   RollerShortcuts.value = loadFromLocalStorage(SHORTCUTS_KEY, BasicShortcuts);
-  OrganizedSettings.value = loadFromLocalStorage(SETTINGS_KEY, BasicSettings);
+  OrganizedSettings.value = mergeWithDefaults(
+    loadFromLocalStorage(SETTINGS_KEY, BasicSettings),
+    BasicSettings()
+  );
 
   initializePartyKeys();
 

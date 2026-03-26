@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {calculateDC, getProficiencyString} from "../../ts/rolling";
-import {Attribute, type iDC, proficiencyLevel} from "../../ts/types";
+import {calculateDC} from "../../ts/rolling";
+import {Attribute, type iDC, proficiencyLevel, ProficiencyValueMap} from "../../ts/types";
 import {capitalize} from "vue";
 
 
@@ -23,6 +23,18 @@ const {
   attrType = Attribute.str
 } = defineProps<Props>()
 
+const proficiencyLabelMap: Record<proficiencyLevel, string> = {
+  [proficiencyLevel.Untrained]: "",
+  [proficiencyLevel.Trained]: "T",
+  [proficiencyLevel.Expert]: "E",
+  [proficiencyLevel.Master]: "M",
+  [proficiencyLevel.Legendary]: "L",
+}
+
+function getProficiencyLabel(p: proficiencyLevel): string {
+  return proficiencyLabelMap[p] ?? ""
+}
+
 
 </script>
 
@@ -32,7 +44,7 @@ const {
     <div class="ac-box border-b-black">
       <div class="inline-block relative w-11  text-center">{{ calculateDC(attrType, attr, level, training, item) }}
         <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
-          {{ getProficiencyString(training) }}
+        {{ getProficiencyLabel(training) }}
         </div>
       </div>
     </div>

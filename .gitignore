@@ -1,3 +1,6 @@
+# TypeScript
+tsconfig.tsbuildinfo
+
 # Nuxt dev/build outputs
 .output
 .data

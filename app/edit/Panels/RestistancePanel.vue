@@ -33,7 +33,7 @@ function removeResistance(iRes: number) {
         <InputNumber
             v-model="res.value" class="rv_field " fluid
             :min="0" :max="30"/>
-        <Button class="rv_button" @click="removeResistance(i, ir)">
+        <Button class="rv_button" @click="removeResistance(ir)">
           <MdiIcon icon="mdiMinus" size="12pt" class="p-0 m-0"/>
         </Button>
       </li>

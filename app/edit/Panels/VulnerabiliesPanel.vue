@@ -44,7 +44,7 @@ function addVulnerability() {
 }
 
 function removeVulnerability(iRes: number) {
-  char.value.char.vulnerabilities.splice(iRes, 1);
+  char.value.vulnerabilities.splice(iRes, 1);
 }
 
 

@@ -244,7 +244,7 @@ function removeSpellDC(iLore: number) {
         }}
       </td>
     </tr>
-    <tr v-for="(lore, il) in char.lores" :key="'edit_char_' + i + '_lore' + il" :class="{editDivider : il == 0}">
+    <tr v-for="(lore, il) in char.lores" :key="'edit_char_lore_' + il" :class="{editDivider : il == 0}">
       <td class="text-center flex">
         <div class="mx-auto">
           <div class="table_skill inline"> {{ lore.name }}</div>
@@ -448,7 +448,7 @@ function removeSpellDC(iLore: number) {
     <tr>
       <td class="text-center flex">
         <InputText v-model="rNewSpellDC" class="lore_skill" flex placeholder="New Spell DC"/>
-        <Button outlined class="lore_button" @click="addSpellDC(i)">
+        <Button outlined class="lore_button" @click="addSpellDC()">
           <MdiIcon icon="mdiPlus"/>
         </Button>
       </td>

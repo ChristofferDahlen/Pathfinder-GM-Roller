@@ -2,12 +2,12 @@
 
 import Button from "primevue/button";
 import {capitalize} from "vue";
-import {type iSkillTable, Skills} from "../../ts/types.ts";
-import {Selected} from "../../ts/sharedResources";
+import {type iSkillTable, Skills} from "../../ts/types";
+import {type selectable, Selected} from "../../ts/sharedResources";
 
 interface sklist {
   trait: string,
-  skills: Array<keyof iSkillTable | string>,
+  skills: Array<selectable | 'lore'>,
 }
 
 const creatureTable : Array<sklist> = [

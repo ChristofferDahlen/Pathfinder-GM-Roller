@@ -1,4 +1,4 @@
-import {Attribute, proficiencyLevel, ProficiencyValueMap, type RollInfo, type RollResult} from "./types";
+import {Attribute, proficiencyLevel, ProficiencyValueMap, type RollInfo} from "./types";
 
 
 export enum RollOutcome {
