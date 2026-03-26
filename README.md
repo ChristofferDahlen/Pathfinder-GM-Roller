@@ -1,75 +1,69 @@
-# Nuxt Minimal Starter
+# Pathfinder GM Roller
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A real-time skill check tracker for Pathfinder 2e game masters. Set a DC and instantly see how every party member rolls against it across all skills and defenses.
 
-## Setup
+**Live site:** https://christofferdahlen.github.io/Pathfinder-GM-Roller/
 
-Make sure to install dependencies:
+## Features
+
+- **Roll table** — displays all characters' skill checks side by side, updated live as the DC changes
+- **DC panel** — adjust the DC via input, difficulty buttons (±2, ±5, ±10), or a slider
+- **Saved DCs** — store up to 6 DCs with Save / Set / Swap controls and keyboard shortcuts
+- **Level Based DCs** — look up DCs by creature or task level
+- **Creature Identification** — Recall Knowledge DCs by creature trait
+- **Quick Selects** — one-click skill row selection presets
+- **Auto Roll** — automatically reroll at a configurable interval
+- **Character editor** — set proficiency, attributes, item bonuses and penalties per skill
+- **Pathbuilder 2e import** — load characters via build ID or pasted JSON
+- **Dark / light mode** — toggle with persistent preference
+- **Keyboard shortcuts** — fully configurable
+
+## Result Colors
+
+| Color | Outcome |
+|---|---|
+| 🟢 Dark green | Critical Success |
+| 🔵 Dark blue | Success |
+| 🔴 Dark red | Failure |
+| 🟠 Orange | Critical Failure |
+
+A lime border indicates a natural 20; an amber border indicates a natural 1.
+
+## Development
+
+Install dependencies:
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
-
-## Development Server
 
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+Generate a static build:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run generate
 ```
 
-Locally preview production build:
+Run unit tests:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npm run test
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Deployment
+
+The project deploys automatically to GitHub Pages via GitHub Actions on every push to `main`.
+
+To enable: go to **Settings → Pages** in the repository and set the source to **GitHub Actions**.
+
+## Tech Stack
+
+- [Nuxt 4](https://nuxt.com) — Vue framework
+- [PrimeVue](https://primevue.org) — UI components
+- [Tailwind CSS](https://tailwindcss.com) — utility styling
+- [VueUse](https://vueuse.org) — keyboard shortcut handling
