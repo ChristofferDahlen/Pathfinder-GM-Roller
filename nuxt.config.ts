@@ -59,9 +59,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
-    '@nuxt/eslint',
-    '@nuxt/content',
-    '@nuxt/test-utils',
     'nuxt-mdi'
   ],
   build: {

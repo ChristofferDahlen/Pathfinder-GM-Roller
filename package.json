@@ -17,13 +17,8 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@nuxt/a11y": "^1.0.0-alpha.1",
-    "@nuxt/content": "^3.11.2",
-    "@nuxt/eslint": "^1.15.1",
-    "@nuxt/test-utils": "^4.0.0",
     "@primeuix/themes": "^2.0.3",
     "@vueuse/core": "^14.2.1",
-    "better-sqlite3": "^12.6.2",
     "nuxt": "^4.3.1",
     "nuxt-mdi": "^2.1.2",
     "primevue": "^4.5.4",
@@ -34,12 +29,10 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "@playwright/test": "^1.58.2",
     "@primevue/nuxt-module": "^4.5.4",
     "@vitest/coverage-v8": "^4.0.18",
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^20.6.1",
-    "playwright-core": "^1.58.2",
     "sass": "^1.97.3",
     "sass-loader": "^16.0.7",
     "vitest": "^4.0.18"
