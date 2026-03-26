@@ -37,7 +37,6 @@ function splitArray<Type>(arr: Array<Type>, part: "first" | "second"): Array<Typ
   const halfLength = Math.ceil(arr.length / 2);
   return part === "first" ? arr.slice(0, halfLength) : arr.slice(halfLength);
 }
-
 function updateBaseline() {
   rollResult.value = evaluateRollBonuses(rollInfo);
   positiveModsResults.value.clear();
@@ -115,14 +114,14 @@ generateRoll();
             <div
                 v-for="b in splitArray(negativeMods, 'first')" :key="b" class="mod inline-block"
                 :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
-                :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
+                :class="SuccessAsString[negativeModsResults.get(b) ?? 0]">{{ b }}
             </div>
           </div>
           <div class="">
             <div
-                v-for="b in splitArray(negativeMods, 'last')" :key="b" class="mod inline-block"
+                v-for="b in splitArray(negativeMods, 'second')" :key="b" class="mod inline-block"
                 :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
-                :class="SuccessAsString[negativeModsResults.get(b)]">{{ b }}
+                :class="SuccessAsString[negativeModsResults.get(b) ?? 0]">{{ b }}
             </div>
           </div>
         </div>
@@ -130,7 +129,7 @@ generateRoll();
         <RollTooltip :dc="DC.value" :roll-info="rollInfo" :roll-result="rollResult">
           <div class="" @dblclick="generateRoll">
             <div
-                :class="[ SuccessAsString[rollResult.result], {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
+                :class="[ SuccessAsString[rollResult.result ?? 0], {'n20' : focus && rollResult.roll === 20, 'n1' : focus && rollResult.roll === 1}]"
                 class="roll-result">
               <div class="inline-block relative w-11  text-center">{{ rollResult.total }}
                 <div class="absolute top-0 leading-none right-0 text-xs opacity-60">
@@ -147,14 +146,14 @@ generateRoll();
             <div
                 v-for="b in splitArray(positiveMods, 'first')" :key="b" class="mod unselectable inline-block"
                 :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
-                :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
+                :class="SuccessAsString[positiveModsResults.get(b) ?? 0]">+{{ b }}
             </div>
           </div>
           <div class="">
             <div
                 v-for="b in splitArray(positiveMods, 'second')" :key="b" class="mod unselectable inline-block"
                 :style="{visibility: hover && OrganizedSettings.Misc.ShowHoverModifiers.state ? 'visible' : 'hidden'}"
-                :class="SuccessAsString[positiveModsResults.get(b)]">+{{ b }}
+                :class="SuccessAsString[positiveModsResults.get(b) ?? 0]">+{{ b }}
             </div>
           </div>
         </div>
@@ -266,3 +265,4 @@ generateRoll();
   border-top: gray double;
 }
 </style>
+
