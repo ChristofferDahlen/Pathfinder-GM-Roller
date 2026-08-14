@@ -106,9 +106,12 @@ async function syncFromServer() {
             currentParty.value.characters[existingIdx],
             pbData
           );
+          currentParty.value.characters[existingIdx].playerName = charInfo.player.charAt(0).toUpperCase() + charInfo.player.slice(1);
         } else {
           const newChar = newCharacter(currentParty.value.characters.length + 1);
-          currentParty.value.characters.push(updateCharacter(newChar, pbData));
+          const updated = updateCharacter(newChar, pbData);
+          updated.playerName = charInfo.player.charAt(0).toUpperCase() + charInfo.player.slice(1);
+          currentParty.value.characters.push(updated);
         }
         updated.push(`${charInfo.name} (Lvl ${charInfo.level})`);
       } catch (e) {
