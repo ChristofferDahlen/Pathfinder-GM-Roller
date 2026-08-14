@@ -61,14 +61,22 @@ async function fetchCampaigns() {
   serverUrl.value = baseUrl;
   try {
     const resp = await fetch(`${baseUrl}/api/campaigns`);
-    const data = await resp.json();
-    serverCampaigns.value = Object.keys(data.campaigns || {});
-    if (serverCampaigns.value.length === 1) {
-      selectedCampaign.value = serverCampaigns.value[0];
+    if (resp.ok) {
+      const data = await resp.json();
+      serverCampaigns.value = Object.keys(data.campaigns || {});
+      if (serverCampaigns.value.length === 1) {
+        selectedCampaign.value = serverCampaigns.value[0];
+      }
+    } else {
+      // Server doesn't support campaigns — use flat mode
+      serverCampaigns.value = [];
+      selectedCampaign.value = "__flat__";
     }
   } catch (e) {
-    syncStatus.value = `❌ Failed to connect: ${e}`;
+    // Network error or no campaigns endpoint — try flat mode
     serverCampaigns.value = [];
+    selectedCampaign.value = "__flat__";
+    syncStatus.value = "";
   }
 }
 
@@ -79,9 +87,31 @@ async function syncFromServer() {
   syncStatus.value = "⏳ Fetching characters...";
 
   try {
-    const resp = await fetch(`${baseUrl}/api/latest-jsons?campaign=${selectedCampaign.value}`);
+    // Build URL based on whether we have campaign support
+    let url: string;
+    if (selectedCampaign.value === "__flat__") {
+      url = `${baseUrl}/api/latest-jsons?flat=true`;
+    } else {
+      url = `${baseUrl}/api/latest-jsons?campaign=${selectedCampaign.value}`;
+    }
+
+    const resp = await fetch(url);
     const data = await resp.json();
-    const chars = data.campaigns?.[selectedCampaign.value] || [];
+
+    // Handle both response formats
+    let chars: Array<{name: string, level: number, player: string, download_url: string}>;
+    if (data.characters) {
+      // Flat mode
+      chars = data.characters;
+    } else if (data.campaigns) {
+      // Grouped mode — flatten all campaigns
+      chars = [];
+      for (const campChars of Object.values(data.campaigns)) {
+        chars.push(...(campChars as typeof chars));
+      }
+    } else {
+      chars = [];
+    }
 
     if (chars.length === 0) {
       syncStatus.value = "⚠️ No characters found in this campaign.";
@@ -190,6 +220,9 @@ onUnmounted(() => {
             <option value="">Select campaign...</option>
             <option v-for="c in serverCampaigns" :key="c" :value="c">{{ c.charAt(0).toUpperCase() + c.slice(1) }}</option>
           </select>
+        </div>
+        <div v-else-if="selectedCampaign === '__flat__'" class="text-xs opacity-60">
+          Server connected (no campaign grouping)
         </div>
 
         <Button v-if="selectedCampaign" class="w-full" @click="syncFromServer" :loading="syncLoading" :disabled="!selectedCampaign">
