@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import {capitalize, onMounted, onUnmounted, ref} from "vue";
-import type {iParty} from "../ts/types";
+import type {iCharacter, iParty} from "../ts/types";
+import {newCharacter} from "../ts/types";
 import {getClassColor} from "../ts/classColors";
+import {type iPBChar, updateCharacter} from "../ts/pb";
 
 const isDark = computed(() => document.documentElement.classList.contains('dark'));
 
 const allParties = ref<Array<iParty>>([]);
 const currentParty = defineModel<iParty>({ required: true });
+
+// Server sync state
+const showServerDialog = ref(false);
+const serverUrl = ref(localStorage.getItem("character_server_url") || "");
+const serverCampaigns = ref<string[]>([]);
+const selectedCampaign = ref("");
+const syncStatus = ref("");
+const syncLoading = ref(false);
 
 function getSavedIndex() {
   return allParties.value.findIndex(p => p.name === currentParty.value.name);
@@ -32,6 +42,86 @@ function loadParty(party: iParty) {
 function deleteParty(i: number) {
   allParties.value.splice(i, 1);
   localStorage.setItem("saved_parties", JSON.stringify(allParties.value));
+}
+
+// ── Server sync ───────────────────────────────────────────────────────────────
+
+async function openServerSync() {
+  showServerDialog.value = true;
+  syncStatus.value = "";
+  if (serverUrl.value) {
+    await fetchCampaigns();
+  }
+}
+
+async function fetchCampaigns() {
+  if (!serverUrl.value) return;
+  const baseUrl = serverUrl.value.replace(/\/+$/, '');
+  localStorage.setItem("character_server_url", baseUrl);
+  serverUrl.value = baseUrl;
+  try {
+    const resp = await fetch(`${baseUrl}/api/campaigns`);
+    const data = await resp.json();
+    serverCampaigns.value = Object.keys(data.campaigns || {});
+    if (serverCampaigns.value.length === 1) {
+      selectedCampaign.value = serverCampaigns.value[0];
+    }
+  } catch (e) {
+    syncStatus.value = `❌ Failed to connect: ${e}`;
+    serverCampaigns.value = [];
+  }
+}
+
+async function syncFromServer() {
+  if (!serverUrl.value || !selectedCampaign.value) return;
+  const baseUrl = serverUrl.value.replace(/\/+$/, '');
+  syncLoading.value = true;
+  syncStatus.value = "⏳ Fetching characters...";
+
+  try {
+    const resp = await fetch(`${baseUrl}/api/latest-jsons?campaign=${selectedCampaign.value}`);
+    const data = await resp.json();
+    const chars = data.campaigns?.[selectedCampaign.value] || [];
+
+    if (chars.length === 0) {
+      syncStatus.value = "⚠️ No characters found in this campaign.";
+      syncLoading.value = false;
+      return;
+    }
+
+    // Download each JSON and update/add characters
+    const updated: string[] = [];
+    for (const charInfo of chars) {
+      try {
+        const jsonResp = await fetch(`${baseUrl}${charInfo.download_url}`);
+        const pbData = await jsonResp.json() as iPBChar;
+
+        // Find existing character by name or add new
+        const existingIdx = currentParty.value.characters.findIndex(
+          c => c.name.toLowerCase() === charInfo.name.toLowerCase()
+        );
+
+        if (existingIdx >= 0) {
+          currentParty.value.characters[existingIdx] = updateCharacter(
+            currentParty.value.characters[existingIdx],
+            pbData
+          );
+        } else {
+          const newChar = newCharacter(currentParty.value.characters.length + 1);
+          currentParty.value.characters.push(updateCharacter(newChar, pbData));
+        }
+        updated.push(`${charInfo.name} (Lvl ${charInfo.level})`);
+      } catch (e) {
+        updated.push(`${charInfo.name} ❌`);
+      }
+    }
+
+    syncStatus.value = `✅ Updated ${updated.length} characters: ${updated.join(", ")}`;
+  } catch (e) {
+    syncStatus.value = `❌ Sync failed: ${e}`;
+  } finally {
+    syncLoading.value = false;
+  }
 }
 
 onMounted(() => {
@@ -67,8 +157,40 @@ onUnmounted(() => {
           <MdiIcon icon="mdiContentSave" class="mr-2"/>
           Save Party
         </Button>
+        <Button size="small" class="w-full" severity="secondary" @click="openServerSync">
+          <MdiIcon icon="mdiSync" class="mr-2"/>
+          Update from Server
+        </Button>
       </div>
     </div>
+
+    <!-- Server sync dialog -->
+    <Dialog v-model:visible="showServerDialog" header="Update Party from Character Server" modal :style="{ width: '28rem' }">
+      <div class="flex flex-col gap-3">
+        <div>
+          <label class="text-xs font-semibold opacity-60">Server URL</label>
+          <div class="flex gap-2 mt-1">
+            <InputText v-model="serverUrl" size="small" placeholder="http://100.64.0.1:8080" class="flex-1"/>
+            <Button size="small" @click="fetchCampaigns" :loading="syncLoading">Connect</Button>
+          </div>
+        </div>
+
+        <div v-if="serverCampaigns.length > 0">
+          <label class="text-xs font-semibold opacity-60">Campaign</label>
+          <select v-model="selectedCampaign" class="w-full mt-1 p-2 rounded border text-sm bg-surface-0 dark:bg-surface-800 border-surface-300 dark:border-surface-600">
+            <option value="">Select campaign...</option>
+            <option v-for="c in serverCampaigns" :key="c" :value="c">{{ c.charAt(0).toUpperCase() + c.slice(1) }}</option>
+          </select>
+        </div>
+
+        <Button v-if="selectedCampaign" class="w-full" @click="syncFromServer" :loading="syncLoading" :disabled="!selectedCampaign">
+          <MdiIcon icon="mdiSync" class="mr-2"/>
+          Sync Characters
+        </Button>
+
+        <div v-if="syncStatus" class="text-xs p-2 rounded bg-surface-100 dark:bg-surface-700" v-html="syncStatus"></div>
+      </div>
+    </Dialog>
 
     <!-- Saved parties -->
     <div class="saved-panel">
