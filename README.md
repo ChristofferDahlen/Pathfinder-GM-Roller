@@ -67,7 +67,7 @@ If `/api/campaigns` returns a 404 or error, the sync falls back to flat mode aut
 
 ### Compatible servers
 
-- [CD_PF2e_Campaigns](https://github.com/ChristofferDahlen/CD_PF2e_Campaigns) — the reference implementation (`just serve-public`)
+Any server implementing the API above will work. The server must store Pathbuilder JSON exports and serve them over HTTP with CORS enabled.
 
 ## Development
 
