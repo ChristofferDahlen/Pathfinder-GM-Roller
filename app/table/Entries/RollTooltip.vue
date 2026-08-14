@@ -25,7 +25,7 @@ function capitalizeFirstLetter(str: string) {
         <div class="border-b w-full block pl-2 pr-2">
           <div
               class="inline-block pr-1"
-              :class="(input.DC > 0) ? 'border-r':''">
+              :class="(input.dc > 0) ? 'border-r':''">
             <div class="roll-pad">
               <div class="roll-result">{{ rollResult.roll }}</div>
               <div class="roll-desc">Roll</div>
@@ -60,8 +60,8 @@ function capitalizeFirstLetter(str: string) {
             </div>
           </div>
           <div class="inline-block pl-1">
-            <div v-if="input.DC !== 0" class="roll-pad">
-              <div class="roll-result">{{ Math.abs(input.DC) }}</div>
+            <div v-if="input.dc !== 0" class="roll-pad">
+              <div class="roll-result">{{ Math.abs(input.dc) }}</div>
               <div class="roll-desc">DC</div>
             </div>
           </div>
