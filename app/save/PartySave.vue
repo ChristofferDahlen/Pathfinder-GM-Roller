@@ -14,7 +14,7 @@ const currentParty = defineModel<iParty>({ required: true });
 const showServerDialog = ref(false);
 const serverUrl = ref(localStorage.getItem("character_server_url") || "");
 const serverCampaigns = ref<string[]>([]);
-const selectedCampaign = ref("");
+const selectedCampaign = ref(localStorage.getItem("character_server_campaign") || "");
 const syncStatus = ref("");
 const syncLoading = ref(false);
 
@@ -120,6 +120,12 @@ async function syncFromServer() {
     }
 
     syncStatus.value = `✅ Updated ${updated.length} characters: ${updated.join(", ")}`;
+
+    // Save campaign selection and auto-set party name if empty
+    localStorage.setItem("character_server_campaign", selectedCampaign.value);
+    if (!currentParty.value.name) {
+      currentParty.value.name = selectedCampaign.value.charAt(0).toUpperCase() + selectedCampaign.value.slice(1);
+    }
   } catch (e) {
     syncStatus.value = `❌ Sync failed: ${e}`;
   } finally {
