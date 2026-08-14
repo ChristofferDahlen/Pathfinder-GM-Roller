@@ -29,6 +29,46 @@ A real-time skill check tracker for Pathfinder 2e game masters. Set a DC and ins
 
 A lime border indicates a natural 20; an amber border indicates a natural 1.
 
+## Character Server Sync
+
+Sync your party's character data from a remote Pathbuilder JSON server instead of manually importing each character. Useful when a GM manages character sheets centrally.
+
+### How it works
+
+1. Open **Save/Load Party** → click **Update from Server**
+2. Enter the server URL (e.g., `http://192.168.1.100:8080` or a Tailscale IP)
+3. Select a campaign (if the server supports it) or sync all characters directly
+4. Click **Sync Characters** — each character's stats are updated from the latest Pathbuilder JSON
+
+Characters are matched by name (case-insensitive). Existing party members are updated; new characters from the server are added to the party. Nothing is deleted.
+
+The server URL and campaign selection are saved in your browser's localStorage.
+
+### Server API Requirements
+
+Any HTTP server that implements these endpoints works:
+
+| Endpoint | Required | Response |
+|----------|----------|----------|
+| `GET /api/campaigns` | Optional | `{"campaigns": {"campaign_name": ["player1", "player2"]}}` |
+| `GET /api/latest-jsons` | Yes | `{"campaigns": {"name": [...]}}` grouped, or `{"characters": [...]}` flat |
+| `GET /api/latest-jsons?campaign=X` | Optional | Filtered to one campaign |
+| `GET /api/latest-jsons?flat=true` | Optional | Returns `{"characters": [...]}` as a flat array |
+| `GET <download_url>` | Yes | Raw Pathbuilder JSON (`{"build": {...}}`) |
+
+Each character entry in the response must include:
+- `name` — character display name
+- `level` — character level (number)
+- `download_url` — relative URL to fetch the full Pathbuilder JSON
+
+The server must set `Access-Control-Allow-Origin: *` (CORS) for browser access.
+
+If `/api/campaigns` returns a 404 or error, the sync falls back to flat mode automatically.
+
+### Compatible servers
+
+- [CD_PF2e_Campaigns](https://github.com/ChristofferDahlen/CD_PF2e_Campaigns) — the reference implementation (`just serve-public`)
+
 ## Development
 
 Install dependencies:

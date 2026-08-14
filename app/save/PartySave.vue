@@ -206,19 +206,11 @@ onUnmounted(() => {
     <!-- Server sync dialog -->
     <Dialog v-model:visible="showServerDialog" header="Update Party from Character Server" modal :style="{ width: '30rem' }">
       <div class="flex flex-col gap-3">
-        <div class="text-xs opacity-60 leading-relaxed bg-surface-100 dark:bg-surface-700 p-2 rounded">
-          <p class="font-semibold mb-1">How it works</p>
-          <p class="mb-1">Connects to a character server that stores Pathbuilder JSON exports. Downloads the latest version of each character and updates your party's stats (abilities, proficiencies, AC, HP, spells, etc.).</p>
-          <p class="mb-1">Characters are matched by name — existing ones are updated, new ones are added. Nothing is deleted from your current party.</p>
-          <p class="font-semibold mb-1 mt-2">Server requirements</p>
-          <ul class="list-disc ml-4 space-y-0.5">
-            <li><code>GET /api/campaigns</code> — returns available campaigns (optional)</li>
-            <li><code>GET /api/latest-jsons?campaign=X</code> — returns character list with download URLs</li>
-            <li><code>GET /api/latest-jsons?flat=true</code> — flat list if no campaigns</li>
-            <li>Each download URL returns raw Pathbuilder JSON format</li>
-            <li>Server must allow CORS (Access-Control-Allow-Origin: *)</li>
-          </ul>
-          <p class="mt-2 opacity-80">The URL is saved locally and remembered between sessions.</p>
+        <div class="text-xs opacity-60 leading-relaxed">
+          Syncs party characters from a Pathbuilder JSON server. Characters are matched by name —
+          existing ones update, new ones are added.
+          <a href="https://github.com/ChristofferDahlen/Pathfinder-GM-Roller#character-server-sync"
+             target="_blank" class="underline opacity-80 hover:opacity-100">Learn more →</a>
         </div>
         <div>
           <label class="text-xs font-semibold opacity-60">Server URL</label>
